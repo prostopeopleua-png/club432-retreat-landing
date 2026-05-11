@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Ретрит в Карпатах · 12–16 червня 2026 · Клуб 432",
-  description: "П'ять днів духовних практик, трансформації та перезавантаження в серці Карпат. Йога, медитація, гра Ліла, кристалохілінг. Seven Hills, Яблуниця.",
+  title: "Клуб 432 · Спільнота свідомого життя",
+  description: "Цілісна система духовних знань та практик для внутрішньої опори й свідомих змін. Духовність. Психологія. Реальне життя.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
