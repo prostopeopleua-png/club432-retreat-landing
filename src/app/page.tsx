@@ -1,911 +1,273 @@
 "use client";
-import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
+import Image from "next/image";
+import { motion, type Variants } from "framer-motion";
+import SmoothScroll from "@/components/SmoothScroll";
+import CosmicBackground from "@/components/CosmicBackground";
 
-// ── Data ────────────────────────────────────────────────────────────────────
+const BOT = "https://t.me/prosto_mindful_bot";
 
-const personas = [
-  {
-    tag: "ШУКАЧ",
-    text: "Ти відчуваєш, що всередині є значно більше потенціалу, ніж проявлено зараз і хочеш глибше розкрити себе (свою Душу) та своє призначення",
-  },
-  {
-    tag: "ПРОВІДНИК",
-    text: "Психологи, коучі, наставники. Тобі потрібна глибина, щоб давати клієнтам більше. Ти шукаєш джерело власного відновлення та професійного зростання.",
-  },
-  {
-    tag: "ТВОРЕЦЬ",
-    text: "Ти будуєш бізнес та проєкти, але хочеш робити це зі стану спокою, а не стресу. Тобі потрібна ясність мислення та розуміння причинно-наслідкових зв'язків.",
-  },
-];
-
-const pains = [
-  {
-    icon: "🌀",
-    title: "Внутрішній хаос",
-    text: "Ти втомився від безсистемної інформації. Шукаєш цілісну систему знань, яка розкладе все по поличках.",
-  },
-  {
-    icon: "⚡",
-    title: "Емоційні гойдалки",
-    text: "Ти втомився від емоційних гойдалок, внутрішніх конфліктів, розгубленості, внутрішньої війни, тривожності і хочеш підняти свій рівень свідомості.",
-  },
-  {
-    icon: "🔒",
-    title: "Скляна стеля",
-    text: "Ти відчуваєш потужний потенціал, але старі страхи та програми блокують вихід на новий рівень.",
-  },
-  {
-    icon: "🧭",
-    title: "Втрата сенсів",
-    text: "Матеріальні цілі досягнуті або не тішать. Як по-старому більше не може бути, а як по-новому — не знаєш. Ти шукаєш інструменти, які допоможуть залишатись свідомим в будь-якій життєвій ситуації.",
-  },
-];
-
-const features = [
-  {
-    icon: "🎓",
-    title: "Глибинні лекції",
-    text: "Щомісяця розбираємо нову фундаментальну тему з точки зору психології та духовних законів + потокові лекції із розбором питань учасників.",
-  },
-  {
-    icon: "🎙",
-    title: "Живі розбори",
-    text: "Прямий контакт із Вадимом. Можливість розібрати наживо свій запит чи ситуацію та побачити вектор руху.",
-  },
-  {
-    icon: "📚",
-    title: "Бібліотека мудрості",
-    text: "Доступ до бази знань за 4 роки. Сотні годин контенту, який завжди під рукою, коли тобі потрібна відповідь. Це твоя психологічна аптечка.",
-  },
-  {
-    icon: "🌅",
-    title: "Щоденні налаштування",
-    text: "Практики, медитації та фокус уваги в чаті, щоб не випадати з усвідомленого стану в рутину.",
-  },
-  {
-    icon: "🤝",
-    title: "Спільнота однодумців",
-    text: "Безпечне оточення, де можна бути собою, поділитися інсайтами та отримати підтримку від людей, які рухаються з тобою в одному напрямку.",
-  },
-];
-
-const formatItems = [
-  {
-    icon: "📅",
-    title: "Регулярність",
-    points: ["Вівторок та Четвер о 19:00.", "8 онлайн-зустрічей з Вадимом.", "Стабільність, яка формує звичку."],
-  },
-  {
-    icon: "⏱",
-    title: "Тривалість",
-    points: ["До 1,5 години концентрована глибина.", "60–70 хв лекція та відповіді на запитання від групи.", "10–15 хв медитація або практика"],
-  },
-  {
-    icon: "▶️",
-    title: "Доступність",
-    points: ["Записи назавжди.", "Не встиг на ефір? Запис з'являється вже через годину.", "Дивись, коли зручно."],
-  },
-  {
-    icon: "🔧",
-    title: "Ресурси",
-    points: ["Закрита Телеграм-група.", "Ефіри через додаток Zoom.", "Зручний додаток для пошуку та перегляду лекцій."],
-  },
-];
-
-const foundations = [
-  {
-    title: "Позачасова Мудрість",
-    text: "Універсальне вчення, що лежить в основі всіх світових традицій. Воно пояснює еволюцію свідомості, взаємозв'язок Душі та особистості і роль людини у Всесвіті.",
-  },
-  {
-    title: "Практична та Езотерична психологія",
-    text: "Ми поєднуємо науковий підхід (вивчення розуму, поведінки та емоцій) із наукою про Душу (розуміння духовних законів та внутрішнього екзистенційного досвіду).",
-  },
-  {
-    title: "Філософія та Символізм",
-    text: "Філософія допомагає нам шукати відповіді на вічні питання буття, а символізм вчить читати мову Всесвіту, де видимий світ є відображенням глибинних істин.",
-  },
-  {
-    title: "Інтеграція джерел",
-    text: "Ми не обмежуємось одним поглядом. Лекції доповнюються мудрістю з Ведів, Бхаґавад-Ґіти, Християнства та Стоїцизму, щоб знайти спільну істину, яка працює.",
-  },
-];
-
-const testimonials = [
-  "Духовний розвиток та розширення світогляду",
-  "Вихід на новий рівень життя",
-  "Подолання особистих проблем",
-  "Мудрість у життєвих питаннях",
-  "Пошук нових сенсів та методів розвитку",
-  "Підняття свідомості до рівня Душі",
-  "Баланс між матеріальним та духовним",
-  "Проста Ясність, якої так не вистачало",
-];
-
-const monthlyIncludes = [
-  { n: "01", title: "8 ефірів на місяць", text: "Зустрічі двічі на тиждень (вівторок та четвер) в онлайн форматі наживо." },
-  { n: "02", title: "Відкритий доступ", text: "Миттєвий доступ до архіву всіх лекцій, матеріалів та книг за 4 роки існування клубу. Переглядай будь-коли." },
-  { n: "03", title: "Індивідуальні розбори", text: "1 раз на місяць відкривається можливість потрапити на розбір до Вадима під час ефіру, або спостерігати за розбором іншого учасника." },
-  { n: "04", title: "Завдання, практики та медитації", text: "Практика, яка поглиблює твій розвиток та напрацьовує інструменти керування власним станом." },
-  { n: "05", title: "Дискусії та інтеграція", text: "Живе обговорення тем місяця в колі своїх, щоб перетворити інформацію на прожитий, усвідомлений досвід." },
-  { n: "06", title: "Підтримка", text: "Миттєвий доступ до вчителя. Виникла якась складна ситуація протягом дня чи впав стан? Пиши в чат, розберемо, підтримаємо та знайдемо шлях вирішення." },
-  { n: "07", title: "Оточення", text: "Особливе підтримуюче оточення, де тебе розуміють. Спільний рух, обмін досвідом та безпечний простір для твоїх усвідомлень." },
-];
-
-const faqs = [
-  {
-    q: "Як отримати доступ?",
-    a: "Натискай кнопку «Стати учасником». Сайт перенаправить тебе в наш телеграм-бот. Він допоможе швидко зареєструватись, надішле посилання на оплату та одразу надасть посилання на вхід у закриту групу.",
-  },
-  {
-    q: "Чи можу я скасувати підписку?",
-    a: "Так, звісно. Ти можеш призупинити участь будь-коли через наш Асистент-бот. Доступ до Клубу залишиться відкритим до кінця твого оплаченого місяця. Ми поважаємо твій ритм, тому ти зможеш легко повернутися, коли знову відчуєш потребу.",
-  },
-  {
-    q: "Які теми обговорюємо?",
-    a: "Усе, що хвилює сучасну людину. Від питань «як налагодити стосунки» чи «збільшити дохід» до глибоких розмов про місію Душі, світобудову та закони Всесвіту. Наша мета — показати, як духовні знання дають реальні результати в матеріальному світі.",
-  },
-  {
-    q: "Як проходять ефіри?",
-    a: "Ми зустрічаємось у Zoom — 1–1,5 години концентрованої мудрості. Вадим розкладає складні духовні істини на прості життєві приклади. Чергуємо глибокі розбори з форматом «питання-відповідь». У кінці — спільна медитація. Якщо не вийшло — запис вже через годину.",
-  },
-  {
-    q: "А якщо я не буду встигати?",
-    a: "Ціль клубу — не завантажити тебе інформацією, а підтримати твій внутрішній стан. Іноді достатньо переглянути одну лекцію на місяць або просто поспілкуватися в чаті. Навіть проста присутність у полі однодумців вже працює на тебе.",
-  },
-  {
-    q: "Чи підійде це новачкам?",
-    a: "Так, цей простір відкритий для кожного. Знання Клубу входять у свідомість м'яко, шар за шаром. На рівні Душі новачків не існує — ти приходиш зі своїм прожитим досвідом, який тут стане усвідомленою мудрістю.",
-  },
-  {
-    q: "Що потрібно для участі?",
-    a: "Лише смартфон або комп'ютер. Технічно — два додатки: Telegram (ком'юніті та навчальні матеріали) та Zoom (живі зустрічі з Вадимом).",
-  },
-];
-
-const BOT_URL = "https://t.me/prosto_mindful_bot";
-const INSTAGRAM_URL = "https://www.instagram.com/vadym_shpylchuk";
-const TELEGRAM_URL = "https://t.me/c/3171347545/145";
-const YOUTUBE_URL = "https://youtube.com/@prosto.mindful";
-
-// ── Shared animation helpers ────────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.3 as const },
-  transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
-});
-
-// ── Section components ───────────────────────────────────────────────────────
-
-function ClubHero() {
+/* ───────────────────────── motion ───────────────────────── */
+const rise: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  show: (i: number = 0) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.75, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] },
+  }),
+};
+function Reveal({ children, i = 0, className }: { children: React.ReactNode; i?: number; className?: string }) {
   return (
-    <section
-      className="relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-6 overflow-hidden text-center"
-      style={{ background: "#07081B" }}
-    >
-      {/* Stars */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px)",
-        backgroundSize: "60px 60px",
-      }} />
-      {/* Glow */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 50% 40%, rgba(239,128,24,0.12) 0%, transparent 60%)",
-      }} />
+    <motion.div className={className} variants={rise} custom={i} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-70px" }}>
+      {children}
+    </motion.div>
+  );
+}
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return <div className="eyebrow-line mb-6">{children}</div>;
+}
 
-      <div className="relative z-10 max-w-3xl mx-auto">
-        <motion.p
-          className="eyebrow mb-6"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        >
-          Духовність · Психологія · Реальне життя
-        </motion.p>
+/* ───────────────────────── icons (line-art, mono) ───────────────────────── */
+const IC = "h-6 w-6 stroke-[1.5]";
+const Icons = {
+  lecture: () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><path d="M4 5h16v11H4z" strokeLinejoin="round"/><path d="M8 20h8M12 16v4" strokeLinecap="round"/><path d="M8 9h8M8 12h5" strokeLinecap="round"/></svg>),
+  live: () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><circle cx="12" cy="12" r="3"/><path d="M6.5 6.5a8 8 0 0 0 0 11M17.5 6.5a8 8 0 0 1 0 11M4 4a12 12 0 0 0 0 16M20 4a12 12 0 0 1 0 16" strokeLinecap="round"/></svg>),
+  library: () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><path d="M5 4h5v16H5zM10 4h5l3 15-5 1z" strokeLinejoin="round"/></svg>),
+  practice: () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><path d="M12 3v3M12 18v3M3 12h3M18 12h3" strokeLinecap="round"/><circle cx="12" cy="12" r="4"/></svg>),
+  community: () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19a5 5 0 0 1 10 0M13 19a5 5 0 0 1 8-3.5" strokeLinecap="round"/></svg>),
+  calendar: () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M9 3v4M15 3v4" strokeLinecap="round"/></svg>),
+  clock: () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2" strokeLinecap="round"/></svg>),
+  infinity: () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><path d="M6 12c0-2 1.5-3.5 3-3.5S18 15.5 15 15.5 3 8.5 6 8.5 18 16 18 12" strokeLinecap="round"/></svg>),
+};
 
-        <motion.h1
-          className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6"
-          style={{ lineHeight: 1.1 }}
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <span className="grad-text">Клуб 432.</span>
-          <br />
-          Спільнота свідомого життя
-        </motion.h1>
+/* ───────────────────────── data ───────────────────────── */
+const FEATURES = [
+  { icon: Icons.lecture, t: "Глибинні лекції", d: "Щомісяця — нова фундаментальна тема з точки зору психології та духовних законів, плюс потокові лекції з розбором питань учасників." },
+  { icon: Icons.live, t: "Живі розбори", d: "Прямий контакт із Вадимом. Розбираєш наживо свій запит чи ситуацію та бачиш вектор руху." },
+  { icon: Icons.library, t: "Бібліотека мудрості", d: "Доступ до бази знань за 4 роки. Сотні годин контенту — твоя психологічна аптечка, завжди під рукою." },
+  { icon: Icons.practice, t: "Щоденні налаштування", d: "Практики, медитації та фокус уваги в чаті, щоб не випадати з усвідомленого стану в рутину." },
+  { icon: Icons.community, t: "Спільнота однодумців", d: "Безпечне оточення, де можна бути собою, ділитися інсайтами й отримувати підтримку тих, хто рухається поруч." },
+];
 
-        <motion.p
-          className="text-base sm:text-lg mb-10"
-          style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.22 }}
-        >
-          Цілісна система духовних знань та практик<br className="hidden sm:block" />
-          для внутрішньої опори й свідомих змін.
-        </motion.p>
+const FORMAT = [
+  { icon: Icons.calendar, t: "Регулярність", d: "Вівторок і четвер о 19:00. 8 онлайн-зустрічей із Вадимом на місяць — стабільність, що формує звичку." },
+  { icon: Icons.clock, t: "Тривалість", d: "До 1,5 години концентрованої глибини: 60–70 хв лекція та відповіді, 10–15 хв медитація або практика." },
+  { icon: Icons.infinity, t: "Записи назавжди", d: "Не встиг на ефір? Запис зʼявляється в додатку вже за годину. Дивись, коли зручно, зі смартфона." },
+];
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <a href={BOT_URL} target="_blank" rel="noopener noreferrer" className="btn-cta">
+const WHO = [
+  { t: "Шукач", d: "Відчуваєш більше потенціалу, ніж проявлено. Хочеш глибше розкрити свою Душу та призначення." },
+  { t: "Провідник", d: "Психолог, коуч, наставник. Шукаєш глибину, щоб давати клієнтам більше — і джерело власного відновлення." },
+  { t: "Творець", d: "Будуєш бізнес і проєкти зі стану спокою, а не стресу. Потрібна ясність і розуміння причин та наслідків." },
+];
+
+const FAQ: [string, string][] = [
+  ["Це якась релігія?", "Ні. Ми не сповідуємо жодну релігію, а обʼєднуємо науку та духовну мудрість для цілісного розуміння людини."],
+  ["Скільки часу це займає?", "Дві живі зустрічі на тиждень (Вт і Чт о 19:00) до 1,5 год. Усе в записах — можна дивитися у власному ритмі."],
+  ["Мені потрібна підготовка?", "Ні. Ми йдемо від простого до глибокого. Достатньо щирого інтересу пізнати себе."],
+  ["Як відбуваються зустрічі?", "Ефіри через Zoom, спілкування — у закритій Telegram-групі, а лекції та записи — у зручному додатку."],
+];
+
+/* ═══════════════════════════ page ═══════════════════════════ */
+export default function Home() {
+  return (
+    <SmoothScroll>
+      <CosmicBackground />
+
+      {/* NAV */}
+      <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
+        <nav className="frost flex w-full max-w-5xl items-center justify-between rounded-full py-2.5 pl-3 pr-3 sm:pl-5">
+          <a href="#top" className="flex items-center gap-2.5">
+            <Image src="/logo-mandala.svg" alt="Клуб 432" width={30} height={30} className="opacity-90" />
+            <span className="font-display text-lg font-semibold tracking-wide">Клуб 432</span>
+          </a>
+          <a href={BOT} target="_blank" rel="noopener noreferrer" className="btn-cta cursor-pointer !px-6 !py-3 !text-[13px]">
             Стати учасником
           </a>
-        </motion.div>
-      </div>
+        </nav>
+      </header>
 
-      {/* Fade to next */}
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #0D0E2D)", zIndex: 4 }} />
-    </section>
-  );
-}
+      <main id="top" className="relative">
+        {/* ══ HERO ══ */}
+        <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 text-center">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 -z-[1] h-[min(78vw,620px)] w-[min(78vw,620px)] -translate-x-1/2 -translate-y-1/2">
+            <div className="absolute inset-0 rounded-full opacity-70 blur-[70px]" style={{ background: "radial-gradient(circle, rgba(253,209,111,0.22), transparent 60%)" }} />
+            <Image src="/logo-mandala.svg" alt="" width={620} height={620} priority className="h-full w-full opacity-[0.55]" style={{ animation: "spinSlow 90s linear infinite" }} />
+          </div>
 
-function WhoSection() {
-  return (
-    <section className="relative py-20 md:py-28 px-5 sm:px-6 overflow-hidden" style={{ background: "#0D0E2D" }}>
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 50% 0%, rgba(253,209,111,0.04) 0%, transparent 55%)",
-      }} />
-
-      <div className="relative z-10 max-w-4xl mx-auto">
-        <motion.p className="eyebrow text-center mb-4" {...fadeUp(0)}>Для кого</motion.p>
-        <motion.h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12"
-          style={{ lineHeight: 1.1 }}
-          {...fadeUp(0.08)}
-        >
-          Хто тут знаходить <span className="grad-text">свою силу?</span>
-        </motion.h2>
-
-        <div className="grid sm:grid-cols-3 gap-4 sm:gap-6">
-          {personas.map(({ tag, text }, i) => (
-            <motion.div
-              key={i}
-              {...fadeUp(0.1 + i * 0.08)}
-              className="rounded-2xl p-5 sm:p-6"
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(253,209,111,0.12)",
-              }}
-            >
-              <p className="eyebrow mb-3" style={{ color: "#EF8018" }}>{tag}</p>
-              <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>{text}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #15173A)", zIndex: 4 }} />
-    </section>
-  );
-}
-
-function WhySection() {
-  return (
-    <section className="relative py-20 md:py-28 px-5 sm:px-6 overflow-hidden" style={{ background: "#15173A" }}>
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 50% 0%, rgba(239,128,24,0.06) 0%, transparent 55%)",
-      }} />
-
-      <div className="relative z-10 max-w-4xl mx-auto">
-        <motion.p className="eyebrow text-center mb-4" {...fadeUp(0)}>Чому ти тут?</motion.p>
-        <motion.h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12"
-          style={{ lineHeight: 1.1 }}
-          {...fadeUp(0.08)}
-        >
-          Тобі близьке <span className="grad-text">хоча б одне?</span>
-        </motion.h2>
-
-        <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
-          {pains.map(({ icon, title, text }, i) => (
-            <motion.div
-              key={i}
-              {...fadeUp(0.1 + i * 0.06)}
-              className="flex gap-4 rounded-2xl p-5"
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.07)",
-              }}
-            >
-              <span className="text-2xl flex-shrink-0 mt-0.5">{icon}</span>
-              <div>
-                <h3 className="font-semibold mb-1.5" style={{ color: "#FDD16F" }}>{title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>{text}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #0D0E2D)", zIndex: 4 }} />
-    </section>
-  );
-}
-
-function SystemSection() {
-  return (
-    <section className="relative py-20 md:py-28 px-5 sm:px-6 overflow-hidden" style={{ background: "#0D0E2D" }}>
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 50% 0%, rgba(253,209,111,0.04) 0%, transparent 55%)",
-      }} />
-
-      <div className="relative z-10 max-w-4xl mx-auto">
-        <motion.p className="eyebrow text-center mb-4" {...fadeUp(0)}>Клуб 432</motion.p>
-        <motion.h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4"
-          style={{ lineHeight: 1.1 }}
-          {...fadeUp(0.08)}
-        >
-          Система, яка <span className="grad-text">працює</span>
-        </motion.h2>
-        <motion.p
-          className="text-center text-sm mb-12"
-          style={{ color: "rgba(255,255,255,0.35)" }}
-          {...fadeUp(0.14)}
-        >
-          Середовище, де поєднуються знання, практика та живе спілкування.
-        </motion.p>
-
-        <div className="flex flex-col gap-3">
-          {features.map(({ icon, title, text }, i) => (
-            <motion.div
-              key={i}
-              {...fadeUp(0.08 + i * 0.06)}
-              className="flex gap-4 rounded-2xl px-5 py-4 card-glow"
-              style={{
-                background: "#15173A",
-                border: "1px solid rgba(255,255,255,0.07)",
-              }}
-            >
-              <span className="text-2xl flex-shrink-0 mt-0.5">{icon}</span>
-              <div>
-                <h3 className="font-semibold mb-1" style={{ color: "#fff" }}>{title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>{text}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #15173A)", zIndex: 4 }} />
-    </section>
-  );
-}
-
-function FormatSection() {
-  return (
-    <section className="relative py-20 md:py-28 px-5 sm:px-6 overflow-hidden" style={{ background: "#15173A" }}>
-      <div className="relative z-10 max-w-4xl mx-auto">
-        <motion.p className="eyebrow text-center mb-4" {...fadeUp(0)}>Формат</motion.p>
-        <motion.h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12"
-          style={{ lineHeight: 1.1 }}
-          {...fadeUp(0.08)}
-        >
-          Твій комфортний ритм <span className="grad-text">розвитку</span>
-        </motion.h2>
-
-        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-          {formatItems.map(({ icon, title, points }, i) => (
-            <motion.div
-              key={i}
-              {...fadeUp(0.08 + i * 0.06)}
-              className="rounded-2xl p-5 sm:p-6"
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(253,209,111,0.1)",
-              }}
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-xl">{icon}</span>
-                <h3 className="font-semibold" style={{ color: "#FDD16F" }}>{title}</h3>
-              </div>
-              <ul className="flex flex-col gap-1.5">
-                {points.map((pt, j) => (
-                  <li key={j} className="flex gap-2 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
-                    <span style={{ color: "#EF8018", flexShrink: 0 }}>●</span>
-                    {pt}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #0D0E2D)", zIndex: 4 }} />
-    </section>
-  );
-}
-
-function FoundationSection() {
-  return (
-    <section className="relative py-20 md:py-28 px-5 sm:px-6 overflow-hidden" style={{ background: "#0D0E2D" }}>
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 50% 0%, rgba(253,209,111,0.04) 0%, transparent 55%)",
-      }} />
-
-      <div className="relative z-10 max-w-4xl mx-auto">
-        <motion.p className="eyebrow text-center mb-4" {...fadeUp(0)}>Фундамент</motion.p>
-        <motion.h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4"
-          style={{ lineHeight: 1.1 }}
-          {...fadeUp(0.08)}
-        >
-          Фундамент <span className="grad-text">знань</span>
-        </motion.h2>
-        <motion.p
-          className="text-center text-sm mb-12 max-w-2xl mx-auto"
-          style={{ color: "rgba(255,255,255,0.45)", lineHeight: 1.7 }}
-          {...fadeUp(0.14)}
-        >
-          Ми не сповідуємо жодну релігію. Ми об'єднуємо науку та духовну мудрість для цілісного розуміння людини.
-          Людина — це єдність трьох рівнів: Матеріального (тіло), Психічного (емоції та думки) і Духовного (душа та дух).
-        </motion.p>
-
-        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-          {foundations.map(({ title, text }, i) => (
-            <motion.div
-              key={i}
-              {...fadeUp(0.1 + i * 0.07)}
-              className="rounded-2xl p-5 sm:p-6 card-glow"
-              style={{
-                background: "#15173A",
-                border: "1px solid rgba(253,209,111,0.1)",
-              }}
-            >
-              <h3 className="font-semibold mb-2" style={{ color: "#FDD16F" }}>{title}</h3>
-              <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>{text}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #15173A)", zIndex: 4 }} />
-    </section>
-  );
-}
-
-function AuthorSection() {
-  const [imgErr, setImgErr] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  return (
-    <section className="relative py-20 md:py-28 px-5 sm:px-6 overflow-hidden" style={{ background: "#15173A" }}>
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 30% 50%, rgba(239,128,24,0.06) 0%, transparent 55%)",
-      }} />
-
-      <div className="relative z-10 max-w-4xl mx-auto">
-        <motion.p className="eyebrow text-center mb-4" {...fadeUp(0)}>Автор та ведучий клубу</motion.p>
-        <motion.h2
-          className="text-3xl sm:text-4xl font-bold text-center mb-12"
-          style={{ lineHeight: 1.1 }}
-          {...fadeUp(0.08)}
-        >
-          Шпильчук <span className="grad-text">Вадим</span>
-        </motion.h2>
-
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          {/* Photo */}
-          <motion.div
-            {...fadeUp(0.1)}
-            className="rounded-3xl overflow-hidden mx-auto w-full max-w-xs md:max-w-none"
-            style={{
-              aspectRatio: "3/4",
-              background: "linear-gradient(135deg, #1E2048 0%, #0D0E2D 100%)",
-              border: "1px solid rgba(253,209,111,0.2)",
-              boxShadow: "0 24px 80px rgba(0,0,0,0.4)",
-            }}
+          <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <Eyebrow>Спільнота свідомого життя</Eyebrow>
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display wordmark text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[0.92] tracking-tight"
           >
-            {!imgErr ? (
-              <img
-                ref={imgRef}
-                src="/photos/vadym.jpg"
-                alt="Шпильчук Вадим"
-                className="w-full h-full object-cover"
-                onError={() => setImgErr(true)}
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center gap-3">
-                <span className="text-5xl">🧘</span>
-                <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>Вадим Шпильчук</p>
-              </div>
-            )}
+            Клуб 432
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.32 }}
+            className="mx-auto mt-7 max-w-2xl text-[clamp(1.05rem,1.7vw,1.35rem)] leading-relaxed text-[var(--c432-ink)]"
+          >
+            Духовність. Психологія. Реальне життя. Цілісна система знань і практик для
+            внутрішньої опори й свідомих змін — і жива спільнота поруч.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.5 }}
+            className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
+          >
+            <a href={BOT} target="_blank" rel="noopener noreferrer" className="btn-cta cursor-pointer">Стати учасником</a>
+            <a href="#what" className="btn-ghost">Що всередині</a>
           </motion.div>
+        </section>
 
-          {/* Text */}
-          <motion.div {...fadeUp(0.16)}>
-            <p className="text-base sm:text-lg mb-6 leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
-              Навчаю розуміти себе, як духовну істоту, а світ, як єдиний механізм, в якому все пов'язано між собою.
-            </p>
-
-            <div className="flex flex-col gap-4">
-              {[
-                { label: "Досвід", value: "4+ роки роботи з людьми. Тисячі годин практики та наставництва." },
-                { label: "Підхід", value: "Педагог, духовний учитель та наставник. Поєднання глибинної психології та духовних законів з інтеграцією в сучасне життя." },
-                { label: "Особистий приклад", value: "Підприємець, практик, сім'янин, дослідник свідомості." },
-                { label: "Місія", value: "Поширення духовності в повсякденному житті, щоб допомогти тобі вийти на новий рівень свідомості." },
-              ].map(({ label, value }, i) => (
-                <div key={i} className="flex gap-3">
-                  <span className="text-xs font-semibold flex-shrink-0 mt-1 tracking-wider uppercase" style={{ color: "#EF8018", minWidth: 80 }}>{label}</span>
-                  <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>{value}</p>
+        {/* ══ WHO ══ */}
+        <section id="what" className="sect mx-auto max-w-6xl px-5">
+          <Reveal><Eyebrow>Хто тут знаходить силу</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-14 max-w-3xl text-center">Клуб для тих, хто відчуває, що всередині більше</h2></Reveal>
+          <div className="grid gap-5 md:grid-cols-3">
+            {WHO.map((w, i) => (
+              <Reveal key={w.t} i={i}>
+                <div className="frost frost-hover h-full p-8">
+                  <h3 className="grad-text text-2xl font-semibold uppercase tracking-wide">{w.t}</h3>
+                  <div className="hairline my-5" />
+                  <p className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{w.d}</p>
                 </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
 
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #0D0E2D)", zIndex: 4 }} />
-    </section>
-  );
-}
+        {/* ══ FEATURES ══ */}
+        <section className="sect mx-auto max-w-6xl px-5">
+          <Reveal><Eyebrow>Система, яка працює</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center">Середовище, де поєднані знання, практика та живе спілкування</h2></Reveal>
+          <Reveal i={2}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">Усе, що потрібно, щоб залишатись свідомим у будь-якій життєвій ситуації.</p></Reveal>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {FEATURES.map((f, i) => (
+              <Reveal key={f.t} i={i}>
+                <div className="frost frost-hover group flex h-full flex-col p-7">
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full text-[var(--c432-amber)]" style={{ background: "rgba(253,209,111,0.08)", boxShadow: "inset 0 0 0 1px rgba(253,209,111,0.18)" }}>
+                    <f.icon />
+                  </div>
+                  <h3 className="text-xl font-semibold">{f.t}</h3>
+                  <p className="mt-3 text-[15px] leading-relaxed text-[var(--c432-ink)]">{f.d}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
 
-function TestimonialsSection() {
-  return (
-    <section className="relative py-20 md:py-28 px-5 sm:px-6 overflow-hidden" style={{ background: "#0D0E2D" }}>
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 50% 0%, rgba(253,209,111,0.04) 0%, transparent 55%)",
-      }} />
+        {/* ══ FORMAT ══ */}
+        <section className="sect mx-auto max-w-6xl px-5">
+          <Reveal><Eyebrow>Формат клубу</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-14 max-w-3xl text-center">Комфортний ритм розвитку — без стресу та дедлайнів</h2></Reveal>
+          <div className="grid gap-5 md:grid-cols-3">
+            {FORMAT.map((f, i) => (
+              <Reveal key={f.t} i={i}>
+                <div className="frost h-full p-8">
+                  <div className="mb-5 text-[var(--c432-amber)]"><f.icon /></div>
+                  <h3 className="text-xl font-semibold">{f.t}</h3>
+                  <p className="mt-3 text-[15px] leading-relaxed text-[var(--c432-ink)]">{f.d}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
 
-      <div className="relative z-10 max-w-3xl mx-auto">
-        <motion.p className="eyebrow text-center mb-4" {...fadeUp(0)}>Відгуки</motion.p>
-        <motion.h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4"
-          style={{ lineHeight: 1.1 }}
-          {...fadeUp(0.08)}
-        >
-          Історія <span className="grad-text">трансформації</span>
-        </motion.h2>
-        <motion.p
-          className="text-center text-sm mb-12"
-          style={{ color: "rgba(255,255,255,0.35)" }}
-          {...fadeUp(0.14)}
-        >
-          Ми попросили учасників клубу описати однією фразою про що для них став Клуб 432
-        </motion.p>
-
-        <div className="flex flex-col gap-2.5">
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={i}
-              {...fadeUp(0.08 + i * 0.05)}
-              className="flex items-center gap-4 px-5 py-4 rounded-2xl"
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.07)",
-              }}
-            >
-              <span className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
-                style={{ background: "rgba(239,128,24,0.15)", color: "#EF8018" }}>
-                {i + 1}
-              </span>
-              <p className="text-sm sm:text-base" style={{ color: "rgba(255,255,255,0.75)" }}>{t}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #15173A)", zIndex: 4 }} />
-    </section>
-  );
-}
-
-function MonthlySection() {
-  return (
-    <section className="relative py-20 md:py-28 px-5 sm:px-6 overflow-hidden" style={{ background: "#15173A" }}>
-      <div className="relative z-10 max-w-4xl mx-auto">
-        <motion.p className="eyebrow text-center mb-4" {...fadeUp(0)}>Що входить</motion.p>
-        <motion.h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4"
-          style={{ lineHeight: 1.1 }}
-          {...fadeUp(0.08)}
-        >
-          Твій місяць у <span className="grad-text">Клубі 432</span>
-        </motion.h2>
-        <motion.p
-          className="text-center text-sm mb-12"
-          style={{ color: "rgba(255,255,255,0.35)" }}
-          {...fadeUp(0.14)}
-        >
-          Повний арсенал інструментів для твого зростання в одному місці
-        </motion.p>
-
-        <div className="flex flex-col gap-3">
-          {monthlyIncludes.map(({ n, title, text }, i) => (
-            <motion.div
-              key={i}
-              {...fadeUp(0.06 + i * 0.05)}
-              className="flex gap-4 sm:gap-5 rounded-2xl px-5 py-4"
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.07)",
-              }}
-            >
-              <span className="flex-shrink-0 text-sm font-bold mt-0.5 w-8" style={{ color: "#EF8018" }}>{n}.</span>
+        {/* ══ AUTHOR ══ */}
+        <section className="sect mx-auto max-w-5xl px-5">
+          <div className="grid items-center gap-10 md:grid-cols-[0.9fr_1.1fr]">
+            <Reveal>
+              <div className="relative mx-auto w-full max-w-sm">
+                <div className="absolute inset-0 -z-[1] rounded-full opacity-60 blur-3xl" style={{ background: "radial-gradient(circle at 50% 35%, rgba(253,209,111,0.25), transparent 65%)" }} />
+                <Image src="/photos/vadym.png" alt="Вадим Шпильчук — засновник Клубу 432" width={894} height={1454} className="h-auto w-full" />
+              </div>
+            </Reveal>
+            <Reveal i={1}>
               <div>
-                <h3 className="font-semibold mb-1" style={{ color: "#fff" }}>{title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>{text}</p>
+                <Eyebrow>Автор і ведучий</Eyebrow>
+                <h2 className="font-display text-4xl font-semibold md:text-5xl">Вадим Шпильчук</h2>
+                <p className="mt-5 text-[clamp(1.05rem,1.6vw,1.3rem)] leading-relaxed text-[var(--c432-ink)]">
+                  «Навчаю розуміти себе як духовну істоту, а світ — як єдиний механізм,
+                  де все повʼязано між собою».
+                </p>
+                <p className="mt-4 text-[15px] leading-relaxed text-white/55">
+                  Педагог, духовний учитель і наставник. Підприємець, практик, сімʼянин,
+                  дослідник свідомості. Поєднує глибинну психологію та духовні закони з
+                  інтеграцією в сучасне життя.
+                </p>
+                <div className="mt-8 grid max-w-md grid-cols-3 gap-4">
+                  {[["4+", "роки з людьми"], ["1000+", "годин практики"], ["∞", "доступ до записів"]].map(([n, l]) => (
+                    <div key={l} className="frost p-4 text-center">
+                      <div className="font-display text-3xl text-[var(--c432-amber)]">{n}</div>
+                      <div className="mt-1 text-[11px] leading-tight text-white/45">{l}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </motion.div>
-          ))}
-        </div>
+            </Reveal>
+          </div>
+        </section>
 
-        {/* Bonuses */}
-        <motion.div
-          {...fadeUp(0.4)}
-          className="mt-6 rounded-2xl p-5 sm:p-6"
-          style={{
-            background: "rgba(253,209,111,0.04)",
-            border: "1px solid rgba(253,209,111,0.18)",
-          }}
-        >
-          <p className="eyebrow mb-3" style={{ color: "#EF8018" }}>Бонус</p>
-          <p className="text-sm mb-3" style={{ color: "rgba(255,255,255,0.7)" }}>
-            Учасникам клубу відкриваються знижки на всі інші продукти:
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {["Індивідуальне заняття", "Місяць ведення", "Курс 7 таємниць", "Навчання на провідника Ліли", "Ліла гра індивідуальна", "Групова Ліла"].map((b, i) => (
-              <span key={i} className="text-xs px-3 py-1.5 rounded-full" style={{
-                background: "rgba(239,128,24,0.1)",
-                border: "1px solid rgba(239,128,24,0.2)",
-                color: "rgba(255,255,255,0.65)",
-              }}>{b}</span>
+        {/* ══ JOIN ══ */}
+        <section id="join" className="sect mx-auto max-w-3xl px-5">
+          <Reveal>
+            <div className="frost relative overflow-hidden p-8 text-center sm:p-14">
+              <div className="pointer-events-none absolute inset-0 opacity-80" style={{ background: "radial-gradient(70% 90% at 50% 0%, rgba(239,128,24,0.14), transparent 70%)" }} />
+              <div className="relative">
+                <Eyebrow>Приєднатися</Eyebrow>
+                <h2 className="font-display h-section mx-auto max-w-2xl">Стань частиною Клубу 432</h2>
+                <p className="mx-auto mt-6 max-w-xl text-[var(--c432-ink)]">
+                  Щомісячні глибинні лекції, живі розбори з Вадимом, бібліотека знань за 4 роки
+                  та щоденні практики у спільноті однодумців.
+                </p>
+                <div className="mt-9 flex flex-col items-center gap-4">
+                  <a href={BOT} target="_blank" rel="noopener noreferrer" className="btn-cta cursor-pointer">Стати учасником</a>
+                  <p className="text-xs uppercase tracking-[0.2em] text-white/40">Вівторок і четвер · 19:00 · записи назавжди</p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* ══ FAQ ══ */}
+        <section className="sect mx-auto max-w-3xl px-5">
+          <Reveal><Eyebrow>Часті питання</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mb-12 text-center">Коротко про головне</h2></Reveal>
+          <div className="space-y-4">
+            {FAQ.map(([q, a], i) => (
+              <Reveal key={q} i={i}>
+                <details className="frost group p-6 [&_summary]:cursor-pointer">
+                  <summary className="flex items-center justify-between gap-4 text-lg font-semibold marker:content-['']">
+                    {q}
+                    <span className="text-2xl text-[var(--c432-amber)] transition-transform duration-300 group-open:rotate-45">+</span>
+                  </summary>
+                  <p className="mt-4 text-[15px] leading-relaxed text-[var(--c432-ink)]">{a}</p>
+                </details>
+              </Reveal>
             ))}
           </div>
-        </motion.div>
-      </div>
+        </section>
 
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #0D0E2D)", zIndex: 4 }} />
-    </section>
-  );
-}
-
-function PricingSection() {
-  return (
-    <section className="relative py-20 md:py-28 px-5 sm:px-6 overflow-hidden" style={{ background: "#0D0E2D" }}>
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 50% 30%, rgba(239,128,24,0.08) 0%, transparent 55%)",
-      }} />
-
-      <div className="relative z-10 max-w-lg mx-auto text-center">
-        <motion.p className="eyebrow mb-4" {...fadeUp(0)}>Вартість</motion.p>
-        <motion.h2
-          className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
-          style={{ lineHeight: 1.1 }}
-          {...fadeUp(0.08)}
-        >
-          Стати учасником <span className="grad-text">Клубу 432</span>
-        </motion.h2>
-        <motion.p className="text-sm mb-10" style={{ color: "rgba(255,255,255,0.35)" }} {...fadeUp(0.14)}>
-          Набір відкрито! Твій місяць участі починається з моменту оплати
-        </motion.p>
-
-        <motion.div
-          {...fadeUp(0.2)}
-          className="rounded-3xl p-7 sm:p-8 text-left"
-          style={{
-            background: "#15173A",
-            border: "1px solid rgba(253,209,111,0.2)",
-            boxShadow: "0 0 60px rgba(253,209,111,0.06)",
-          }}
-        >
-          <p className="eyebrow mb-2" style={{ color: "rgba(255,255,255,0.35)" }}>Учасник клубу</p>
-          <div className="flex items-end gap-3 mb-2">
-            <span className="text-4xl sm:text-5xl font-bold" style={{ color: "#FDD16F" }}>1 200</span>
-            <span className="text-lg mb-1" style={{ color: "rgba(255,255,255,0.5)" }}>грн / міс</span>
-          </div>
-          <p className="text-xs mb-6 line-through" style={{ color: "rgba(255,255,255,0.25)" }}>Цінність: 5 000 грн</p>
-
-          <div className="flex flex-col gap-2.5 mb-7">
-            {[
-              "Доступ до всіх живих ефірів (8/міс)",
-              "Участь у розборах з Вадимом",
-              "Бонус: Доступ до Бази Знань за 4 роки",
-              "Закритий чат та оточення",
-              "Щоденні практики",
-              "Автоматична щомісячна підписка для зручності",
-            ].map((f, i) => (
-              <div key={i} className="flex gap-3 items-start">
-                <span className="flex-shrink-0 mt-0.5" style={{ color: "#EF8018" }}>✓</span>
-                <span className="text-sm" style={{ color: "rgba(255,255,255,0.7)" }}>{f}</span>
+        {/* ══ FOOTER ══ */}
+        <footer className="sect mx-auto max-w-6xl px-5 pb-16">
+          <div className="hairline mb-12" />
+          <div className="flex flex-col items-center gap-8 text-center md:flex-row md:justify-between md:text-left">
+            <div className="flex items-center gap-3">
+              <Image src="/logo-mandala.svg" alt="Клуб 432" width={40} height={40} className="opacity-90" />
+              <div>
+                <div className="font-display text-lg font-semibold">Клуб 432</div>
+                <div className="text-xs text-white/40">Спільнота свідомого життя</div>
               </div>
-            ))}
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm text-white/55">
+              <a href={BOT} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--c432-amber)]">Telegram-бот</a>
+              <a href="/oferta" className="transition-colors hover:text-[var(--c432-amber)]">Оферта</a>
+              <a href="/privacy-policy" className="transition-colors hover:text-[var(--c432-amber)]">Політика конфіденційності</a>
+            </div>
           </div>
-
-          <a href={BOT_URL} target="_blank" rel="noopener noreferrer" className="btn-cta w-full text-center block">
-            Стати учасником
-          </a>
-          <p className="text-center text-xs mt-3" style={{ color: "rgba(255,255,255,0.25)" }}>
-            * Можна скасувати в будь-який момент *
-          </p>
-        </motion.div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #15173A)", zIndex: 4 }} />
-    </section>
-  );
-}
-
-function FAQSection() {
-  const [open, setOpen] = useState<number | null>(null);
-
-  return (
-    <section className="relative py-20 md:py-28 px-5 sm:px-6 overflow-hidden" style={{ background: "#15173A" }}>
-      <div className="relative z-10 max-w-3xl mx-auto">
-        <motion.p className="eyebrow text-center mb-4" {...fadeUp(0)}>FAQ</motion.p>
-        <motion.h2
-          className="text-3xl sm:text-4xl font-bold text-center mb-12"
-          style={{ lineHeight: 1.1 }}
-          {...fadeUp(0.08)}
-        >
-          Часті <span className="grad-text">запитання</span>
-        </motion.h2>
-
-        <div className="flex flex-col gap-2.5">
-          {faqs.map(({ q, a }, i) => (
-            <motion.div
-              key={i}
-              {...fadeUp(0.06 + i * 0.04)}
-              className="rounded-2xl overflow-hidden cursor-pointer"
-              style={{
-                background: open === i ? "#1E2048" : "#0D0E2D",
-                border: open === i ? "1px solid rgba(253,209,111,0.3)" : "1px solid rgba(255,255,255,0.07)",
-                transition: "background 0.3s, border-color 0.3s",
-              }}
-              onClick={() => setOpen(open === i ? null : i)}
-            >
-              <div className="px-5 py-4 flex items-center justify-between gap-4">
-                <span className="font-semibold text-sm sm:text-base" style={{ color: open === i ? "#FDD16F" : "#fff", transition: "color 0.3s" }}>
-                  {q}
-                </span>
-                <span
-                  className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm"
-                  style={{
-                    background: open === i ? "rgba(239,128,24,0.2)" : "rgba(255,255,255,0.06)",
-                    color: open === i ? "#EF8018" : "rgba(255,255,255,0.35)",
-                    transform: open === i ? "rotate(45deg)" : "rotate(0deg)",
-                    transition: "transform 0.3s, background 0.3s, color 0.3s",
-                  }}
-                >
-                  +
-                </span>
-              </div>
-              <AnimatePresence>
-                {open === i && (
-                  <motion.p
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="overflow-hidden px-5 pb-5 text-sm leading-relaxed"
-                    style={{
-                      color: "rgba(255,255,255,0.65)",
-                      borderTop: "1px solid rgba(253,209,111,0.1)",
-                      paddingTop: 14,
-                    }}
-                  >
-                    {a}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
-        style={{ height: 120, background: "linear-gradient(to bottom, transparent, #0D0E2D)", zIndex: 4 }} />
-    </section>
-  );
-}
-
-function ContactSection() {
-  return (
-    <section className="relative py-20 md:py-24 px-5 sm:px-6 overflow-hidden" style={{ background: "#0D0E2D" }}>
-      <div className="relative z-10 max-w-xl mx-auto text-center">
-        <motion.h2
-          className="text-2xl sm:text-3xl font-bold mb-4"
-          {...fadeUp(0)}
-        >
-          Досі залишилися <span className="grad-text">питання?</span>
-        </motion.h2>
-        <motion.p className="text-sm mb-8" style={{ color: "rgba(255,255,255,0.4)" }} {...fadeUp(0.08)}>
-          Пиши мені в Telegram і я відповім тобі найближчим часом
-        </motion.p>
-        <motion.div {...fadeUp(0.14)}>
-          <a href="https://t.me/vadym_shpylchuk" target="_blank" rel="noopener noreferrer" className="btn-cta">
-            Написати мені
-          </a>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function FooterSection() {
-  return (
-    <footer
-      className="px-5 sm:px-6 py-10"
-      style={{ background: "#07081B", borderTop: "1px solid rgba(255,255,255,0.06)" }}
-    >
-      <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-          {/* Left */}
-          <div className="text-center sm:text-left">
-            <p className="font-bold text-sm mb-1" style={{ color: "#FDD16F" }}>Клуб 432</p>
-            <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>+380982627024</p>
-            <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>prosto.mindful@gmail.com</p>
-          </div>
-
-          {/* Social */}
-          <div className="flex gap-4 items-center">
-            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer"
-              className="w-9 h-9 rounded-full flex items-center justify-center text-sm transition-opacity hover:opacity-80"
-              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-              📷
-            </a>
-            <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer"
-              className="w-9 h-9 rounded-full flex items-center justify-center text-sm transition-opacity hover:opacity-80"
-              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-              ✈️
-            </a>
-            <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer"
-              className="w-9 h-9 rounded-full flex items-center justify-center text-sm transition-opacity hover:opacity-80"
-              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-              ▶️
-            </a>
-          </div>
-
-          {/* Right */}
-          <div className="text-center sm:text-right text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>
-            <a href="/oferta" className="hover:text-white transition-colors block mb-1">Договір публічної оферти</a>
-            <a href="/privacy-policy" className="hover:text-white transition-colors block mb-1">Політика конфіденційності</a>
-            <p className="mt-2">© 2026 Клуб 432. Всі права захищено.</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-// ── Page ─────────────────────────────────────────────────────────────────────
-
-export default function HomePage() {
-  return (
-    <main>
-      <ClubHero />
-      <WhoSection />
-      <WhySection />
-      <SystemSection />
-      <FormatSection />
-      <FoundationSection />
-      <AuthorSection />
-      <TestimonialsSection />
-      <MonthlySection />
-      <PricingSection />
-      <FAQSection />
-      <ContactSection />
-      <FooterSection />
-    </main>
+          <p className="mt-10 text-center text-xs text-white/30">© {new Date().getFullYear()} Клуб 432 · ФОП Шпильчук Вадим Дмитрович</p>
+        </footer>
+      </main>
+    </SmoothScroll>
   );
 }
