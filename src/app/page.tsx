@@ -77,7 +77,7 @@ export default function Home() {
       <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
         <nav className="frost flex w-full max-w-5xl items-center justify-between rounded-full py-2.5 pl-3 pr-3 sm:pl-5">
           <a href="#top" className="flex items-center gap-2.5">
-            <Image src="/logo-mandala.svg" alt="Клуб 432" width={30} height={30} className="opacity-90" />
+            <Image src="/logo-mandala-white.svg" alt="Клуб 432" width={32} height={32} className="drop-shadow-[0_0_6px_rgba(255,255,255,0.25)]" />
             <span className="font-display text-lg font-semibold tracking-wide">Клуб 432</span>
           </a>
           <a href={BOT} target="_blank" rel="noopener noreferrer" className="btn-cta cursor-pointer !px-6 !py-3 !text-[13px]">
@@ -99,7 +99,7 @@ export default function Home() {
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display wordmark text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[0.92] tracking-tight"
+            className="font-display wordmark text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[1.06] tracking-tight pb-[0.14em]"
           >
             Клуб 432
           </motion.h1>
@@ -180,6 +180,8 @@ export default function Home() {
               <div className="relative mx-auto w-full max-w-sm">
                 <div className="absolute inset-0 -z-[1] rounded-full opacity-60 blur-3xl" style={{ background: "radial-gradient(circle at 50% 35%, rgba(253,209,111,0.25), transparent 65%)" }} />
                 <Image src="/photos/vadym.png" alt="Вадим Шпильчук — засновник Клубу 432" width={894} height={1454} className="h-auto w-full" />
+                {/* fade the cropped bottom edge into the cosmos (colours match, stars show through) */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5" style={{ background: "linear-gradient(to top, var(--c432-bg) 8%, rgba(13,14,45,0.6) 45%, transparent 100%)" }} />
               </div>
             </Reveal>
             <Reveal i={1}>

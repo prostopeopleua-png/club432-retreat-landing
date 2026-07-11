@@ -283,6 +283,26 @@ body {
 /* Seamless section — transparent, generous cathedral rhythm */
 .sect { position: relative; padding-block: clamp(4.5rem, 11vh, 9rem); }
 
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.animate-blink { animation: blink 1s step-end infinite; }
+
+/* Hero video: dissolve the light backdrop into the cosmos (seamless) */
+.hero-video {
+  -webkit-mask-image: radial-gradient(135% 118% at 74% 40%, #000 40%, transparent 80%);
+  mask-image: radial-gradient(135% 118% at 74% 40%, #000 40%, transparent 80%);
+}
+@media (max-width: 1023px) {
+  .hero-video {
+    -webkit-mask-image: radial-gradient(120% 95% at 52% 40%, #000 44%, transparent 82%);
+    mask-image: radial-gradient(120% 95% at 52% 40%, #000 44%, transparent 82%);
+  }
+}
+
+@keyframes fireGlow {
+  0%, 100% { opacity: 0.75; transform: scale(1); filter: blur(30px); }
+  50%       { opacity: 1; transform: scale(1.08); filter: blur(40px); }
+}
+
 @keyframes spinSlow { to { transform: rotate(360deg); } }
 @keyframes breathe { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.9; transform: scale(1.04); } }
 @keyframes twinkle { 0%,100% { opacity: 0.15; } 50% { opacity: 0.9; } }
