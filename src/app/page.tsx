@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
 import SmoothScroll from "@/components/SmoothScroll";
 import CosmicBackground from "@/components/CosmicBackground";
-import RoamingFigure from "@/components/RoamingFigure";
+import RoamingMandala from "@/components/RoamingMandala";
 
 const BOT = "https://t.me/prosto_mindful_bot";
 
@@ -73,7 +73,7 @@ export default function Home() {
   return (
     <SmoothScroll>
       <CosmicBackground />
-      <RoamingFigure />
+      <RoamingMandala />
 
       {/* NAV */}
       <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
@@ -91,16 +91,13 @@ export default function Home() {
       <main id="top" className="relative z-10">
         {/* ══ HERO ══ */}
         <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 text-center">
-          <div className="pointer-events-none absolute left-1/2 top-1/2 -z-[1] h-[min(78vw,620px)] w-[min(78vw,620px)] -translate-x-1/2 -translate-y-1/2">
-            <div className="absolute inset-0 rounded-full opacity-70 blur-[70px]" style={{ background: "radial-gradient(circle, rgba(253,209,111,0.22), transparent 60%)" }} />
-            <Image src="/logo-mandala.svg" alt="" width={620} height={620} priority className="h-full w-full opacity-[0.55]" style={{ animation: "spinSlow 90s linear infinite" }} />
-          </div>
 
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <Eyebrow>Спільнота свідомого життя</Eyebrow>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            style={{ textShadow: "0 0 44px rgba(7,8,27,0.95), 0 2px 22px rgba(7,8,27,0.85)" }}
             className="font-display wordmark text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[1.06] tracking-tight pb-[0.14em]"
           >
             Клуб 432
