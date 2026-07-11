@@ -88,7 +88,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <main id="top" className="relative">
+      <main id="top" className="relative z-10">
         {/* ══ HERO ══ */}
         <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 text-center">
           <div className="pointer-events-none absolute left-1/2 top-1/2 -z-[1] h-[min(78vw,620px)] w-[min(78vw,620px)] -translate-x-1/2 -translate-y-1/2">
@@ -181,9 +181,18 @@ export default function Home() {
             <Reveal>
               <div className="relative mx-auto w-full max-w-sm">
                 <div className="absolute inset-0 -z-[1] rounded-full opacity-60 blur-3xl" style={{ background: "radial-gradient(circle at 50% 35%, rgba(253,209,111,0.25), transparent 65%)" }} />
-                <Image src="/photos/vadym.png" alt="Вадим Шпильчук — засновник Клубу 432" width={894} height={1454} className="h-auto w-full" />
-                {/* fade the cropped bottom edge into the cosmos (colours match, stars show through) */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5" style={{ background: "linear-gradient(to top, var(--c432-bg) 8%, rgba(13,14,45,0.6) 45%, transparent 100%)" }} />
+                {/* mask dissolves the cropped bottom into transparency — the starfield cosmos shows through like fog */}
+                <Image
+                  src="/photos/vadym.png"
+                  alt="Вадим Шпильчук — засновник Клубу 432"
+                  width={894}
+                  height={1454}
+                  className="h-auto w-full"
+                  style={{
+                    WebkitMaskImage: "linear-gradient(to bottom, #000 52%, rgba(0,0,0,0.55) 78%, transparent 96%)",
+                    maskImage: "linear-gradient(to bottom, #000 52%, rgba(0,0,0,0.55) 78%, transparent 96%)",
+                  }}
+                />
               </div>
             </Reveal>
             <Reveal i={1}>
@@ -257,7 +266,7 @@ export default function Home() {
           <div className="hairline mb-12" />
           <div className="flex flex-col items-center gap-8 text-center md:flex-row md:justify-between md:text-left">
             <div className="flex items-center gap-3">
-              <Image src="/logo-mandala.svg" alt="Клуб 432" width={40} height={40} className="opacity-90" />
+              <Image src="/logo-mandala-white.svg" alt="Клуб 432" width={42} height={42} className="drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" />
               <div>
                 <div className="font-display text-lg font-semibold">Клуб 432</div>
                 <div className="text-xs text-white/40">Спільнота свідомого життя</div>
