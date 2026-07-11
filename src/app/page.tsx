@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
 import SmoothScroll from "@/components/SmoothScroll";
 import CosmicBackground from "@/components/CosmicBackground";
+import RoamingFigure from "@/components/RoamingFigure";
 
 const BOT = "https://t.me/prosto_mindful_bot";
 
@@ -72,6 +73,7 @@ export default function Home() {
   return (
     <SmoothScroll>
       <CosmicBackground />
+      <RoamingFigure />
 
       {/* NAV */}
       <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
