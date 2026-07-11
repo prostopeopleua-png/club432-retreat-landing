@@ -91,14 +91,18 @@ export default function Home() {
       <main id="top" className="relative z-10">
         {/* ══ HERO ══ */}
         <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 text-center">
+          {/* soft dark scrim behind the text so the wordmark stays legible over the burning mandala */}
+          <div
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[72%] w-[min(92vw,880px)] -translate-x-1/2 -translate-y-1/2"
+            style={{ background: "radial-gradient(58% 50% at 50% 50%, rgba(7,8,27,0.74), rgba(7,8,27,0.34) 56%, transparent 80%)" }}
+          />
 
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <Eyebrow>Спільнота свідомого життя</Eyebrow>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            style={{ textShadow: "0 0 44px rgba(7,8,27,0.95), 0 2px 22px rgba(7,8,27,0.85)" }}
-            className="font-display wordmark text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[1.06] tracking-tight pb-[0.14em]"
+            className="font-display wordmark relative text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[1.06] tracking-tight pb-[0.14em] drop-shadow-[0_0_30px_rgba(7,8,27,0.55)]"
           >
             Клуб 432
           </motion.h1>
@@ -177,19 +181,14 @@ export default function Home() {
           <div className="grid items-center gap-10 md:grid-cols-[0.9fr_1.1fr]">
             <Reveal>
               <div className="relative mx-auto w-full max-w-sm">
+                {/* warm halo */}
                 <div className="absolute inset-0 -z-[1] rounded-full opacity-60 blur-3xl" style={{ background: "radial-gradient(circle at 50% 35%, rgba(253,209,111,0.25), transparent 65%)" }} />
-                {/* mask dissolves the cropped bottom into transparency — the starfield cosmos shows through like fog */}
-                <Image
-                  src="/photos/vadym.png"
-                  alt="Вадим Шпильчук — засновник Клубу 432"
-                  width={894}
-                  height={1454}
-                  className="h-auto w-full"
-                  style={{
-                    WebkitMaskImage: "linear-gradient(to bottom, #000 52%, rgba(0,0,0,0.55) 78%, transparent 96%)",
-                    maskImage: "linear-gradient(to bottom, #000 52%, rgba(0,0,0,0.55) 78%, transparent 96%)",
-                  }}
-                />
+                {/* fog he emerges from — dark cloud behind, fading into the cosmos */}
+                <div className="absolute inset-x-[-15%] bottom-[-6%] -z-[1] h-3/4" style={{ background: "radial-gradient(120% 85% at 50% 100%, rgba(11,13,32,0.95) 0%, rgba(11,13,32,0.55) 42%, transparent 76%)", filter: "blur(10px)" }} />
+                {/* opaque photo — solid, not cut-out */}
+                <Image src="/photos/vadym.png" alt="Вадим Шпильчук — засновник Клубу 432" width={894} height={1454} className="h-auto w-full" />
+                {/* fog in front hides the cropped bottom edge — colour of the robe/cosmos, dissolves upward */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%]" style={{ background: "linear-gradient(to top, #0a0c1e 4%, rgba(10,12,30,0.88) 26%, rgba(10,12,30,0.42) 58%, transparent 100%)" }} />
               </div>
             </Reveal>
             <Reveal i={1}>
