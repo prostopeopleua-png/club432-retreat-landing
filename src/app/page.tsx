@@ -94,7 +94,7 @@ export default function Home() {
           {/* soft dark scrim behind the text so the wordmark stays legible over the burning mandala */}
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 h-[72%] w-[min(92vw,880px)] -translate-x-1/2 -translate-y-1/2"
-            style={{ background: "radial-gradient(58% 50% at 50% 50%, rgba(7,8,27,0.74), rgba(7,8,27,0.34) 56%, transparent 80%)" }}
+            style={{ background: "radial-gradient(56% 48% at 50% 46%, rgba(7,8,27,0.5), rgba(7,8,27,0.22) 58%, transparent 82%)" }}
           />
 
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
@@ -108,7 +108,7 @@ export default function Home() {
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.32 }}
-            className="mx-auto mt-7 max-w-2xl text-[clamp(1.05rem,1.7vw,1.35rem)] leading-relaxed text-[var(--c432-ink)]"
+            className="mx-auto mt-7 max-w-2xl text-[clamp(1.05rem,1.7vw,1.35rem)] leading-relaxed text-white/85 [text-shadow:0_1px_16px_rgba(7,8,27,0.95)]"
           >
             Духовність. Психологія. Реальне життя. Цілісна система знань і практик для
             внутрішньої опори й свідомих змін — і жива спільнота поруч.
