@@ -91,18 +91,12 @@ export default function Home() {
       <main id="top" className="relative z-10">
         {/* ══ HERO ══ */}
         <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 text-center">
-          {/* soft dark scrim behind the text so the wordmark stays legible over the burning mandala */}
-          <div
-            className="pointer-events-none absolute left-1/2 top-1/2 h-[72%] w-[min(92vw,880px)] -translate-x-1/2 -translate-y-1/2"
-            style={{ background: "radial-gradient(56% 48% at 50% 46%, rgba(7,8,27,0.5), rgba(7,8,27,0.22) 58%, transparent 82%)" }}
-          />
-
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <Eyebrow>Спільнота свідомого життя</Eyebrow>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display wordmark relative text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[1.06] tracking-tight pb-[0.14em] drop-shadow-[0_0_30px_rgba(7,8,27,0.55)]"
+            className="font-display wordmark relative text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[1.06] tracking-tight pb-[0.14em] [filter:drop-shadow(0_2px_10px_rgba(7,8,27,0.9))_drop-shadow(0_0_28px_rgba(7,8,27,0.7))]"
           >
             Клуб 432
           </motion.h1>
@@ -180,15 +174,21 @@ export default function Home() {
         <section className="sect mx-auto max-w-5xl px-5">
           <div className="grid items-center gap-10 md:grid-cols-[0.9fr_1.1fr]">
             <Reveal>
-              <div className="relative mx-auto w-full max-w-sm">
-                {/* warm halo */}
-                <div className="absolute inset-0 -z-[1] rounded-full opacity-60 blur-3xl" style={{ background: "radial-gradient(circle at 50% 35%, rgba(253,209,111,0.25), transparent 65%)" }} />
-                {/* fog he emerges from — dark cloud behind, fading into the cosmos */}
-                <div className="absolute inset-x-[-15%] bottom-[-6%] -z-[1] h-3/4" style={{ background: "radial-gradient(120% 85% at 50% 100%, rgba(11,13,32,0.95) 0%, rgba(11,13,32,0.55) 42%, transparent 76%)", filter: "blur(10px)" }} />
-                {/* opaque photo — solid, not cut-out */}
-                <Image src="/photos/vadym.png" alt="Вадим Шпильчук — засновник Клубу 432" width={894} height={1454} className="h-auto w-full" />
-                {/* fog in front hides the cropped bottom edge — colour of the robe/cosmos, dissolves upward */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%]" style={{ background: "linear-gradient(to top, #0a0c1e 4%, rgba(10,12,30,0.88) 26%, rgba(10,12,30,0.42) 58%, transparent 100%)" }} />
+              {/* photo framed in a frosted-glass card, like the other cards */}
+              <div className="frost frost-hover mx-auto w-full max-w-sm overflow-hidden rounded-[1.75rem] p-3">
+                <div
+                  className="relative aspect-[3/4] overflow-hidden rounded-[1.4rem]"
+                  style={{ background: "radial-gradient(circle at 50% 26%, rgba(253,209,111,0.18), rgba(20,22,52,0.55) 64%)" }}
+                >
+                  <Image
+                    src="/photos/vadym.png"
+                    alt="Вадим Шпильчук — засновник Клубу 432"
+                    fill
+                    sizes="(max-width: 768px) 90vw, 380px"
+                    className="object-cover object-top"
+                  />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4" style={{ background: "linear-gradient(to top, rgba(13,14,45,0.85), transparent)" }} />
+                </div>
               </div>
             </Reveal>
             <Reveal i={1}>
@@ -217,22 +217,45 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ══ JOIN ══ */}
-        <section id="join" className="sect mx-auto max-w-3xl px-5">
-          <Reveal>
-            <div className="frost relative overflow-hidden p-8 text-center sm:p-14">
-              <div className="pointer-events-none absolute inset-0 opacity-80" style={{ background: "radial-gradient(70% 90% at 50% 0%, rgba(239,128,24,0.14), transparent 70%)" }} />
+        {/* ══ JOIN / PRICING ══ */}
+        <section id="join" className="sect mx-auto max-w-2xl px-5">
+          <Reveal><Eyebrow>Приєднатися</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section text-center">Стати учасником Клубу 432</h2></Reveal>
+          <Reveal i={2}><p className="mx-auto mb-12 mt-4 max-w-xl text-center text-[var(--c432-ink)]">Набір відкрито! Твій місяць участі починається з моменту оплати.</p></Reveal>
+
+          <Reveal i={3}>
+            <div className="frost relative mx-auto max-w-md overflow-hidden rounded-[2rem] p-8 text-center sm:p-10">
+              <div className="pointer-events-none absolute inset-0 opacity-90" style={{ background: "radial-gradient(75% 60% at 50% 0%, rgba(239,128,24,0.16), transparent 68%)" }} />
               <div className="relative">
-                <Eyebrow>Приєднатися</Eyebrow>
-                <h2 className="font-display h-section mx-auto max-w-2xl">Стань частиною Клубу 432</h2>
-                <p className="mx-auto mt-6 max-w-xl text-[var(--c432-ink)]">
-                  Щомісячні глибинні лекції, живі розбори з Вадимом, бібліотека знань за 4 роки
-                  та щоденні практики у спільноті однодумців.
-                </p>
-                <div className="mt-9 flex flex-col items-center gap-4">
-                  <a href={BOT} target="_blank" rel="noopener noreferrer" className="btn-cta cursor-pointer">Стати учасником</a>
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/40">Вівторок і четвер · 19:00 · записи назавжди</p>
+                <h3 className="grad-text text-2xl font-semibold">Учасник клубу</h3>
+                <p className="mt-4 text-white/45">Цінність: <span className="line-through">5 000 грн</span></p>
+                <div className="mt-2 font-display text-5xl font-semibold text-[var(--c432-amber)]">
+                  25&nbsp;€ <span className="text-2xl font-normal text-white/55">/ міс</span>
                 </div>
+                <p className="mt-1 text-sm text-white/45">(≈ 1&nbsp;200 грн)</p>
+
+                <div className="hairline my-7" />
+
+                <ul className="space-y-4 text-left">
+                  {[
+                    <>Доступ до всіх живих ефірів (8/міс)</>,
+                    <>Участь у розборах з Вадимом</>,
+                    <><span className="font-semibold text-white">Бонус:</span> доступ до Бази Знань за 4 роки</>,
+                    <>Закритий чат та оточення</>,
+                    <>Щоденні практики та налаштування</>,
+                    <>Автоматична щомісячна підписка для зручності</>,
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--c432-amber)]">
+                        <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="#0D0E2D" strokeWidth="3.2"><path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      </span>
+                      <span className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <a href={BOT} target="_blank" rel="noopener noreferrer" className="btn-cta mt-9 w-full cursor-pointer">Стати учасником</a>
+                <p className="mt-5 text-xs uppercase tracking-[0.18em] text-[var(--c432-amber)]/70">✳ Можна скасувати будь-якої миті</p>
               </div>
             </div>
           </Reveal>

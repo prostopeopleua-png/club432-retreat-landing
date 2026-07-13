@@ -34,7 +34,9 @@ export default function CosmicBackground() {
       }));
     };
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.matchMedia("(max-width: 820px)").matches;
     let raf = 0;
 
     const draw = (t: number) => {
