@@ -59,7 +59,10 @@ export default function CosmicBackground() {
     draw(0);
     if (reduced) cancelAnimationFrame(raf);
 
-    const onResize = () => build();
+    const onResize = () => {
+      build();
+      if (reduced) draw(0); // static path: canvas was cleared by resize → repaint stars
+    };
     window.addEventListener("resize", onResize);
     return () => {
       window.removeEventListener("resize", onResize);
