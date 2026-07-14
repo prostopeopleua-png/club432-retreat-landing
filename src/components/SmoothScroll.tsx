@@ -10,6 +10,9 @@ import Lenis from "lenis";
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Native scroll on touch/mobile — Lenis adds jank there; only enhance pointer devices.
+    const touch = window.matchMedia("(hover: none) and (pointer: coarse)").matches || window.innerWidth < 900;
+    if (touch) return;
 
     const lenis = new Lenis({
       lerp: 0.09,

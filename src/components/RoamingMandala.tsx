@@ -56,7 +56,7 @@ export default function RoamingMandala() {
         >
           <div
             className="absolute inset-0"
-            style={{ transformStyle: "preserve-3d", animation: light ? undefined : "spinSlow 80s linear infinite" }}
+            style={{ transformStyle: "preserve-3d", animation: "spinSlow 80s linear infinite" }}
           >
             {/* fire glow — cheap CSS radial */}
             <div
