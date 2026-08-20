@@ -181,6 +181,28 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ══ MONTH — як проходить місяць ══ */}
+        <section className="sect mx-auto max-w-6xl px-5">
+          <Reveal><Eyebrow>{C.month.eyebrow}</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center">{C.month.heading}</h2></Reveal>
+          <Reveal i={2}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">{C.month.subtitle}</p></Reveal>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {C.month.items.map((m, i) => (
+              <Reveal key={m.week} i={i}>
+                <div className="frost frost-hover flex h-full flex-col p-7">
+                  <div className="font-display text-4xl leading-none text-[var(--c432-amber)]/45">{m.week}</div>
+                  <h3 className="mt-4 text-xl font-semibold">{m.title}</h3>
+                  <div className="hairline my-4" />
+                  <p className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{m.text}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal i={4}>
+            <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] leading-relaxed text-white/55">{C.month.outro}</p>
+          </Reveal>
+        </section>
+
         {/* ══ AUTHOR ══ */}
         <section className="sect mx-auto max-w-5xl px-5">
           <div className="grid items-center gap-10 md:grid-cols-[0.9fr_1.1fr]">
