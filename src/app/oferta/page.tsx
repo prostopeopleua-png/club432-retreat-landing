@@ -1,7 +1,11 @@
 import { LegalLayout, type LegalBlock } from "@/components/LegalLayout";
 
 export const metadata = {
-  title: "Оферта · Клуб 432",
+  title: "Оферта",
+  description:
+    "Договір публічної оферти на придбання інформаційних послуг Клубу 432. ФОП Шпильчук Вадим Дмитрович.",
+  alternates: { canonical: "/oferta" },
+  robots: { index: true, follow: true },
 };
 
 const blocks: LegalBlock[] = [

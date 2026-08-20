@@ -5,7 +5,9 @@ import { motion, type Variants } from "framer-motion";
 import SmoothScroll from "@/components/SmoothScroll";
 import CosmicBackground from "@/components/CosmicBackground";
 import RoamingMandala from "@/components/RoamingMandala";
+import CtaLink from "@/components/CtaLink";
 import { content as C } from "@/content";
+import { SITE_URL, SITE_NAME } from "@/lib/seo";
 
 const BOT = C.botUrl;
 
@@ -43,10 +45,44 @@ const FormatIcons = [
   () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><path d="M6 12c0-2 1.5-3.5 3-3.5S18 15.5 15 15.5 3 8.5 6 8.5 18 16 18 12" strokeLinecap="round"/></svg>),
 ];
 
+
+/* ───────── structured data (FAQ + підписка) для Google ───────── */
+const pageJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "@id": `${SITE_URL}#faq`,
+      mainEntity: C.faq.items.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+    {
+      "@type": "Product",
+      "@id": `${SITE_URL}#membership`,
+      name: `${SITE_NAME} — ${C.pricing.planName}`,
+      description: C.features.subtitle,
+      brand: { "@type": "Brand", name: SITE_NAME },
+      url: `${SITE_URL}#join`,
+      offers: {
+        "@type": "Offer",
+        price: "25",
+        priceCurrency: "EUR",
+        availability: "https://schema.org/InStock",
+        url: C.botUrl,
+        category: "Subscription",
+      },
+    },
+  ],
+};
+
 /* ═══════════════════════════ page ═══════════════════════════ */
 export default function Home() {
   return (
     <SmoothScroll>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }} />
       <CosmicBackground />
       <RoamingMandala />
 
@@ -57,9 +93,9 @@ export default function Home() {
             <Image src="/logo-mandala-white.svg" alt={C.nav.brand} width={32} height={32} className="drop-shadow-[0_0_6px_rgba(255,255,255,0.25)]" />
             <span className="font-display text-lg font-semibold tracking-wide">{C.nav.brand}</span>
           </a>
-          <a href={BOT} target="_blank" rel="noopener noreferrer" className="btn-cta cursor-pointer !px-6 !py-3 !text-[13px]">
+          <CtaLink href={BOT} location="nav" className="btn-cta cursor-pointer !px-6 !py-3 !text-[13px]">
             {C.nav.cta}
-          </a>
+          </CtaLink>
         </nav>
       </header>
 
@@ -85,7 +121,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.5 }}
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
           >
-            <a href={BOT} target="_blank" rel="noopener noreferrer" className="btn-cta cursor-pointer">{C.hero.ctaPrimary}</a>
+            <CtaLink href={BOT} location="hero" className="btn-cta cursor-pointer">{C.hero.ctaPrimary}</CtaLink>
             <a href="#what" className="btn-ghost">{C.hero.ctaSecondary}</a>
           </motion.div>
         </section>
@@ -215,7 +251,7 @@ export default function Home() {
                   ))}
                 </ul>
 
-                <a href={BOT} target="_blank" rel="noopener noreferrer" className="btn-cta mt-9 w-full cursor-pointer">{C.pricing.cta}</a>
+                <CtaLink href={BOT} location="pricing" className="btn-cta mt-9 w-full cursor-pointer">{C.pricing.cta}</CtaLink>
                 <p className="mt-5 text-xs uppercase tracking-[0.18em] text-[var(--c432-amber)]/70">{C.pricing.cancelNote}</p>
               </div>
             </div>
@@ -253,7 +289,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm text-white/55">
-              <a href={BOT} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkBot}</a>
+              <CtaLink href={BOT} location="footer" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkBot}</CtaLink>
               <a href="/oferta" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkOferta}</a>
               <a href="/privacy-policy" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkPrivacy}</a>
             </div>

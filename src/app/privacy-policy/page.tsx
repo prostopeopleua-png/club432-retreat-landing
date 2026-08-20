@@ -1,7 +1,11 @@
 import { LegalLayout, type LegalBlock } from "@/components/LegalLayout";
 
 export const metadata = {
-  title: "Політика конфіденційності · Клуб 432",
+  title: "Політика конфіденційності",
+  description:
+    "Як Клуб 432 (ФОП Шпильчук Вадим Дмитрович) обробляє та захищає персональні дані відвідувачів сайту club432.com.",
+  alternates: { canonical: "/privacy-policy" },
+  robots: { index: true, follow: true },
 };
 
 const blocks: LegalBlock[] = [

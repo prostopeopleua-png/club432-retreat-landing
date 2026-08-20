@@ -1,6 +1,6 @@
 # HANDOFF — club432.com (новий сайт Клубу 432)
 
-> Передача контексту для продовження роботи в новій сесії. Оновлено 2026-07-12.
+> Передача контексту для продовження роботи в новій сесії. Оновлено 2026-08-20.
 
 ## Що це і де воно
 
@@ -36,6 +36,10 @@ cd ~/work/retreat-landing && vercel --prod --yes
 - `src/app/icon.svg` — фавіконка (чорна мандала на білому)
 - `public/logo-mandala.svg` (градієнт), `logo-mandala-white.svg` (нав/футер), `logo-mandala-fire.svg`, `photos/vadym.png`
 - `src/app/metod-432/page.tsx` — флагман з R3F 3D-героєм (окрема сторінка)
+- `src/lib/analytics.ts` — GA4/Pixel ID + хелпери `track` / `trackSubscribeClick`
+- `src/components/Analytics.tsx` — завантаження GA4 + Meta Pixel; `src/components/CtaLink.tsx` — кнопка CTA з подією
+- `src/lib/seo.ts`, `src/app/opengraph-image.tsx`, `src/app/sitemap.ts`, `src/app/robots.ts` — SEO
+- `ANALYTICS.md` — що і як міряється, що натиснути в Meta/GA/Vercel
 
 ## Дизайн-система (коротко)
 - Космос: `--c432-bg #0D0E2D`, deep `#07081B`; акцент золото-помаранч `#FDD16F→#EF8018`; вторинний фіолет `#6D5AE6`
@@ -52,9 +56,9 @@ cd ~/work/retreat-landing && vercel --prod --yes
 ## 🗺️ РОАДМАП (узгоджено з Вадимом — робити далі)
 
 ### P1 — першими (макс. віддача)
-1. **Аналітика + Meta Pixel** — Vercel Analytics + GA4 + Meta Pixel з подією «клік підписка». Вадим крутить Meta-рекламу → без цього сліпо. *(можу зробити сам)*
-2. **Відгуки / соц.доказ** — секція з відгуками учасників + лічильник. *Потрібні матеріали від Вадима (3–6 відгуків).*
-3. **SEO + OG** — OG-картинка, title/description на сторінку, sitemap.xml, robots.txt, розмітка Organization/FAQ. *(можу зробити сам)*
+1. ~~**Аналітика + Meta Pixel**~~ ✅ **зроблено 2026-08-20.** GA4 `G-VSKQWFFNLK` + Meta Pixel `406163265532535` (ID взяті зі старого Weblium-сайту) + Vercel Analytics/Speed Insights. Подія кліку «Стати учасником»: GA4 `subscribe_click`, Meta `Lead`, з параметром `location` (nav/hero/pricing/footer) і `value 25 EUR`. Деталі й що натиснути в кабінетах Meta/GA — **`ANALYTICS.md`**.
+2. **Відгуки / соц.доказ** — секція з відгуками учасників + лічильник. *Потрібні матеріали від Вадима (3–6 відгуків).* ← **наступне**
+3. ~~**SEO + OG**~~ ✅ **зроблено 2026-08-20.** Динамічна OG-картинка (`src/app/opengraph-image.tsx`, next/og + Montserrat з `src/app/_og/`), повні metadata в `layout.tsx` (metadataBase, canonical, OG/Twitter, robots), `sitemap.ts`, `robots.ts`, JSON-LD Organization + WebSite (layout) та FAQPage + Product/Offer (головна), title/description/canonical на всі сторінки.
 4. **Лід-магніт / безкоштовний вхід** — «7 таємниць» або безкоштовний вебінар → збір ліда в бот → прогрів. *Потрібне рішення/матеріали Вадима.*
 
 ### P2
@@ -68,12 +72,15 @@ cd ~/work/retreat-landing && vercel --prod --yes
 - Тестимоніали-карусель, мікро-анімації, cookie-згода (EU), Lighthouse-аудит, контакт для підтримки
 
 ## 🔧 Відкриті хвости
+- [ ] **Підтвердити лічильники з Вадимом** — GA4/Pixel ID успадковані зі старого сайту; перевірити в Meta Events Manager (Test Events) і позначити `subscribe_click` як Key event у GA4 (див. `ANALYTICS.md`)
+- [ ] **Увімкнути Analytics/Speed Insights** у кабінеті Vercel для проєкту `retreat-landing`
+- [ ] **Google Search Console** — додати club432.com і подати `https://club432.com/sitemap.xml`
 - [ ] **Нове фото Вадима** — Вадим надсилав вкладенням у чат (не файл). Треба зберегти як `~/Downloads/PROSTO/vadym.png` → скопіювати в `public/photos/vadym.png` → деплой. (Поточне фото — старе з архіву, обрізане; вставлене в скляну картку.)
 - [ ] **Форми → бот** — ліди з сайту слати в Telegram (`botService.notifyAdmins`, Вадим `547633690`)
 - [ ] Винести тексти `/oferta` і `/metod-432` у `content.ts`
 
 ## Рекомендований старт нової сесії
-Почати з **P1.1 (аналітика+pixel)** і **P1.3 (SEO+OG)** — їх можу зробити сам, без матеріалів. Паралельно попросити у Вадима відгуки (P1.2) і рішення по лід-магніту (P1.4).
+P1.1 і P1.3 закриті. Далі — **P1.2 (відгуки/соц.доказ)** і **P1.4 (лід-магніт)**: обидва впираються в матеріали від Вадима (3–6 відгуків; рішення, що саме віддаємо безкоштовно). Поки їх немає — можна брати **P2.5 (навігація в шапці)** або **P2.8 (FAQ із запереченнями)**.
 
 ## Архів контенту (для нових сторінок)
 Повна копія старого Weblium-сайту: `~/work/club432-site/` (16 стор. + 329 зображень, у т.ч. арт ігрового поля Ліли, фото). Скрипти дзеркала — у scratchpad `mirror.py`/`pass2_images.py`.
