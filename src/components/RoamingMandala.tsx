@@ -86,7 +86,7 @@ export default function RoamingMandala() {
                   width={640}
                   height={640}
                   priority={front}
-                  className="absolute inset-0 h-full w-full"
+                  className={`absolute inset-0 h-full w-full${front ? " mandala-front" : ""}`}
                   style={{
                     transform: `translateZ(${z}px)`,
                     opacity: front ? 1 : 0.62,

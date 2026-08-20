@@ -88,12 +88,12 @@ export default function Home() {
 
       {/* NAV */}
       <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
-        <nav className="frost flex w-full max-w-5xl items-center justify-between rounded-full py-2.5 pl-3 pr-3 sm:pl-5">
+        <nav className="frost flex w-full max-w-5xl items-center justify-between gap-3 rounded-full py-2.5 pl-3 pr-3 sm:pl-5">
           <a href="#top" className="flex items-center gap-2.5">
-            <Image src="/logo-mandala-white.svg" alt={C.nav.brand} width={32} height={32} className="drop-shadow-[0_0_6px_rgba(255,255,255,0.25)]" />
-            <span className="font-display text-lg font-semibold tracking-wide">{C.nav.brand}</span>
+            <Image src="/logo-mandala-white.svg" alt={C.nav.brand} width={32} height={32} className="shrink-0 drop-shadow-[0_0_6px_rgba(255,255,255,0.25)]" />
+            <span className="font-display whitespace-nowrap text-lg font-semibold tracking-wide">{C.nav.brand}</span>
           </a>
-          <CtaLink href={BOT} location="nav" className="btn-cta cursor-pointer !px-6 !py-3 !text-[13px]">
+          <CtaLink href={BOT} location="nav" className="btn-cta cursor-pointer !px-4 !py-2.5 !text-[11px] sm:!px-6 sm:!py-3 sm:!text-[13px]">
             {C.nav.cta}
           </CtaLink>
         </nav>
@@ -101,29 +101,24 @@ export default function Home() {
 
       <main id="top" className="relative z-10">
         {/* ══ HERO ══ */}
+        {/* Поява першого екрана — на чистому CSS, БЕЗ framer-motion.
+            Раніше заголовок і кнопки мали opacity:0 в HTML і проявлялись лише
+            після завантаження React. На повільному телефоні людина кілька
+            секунд дивилась у порожній екран. CSS-анімація стартує одразу. */}
         <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 text-center">
-          <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <div className="rise-in">
             <Eyebrow>{C.hero.eyebrow}</Eyebrow>
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display wordmark relative text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[1.06] tracking-tight pb-[0.14em] [filter:drop-shadow(0_2px_10px_rgba(7,8,27,0.9))_drop-shadow(0_0_28px_rgba(7,8,27,0.7))]"
-          >
+          </div>
+          <h1 className="rise-in rise-d1 font-display wordmark relative text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[1.06] tracking-tight pb-[0.14em] [filter:drop-shadow(0_2px_10px_rgba(7,8,27,0.9))_drop-shadow(0_0_28px_rgba(7,8,27,0.7))]">
             {C.hero.title}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.32 }}
-            className="mx-auto mt-7 max-w-2xl text-[clamp(1.05rem,1.7vw,1.35rem)] leading-relaxed text-white/85 [text-shadow:0_1px_16px_rgba(7,8,27,0.95)]"
-          >
+          </h1>
+          <p className="rise-in rise-d2 mx-auto mt-7 max-w-2xl text-[clamp(1.05rem,1.7vw,1.35rem)] leading-relaxed text-white/85 [text-shadow:0_1px_16px_rgba(7,8,27,0.95)]">
             {C.hero.subtitle}
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.5 }}
-            className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
-          >
+          </p>
+          <div className="rise-in rise-d3 mt-10 flex flex-col items-center gap-4 sm:flex-row">
             <CtaLink href={BOT} location="hero" className="btn-cta cursor-pointer">{C.hero.ctaPrimary}</CtaLink>
             <a href="#what" className="btn-ghost">{C.hero.ctaSecondary}</a>
-          </motion.div>
+          </div>
         </section>
 
         {/* ══ WHO ══ */}

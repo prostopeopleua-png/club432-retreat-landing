@@ -76,15 +76,15 @@ export default function CosmicBackground() {
       <div className="absolute inset-0 bg-[radial-gradient(130%_100%_at_50%_-10%,#141a44_0%,#0b0d2c_38%,#07081b_100%)]" />
       {/* nebula glows */}
       <div
-        className="absolute left-1/2 top-[-10%] h-[70vh] w-[80vw] -translate-x-1/2 rounded-full blur-[120px]"
+        className="nebula absolute left-1/2 top-[-10%] h-[70vh] w-[80vw] -translate-x-1/2 rounded-full blur-[120px]"
         style={{ background: "radial-gradient(circle, rgba(239,128,24,0.16), transparent 62%)", animation: "breathe 11s ease-in-out infinite" }}
       />
       <div
-        className="absolute bottom-[-15%] right-[-10%] h-[60vh] w-[55vw] rounded-full blur-[130px]"
+        className="nebula absolute bottom-[-15%] right-[-10%] h-[60vh] w-[55vw] rounded-full blur-[130px]"
         style={{ background: "radial-gradient(circle, rgba(109,90,230,0.16), transparent 60%)", animation: "breathe 14s ease-in-out infinite reverse" }}
       />
       <div
-        className="absolute bottom-[10%] left-[-10%] h-[45vh] w-[45vw] rounded-full blur-[120px]"
+        className="nebula absolute bottom-[10%] left-[-10%] h-[45vh] w-[45vw] rounded-full blur-[120px]"
         style={{ background: "radial-gradient(circle, rgba(253,209,111,0.08), transparent 60%)", animation: "breathe 16s ease-in-out infinite" }}
       />
       {/* starfield */}
