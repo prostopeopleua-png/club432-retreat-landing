@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/metod-432", priority: 0.9, changeFrequency: "monthly" },
     { path: "/retreat-carpathians", priority: 0.6, changeFrequency: "monthly" },
     { path: "/oferta", priority: 0.2, changeFrequency: "yearly" },
+    { path: "/oferta-retreat", priority: 0.1, changeFrequency: "yearly" },
     { path: "/privacy-policy", priority: 0.2, changeFrequency: "yearly" },
   ];
 
