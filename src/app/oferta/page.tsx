@@ -130,9 +130,9 @@ export default function Page() {
           <p className="mb-1">Реквізити Виконавця</p>
           <p className="mb-1">ФОП Шпильчук Вадим Дмитрович</p>
           <p className="mb-1">РНОКПП: 3216820393</p>
-          <p className="mb-1">Рахунок: UA383052990000026001016105463</p>
-          <p className="mb-1">Банк: АТ КБ «ПРИВАТБАНК»</p>
-          <p className="mb-1">Електронна пошта: prosto.mindful@gmail.com</p>
+          <p className="mb-1">Рахунок: UA643220010000026007340034336</p>
+          <p className="mb-1">Банк: АТ «УНІВЕРСАЛ БАНК»</p>
+          <p className="mb-1">Електронна пошта: prosto.people.ua@gmail.com</p>
           <p className="mb-1">Телеграм для звернень: https://t.me/prosto_mindful_bot</p>
         </div>
       }
