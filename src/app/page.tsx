@@ -115,10 +115,16 @@ export default function Home() {
           <p className="rise-in rise-d2 mx-auto mt-7 max-w-2xl text-[clamp(1.05rem,1.7vw,1.35rem)] leading-relaxed text-white/85 [text-shadow:0_1px_16px_rgba(7,8,27,0.95)]">
             {C.hero.subtitle}
           </p>
-          <div className="rise-in rise-d3 mt-10 flex flex-col items-center gap-4 sm:flex-row">
+          <p className="rise-in rise-d3 mt-8 text-[13px] tracking-wide text-white/55 [text-shadow:0_1px_12px_rgba(7,8,27,0.95)]">
+            {C.hero.facts}
+          </p>
+          <div className="rise-in rise-d3 mt-7 flex flex-col items-center gap-4 sm:flex-row">
             <CtaLink href={BOT} location="hero" className="btn-cta cursor-pointer">{C.hero.ctaPrimary}</CtaLink>
             <a href="#what" className="btn-ghost">{C.hero.ctaSecondary}</a>
           </div>
+          <p className="rise-in rise-d3 mt-5 text-xs text-white/40 [text-shadow:0_1px_12px_rgba(7,8,27,0.95)]">
+            {C.ctaNote}
+          </p>
         </section>
 
         {/* ══ WHO ══ */}
@@ -159,6 +165,17 @@ export default function Home() {
               );
             })}
           </div>
+          <Reveal i={5}>
+            <div className="mt-10 text-center">
+              <a
+                href="/metod-432"
+                className="group inline-flex items-center gap-2 text-sm tracking-wide text-[var(--c432-amber)]/85 transition-colors hover:text-[var(--c432-amber)]"
+              >
+                {C.features.deeperLink}
+                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </a>
+            </div>
+          </Reveal>
         </section>
 
         {/* ══ FORMAT ══ */}
@@ -269,7 +286,8 @@ export default function Home() {
                 </ul>
 
                 <CtaLink href={BOT} location="pricing" className="btn-cta mt-9 w-full cursor-pointer">{C.pricing.cta}</CtaLink>
-                <p className="mt-5 text-xs uppercase tracking-[0.18em] text-[var(--c432-amber)]/70">{C.pricing.cancelNote}</p>
+                <p className="mt-4 text-xs text-white/40">{C.ctaNote}</p>
+                <p className="mt-4 text-xs uppercase tracking-[0.18em] text-[var(--c432-amber)]/70">{C.pricing.cancelNote}</p>
               </div>
             </div>
           </Reveal>
@@ -306,7 +324,8 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm text-white/55">
-              <CtaLink href={BOT} location="footer" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkBot}</CtaLink>
+              <a href="/metod-432" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkMetod}</a>
+              <a href={C.botUrlPlain} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkBot}</a>
               <a href="/oferta" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkOferta}</a>
               <a href="/privacy-policy" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkPrivacy}</a>
             </div>
