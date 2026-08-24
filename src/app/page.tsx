@@ -162,7 +162,7 @@ export default function Home() {
           <div className="relative mx-auto grid w-full max-w-[1500px] items-center gap-0 px-5 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] md:gap-12 md:px-10">
             {/* ПОРТРЕТ — на мобільному зверху, на десктопі праворуч */}
             <Reveal className="order-1 md:order-2">
-              <div className="relative mx-auto w-[min(118%,620px)] md:mx-0 md:ml-auto md:w-auto md:translate-x-4 lg:translate-x-10">
+              <div className="relative -mx-[3.75rem] w-[calc(100%+7.5rem)] md:mx-0 md:ml-auto md:w-auto md:translate-x-4 lg:translate-x-10">
                 <Image
                   src="/photos/vadym-portrait.webp"
                   alt={C.author.name}
