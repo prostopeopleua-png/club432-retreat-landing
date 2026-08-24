@@ -144,6 +144,39 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ══ AUTHOR ══ */}
+        <section className="sect mx-auto max-w-5xl px-5">
+          <div className="grid items-center gap-10 md:grid-cols-[0.9fr_1.1fr]">
+            <Reveal>
+              <div className="frost frost-hover mx-auto w-full max-w-sm overflow-hidden rounded-[1.75rem] p-3">
+                <div
+                  className="relative aspect-[3/4] overflow-hidden rounded-[1.4rem]"
+                  style={{ background: "radial-gradient(circle at 50% 26%, rgba(253,209,111,0.18), rgba(20,22,52,0.55) 64%)" }}
+                >
+                  <Image src="/photos/vadym.png" alt={C.author.name} fill sizes="(max-width: 768px) 90vw, 380px" className="object-cover object-top" />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4" style={{ background: "linear-gradient(to top, rgba(13,14,45,0.85), transparent)" }} />
+                </div>
+              </div>
+            </Reveal>
+            <Reveal i={1}>
+              <div>
+                <Eyebrow>{C.author.eyebrow}</Eyebrow>
+                <h2 className="font-display text-4xl font-semibold md:text-5xl">{C.author.name}</h2>
+                <p className="mt-5 text-[clamp(1.05rem,1.6vw,1.3rem)] leading-relaxed text-[var(--c432-ink)]">{C.author.quote}</p>
+                <p className="mt-4 text-[15px] leading-relaxed text-white/55">{C.author.bio}</p>
+                <div className="mt-8 grid max-w-md grid-cols-3 gap-4">
+                  {C.author.stats.map((s) => (
+                    <div key={s.label} className="frost p-4 text-center">
+                      <div className="font-display text-3xl text-[var(--c432-amber)]">{s.value}</div>
+                      <div className="mt-1 text-[11px] leading-tight text-white/45">{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
         {/* ══ FEATURES ══ */}
         <section className="sect mx-auto max-w-6xl px-5">
           <Reveal><Eyebrow>{C.features.eyebrow}</Eyebrow></Reveal>
@@ -252,39 +285,6 @@ export default function Home() {
           <Reveal i={4}>
             <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] leading-relaxed text-white/55">{C.month.outro}</p>
           </Reveal>
-        </section>
-
-        {/* ══ AUTHOR ══ */}
-        <section className="sect mx-auto max-w-5xl px-5">
-          <div className="grid items-center gap-10 md:grid-cols-[0.9fr_1.1fr]">
-            <Reveal>
-              <div className="frost frost-hover mx-auto w-full max-w-sm overflow-hidden rounded-[1.75rem] p-3">
-                <div
-                  className="relative aspect-[3/4] overflow-hidden rounded-[1.4rem]"
-                  style={{ background: "radial-gradient(circle at 50% 26%, rgba(253,209,111,0.18), rgba(20,22,52,0.55) 64%)" }}
-                >
-                  <Image src="/photos/vadym.png" alt={C.author.name} fill sizes="(max-width: 768px) 90vw, 380px" className="object-cover object-top" />
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4" style={{ background: "linear-gradient(to top, rgba(13,14,45,0.85), transparent)" }} />
-                </div>
-              </div>
-            </Reveal>
-            <Reveal i={1}>
-              <div>
-                <Eyebrow>{C.author.eyebrow}</Eyebrow>
-                <h2 className="font-display text-4xl font-semibold md:text-5xl">{C.author.name}</h2>
-                <p className="mt-5 text-[clamp(1.05rem,1.6vw,1.3rem)] leading-relaxed text-[var(--c432-ink)]">{C.author.quote}</p>
-                <p className="mt-4 text-[15px] leading-relaxed text-white/55">{C.author.bio}</p>
-                <div className="mt-8 grid max-w-md grid-cols-3 gap-4">
-                  {C.author.stats.map((s) => (
-                    <div key={s.label} className="frost p-4 text-center">
-                      <div className="font-display text-3xl text-[var(--c432-amber)]">{s.value}</div>
-                      <div className="mt-1 text-[11px] leading-tight text-white/45">{s.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-          </div>
         </section>
 
         {/* ══ JOIN / PRICING ══ */}
