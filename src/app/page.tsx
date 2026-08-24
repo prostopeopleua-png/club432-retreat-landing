@@ -144,31 +144,57 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ══ AUTHOR ══ */}
-        <section className="sect mx-auto max-w-5xl px-5">
-          <div className="grid items-center gap-10 md:grid-cols-[0.9fr_1.1fr]">
-            <Reveal>
-              <div className="frost frost-hover mx-auto w-full max-w-sm overflow-hidden rounded-[1.75rem] p-3">
-                <div
-                  className="relative aspect-[3/4] overflow-hidden rounded-[1.4rem]"
-                  style={{ background: "radial-gradient(circle at 50% 26%, rgba(253,209,111,0.18), rgba(20,22,52,0.55) 64%)" }}
-                >
-                  <Image src="/photos/vadym.png" alt={C.author.name} fill sizes="(max-width: 768px) 90vw, 380px" className="object-cover object-top" />
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4" style={{ background: "linear-gradient(to top, rgba(13,14,45,0.85), transparent)" }} />
-                </div>
+        {/* ══ AUTHOR ══
+            Портрет без рамки: чорне тло знімка розчинене в альфу, тому Вадим
+            проступає прямо з космосу сторінки. Ніякої картки — рамка тут була б
+            стандартним рішенням і вбила б ефект присутності. */}
+        <section className="sect relative overflow-hidden">
+          {/* тепле сяйво позаду постаті — той самий вогонь, що в мандалі */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(46% 42% at 72% 46%, rgba(239,128,24,0.20) 0%, rgba(239,128,24,0.06) 38%, transparent 66%)",
+            }}
+          />
+
+          <div className="relative mx-auto grid w-full max-w-[1500px] items-center gap-0 px-5 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] md:gap-12 md:px-10">
+            {/* ПОРТРЕТ — на мобільному зверху, на десктопі праворуч */}
+            <Reveal className="order-1 md:order-2">
+              <div className="relative mx-auto w-[min(118%,620px)] md:mx-0 md:ml-auto md:w-auto md:translate-x-4 lg:translate-x-10">
+                <Image
+                  src="/photos/vadym-portrait.webp"
+                  alt={C.author.name}
+                  width={1200}
+                  height={1500}
+                  sizes="(max-width: 768px) 118vw, 52vw"
+                  className="h-auto w-full select-none md:h-[min(88vh,900px)] md:w-auto md:max-w-none"
+                />
               </div>
             </Reveal>
-            <Reveal i={1}>
-              <div>
+
+            {/* ТЕКСТ — на мобільному заходить на розмитий низ фото */}
+            <Reveal i={1} className="order-2 md:order-1">
+              <div className="relative -mt-24 text-center md:mt-0 md:text-left">
                 <Eyebrow>{C.author.eyebrow}</Eyebrow>
-                <h2 className="font-display text-4xl font-semibold md:text-5xl">{C.author.name}</h2>
-                <p className="mt-5 text-[clamp(1.05rem,1.6vw,1.3rem)] leading-relaxed text-[var(--c432-ink)]">{C.author.quote}</p>
-                <p className="mt-4 text-[15px] leading-relaxed text-white/55">{C.author.bio}</p>
-                <div className="mt-8 grid max-w-md grid-cols-3 gap-4">
-                  {C.author.stats.map((s) => (
-                    <div key={s.label} className="frost p-4 text-center">
-                      <div className="font-display text-3xl text-[var(--c432-amber)]">{s.value}</div>
-                      <div className="mt-1 text-[11px] leading-tight text-white/45">{s.label}</div>
+                <h2 className="font-display mt-2 text-[clamp(2.4rem,6vw,4.2rem)] font-semibold leading-[1.05]">
+                  {C.author.name}
+                </h2>
+
+                <p className="font-display mt-7 text-[clamp(1.2rem,2.1vw,1.7rem)] leading-snug text-white/90">
+                  {C.author.quote}
+                </p>
+
+                <div className="hairline my-7 md:max-w-sm" />
+
+                <p className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{C.author.bio}</p>
+
+                <div className="mt-9 flex flex-wrap justify-center gap-x-10 gap-y-6 md:justify-start">
+                  {C.author.stats.map((st) => (
+                    <div key={st.label}>
+                      <div className="font-display text-[2.4rem] leading-none text-[var(--c432-amber)]">{st.value}</div>
+                      <div className="mt-2 text-[11px] uppercase tracking-[0.16em] text-white/40">{st.label}</div>
                     </div>
                   ))}
                 </div>
