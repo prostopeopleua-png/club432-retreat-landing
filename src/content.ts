@@ -152,7 +152,7 @@ export const content = {
     stats: [
       { value: "4+", label: "роки з людьми" },
       { value: "1000+", label: "годин практики" },
-      { value: "392", label: "лекції в базі клубу" },
+      { value: "311", label: "лекцій уже в застосунку" },
     ],
   },
 
