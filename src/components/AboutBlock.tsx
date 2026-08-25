@@ -28,7 +28,7 @@ export default function AboutBlock() {
   // Завіса. Затемнює УСЮ сторінку — космос, мандалу, попередню секцію — поки
   // блок проходить екран. Через неї і виникає відчуття провалу в темряву,
   // а на виході вона так само плавно піднімається і сайт повертається.
-  const veil = useTransform(scrollYProgress, [0, 0.26, 0.4, 0.72, 0.94], [0, 0.86, 0.94, 0.94, 0]);
+  const veil = useTransform(scrollYProgress, [0, 0.26, 0.4, 0.82, 0.99], [0, 0.86, 0.94, 0.94, 0]);
 
   // Сам блок зʼявляється трохи пізніше за темряву: спершу гасне світло, потім
   // проступає обличчя.
@@ -36,8 +36,8 @@ export default function AboutBlock() {
   const scale = useTransform(scrollYProgress, [0.12, 0.34, 0.76, 0.93], [0.965, 1, 1, 0.985]);
   const lift = useTransform(scrollYProgress, [0.12, 0.34, 0.76, 0.93], [40, 0, 0, -22]);
   // фото дрейфує повільніше за блок — глибина
-  const photoY = useTransform(scrollYProgress, [0, 1], ["-3.5%", "3.5%"]);
-  const photoScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.1, 1.16, 1.1]);
+  const photoY = useTransform(scrollYProgress, [0, 1], ["-2.2%", "2.2%"]);
+  const photoScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.04, 1.09, 1.04]);
 
   return (
     <div ref={ref} className="relative min-h-[100svh] w-full">
@@ -55,14 +55,20 @@ export default function AboutBlock() {
         style={reduced ? undefined : { opacity, scale, y: lift }}
         className="am relative z-[25] flex min-h-[100svh] w-full overflow-hidden"
       >
-        <motion.div style={reduced ? undefined : { y: photoY, scale: photoScale }} className="absolute inset-0">
+        {/* Кадр ширший за екран і притиснутий до лівого краю: обличчя через це
+            їде правіше й не потрапляє під текст. По вертикалі 12% замість 24% —
+            верх голови лежить на 17.4% висоти знімка, при 24% маківку зрізало. */}
+        <motion.div
+          style={reduced ? undefined : { y: photoY, scale: photoScale }}
+          className="absolute inset-y-0 left-0 w-full md:w-[118%]"
+        >
           <Image
             src="/photos/vadym-about.webp"
             alt={C.author.name}
             fill
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, 118vw"
             className="object-cover"
-            style={{ objectPosition: "58% 24%" }}
+            style={{ objectPosition: "58% 12%" }}
           />
         </motion.div>
 
@@ -72,7 +78,17 @@ export default function AboutBlock() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(0deg, #07081B 4%, rgba(7,8,27,0.74) 40%, rgba(7,8,27,0.30) 68%, rgba(7,8,27,0.60) 100%)",
+              "linear-gradient(0deg, #07081B 11%, rgba(7,8,27,0.78) 42%, rgba(7,8,27,0.32) 70%, rgba(7,8,27,0.60) 100%)",
+          }}
+        />
+        {/* Затемнення з лівого боку: текст лягає на тінь, а не на обличчя.
+            Тільки на десктопі — на телефоні текст і так під фото. */}
+        <div
+          aria-hidden
+          className="am__sidewash absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(7,8,27,0.90) 0%, rgba(7,8,27,0.62) 26%, rgba(7,8,27,0.18) 50%, rgba(7,8,27,0) 66%)",
           }}
         />
         <div
@@ -116,6 +132,15 @@ export default function AboutBlock() {
           </div>
         </div>
       </motion.div>
+
+      {/* Стик із наступною секцією. Без нього нижній край блоку читається
+          світлою смугою: під ним одразу починається космос із зорями, який
+          світліший за суцільний #07081B. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-0 top-full z-[20] h-[22vh] w-full"
+        style={{ background: "linear-gradient(180deg, #07081B 0%, rgba(7,8,27,0.72) 38%, rgba(7,8,27,0) 100%)" }}
+      />
     </div>
   );
 }

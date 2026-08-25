@@ -396,6 +396,10 @@ body {
    бути взагалі, інакше зникає ефект провалу в темряву. */
 .am { background: #07081B; }
 
+/* Бокове затемнення під текстом — лише на широких екранах. */
+.am__sidewash { display: none; }
+@media (min-width: 768px) { .am__sidewash { display: block; } }
+
 /* Тепле сяйво дихає. Тільки transform і scale, тому дешево. */
 .am__aurora { animation: amDrift 20s ease-in-out infinite; }
 
