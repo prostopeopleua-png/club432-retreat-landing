@@ -249,6 +249,12 @@ body {
 
   /* 5. Зерно (grain) — напівпрозорий шар із mix-blend-mode поверх усього. */
   .grain::after { display: none !important; }
+
+  /* 6. Блок про автора: промінь світла має filter: blur на рухомому шарі —
+     найдорожче, що тут є. Дихання сяйва теж прибираємо, щоб під час скролу
+     працював лише сам скрол. */
+  .am__sweep { display: none !important; }
+  .am__aurora { animation: none !important; }
 }
 
 /* ═══════════ КЛУБ 432 — seamless cosmos + frosted glass (v3) ═══════════ */
@@ -384,3 +390,37 @@ body {
 .rise-d1 { animation-delay: 0.08s; }
 .rise-d2 { animation-delay: 0.26s; }
 .rise-d3 { animation-delay: 0.42s; }
+
+/* ═══════════ Блок «Автор та ведучий» ═══════════ */
+.am { height: 760px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45); background: #07081B; }
+
+/* Тепле сяйво дихає. Тільки transform і scale, тому дешево. */
+.am__aurora { animation: amDrift 20s ease-in-out infinite; }
+
+/* Промінь світла проходить кадром. Має filter: blur, тобто перемальовується
+   щокадру — на телефоні вимкнений (див. мобільний блок нижче). */
+.am__sweep {
+  position: absolute;
+  top: -20%;
+  left: 0;
+  width: 22%;
+  height: 140%;
+  background: linear-gradient(90deg, transparent, rgba(253, 209, 111, 0.28), transparent);
+  filter: blur(14px);
+  animation: amSweep 11s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@keyframes amDrift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(2%, -2%, 0) scale(1.06); }
+}
+@keyframes amSweep {
+  0%   { transform: translateX(-40%) skewX(-12deg); opacity: 0; }
+  12%  { opacity: 0.5; }
+  45%  { opacity: 0; }
+  100% { transform: translateX(140%) skewX(-12deg); opacity: 0; }
+}
+
+@media (max-width: 900px) {
+  .am { height: auto; min-height: 620px; }
+}

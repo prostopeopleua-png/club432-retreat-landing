@@ -6,6 +6,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import CosmicBackground from "@/components/CosmicBackground";
 import RoamingMandala from "@/components/RoamingMandala";
 import CtaLink from "@/components/CtaLink";
+import AboutBlock from "@/components/AboutBlock";
 import { content as C } from "@/content";
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
 
@@ -144,63 +145,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ══ AUTHOR ══
-            Портрет без рамки: чорне тло знімка розчинене в альфу, тому Вадим
-            проступає прямо з космосу сторінки. Ніякої картки — рамка тут була б
-            стандартним рішенням і вбила б ефект присутності. */}
-        <section className="sect relative overflow-hidden">
-          {/* тепле сяйво позаду постаті — той самий вогонь, що в мандалі */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(46% 42% at 72% 46%, rgba(239,128,24,0.20) 0%, rgba(239,128,24,0.06) 38%, transparent 66%)",
-            }}
-          />
-
-          <div className="relative mx-auto grid w-full max-w-[1500px] items-center gap-0 px-5 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] md:gap-12 md:px-10">
-            {/* ПОРТРЕТ — на мобільному зверху, на десктопі праворуч */}
-            <Reveal className="order-1 md:order-2">
-              <div className="relative -mx-[3.75rem] w-[calc(100%+7.5rem)] md:mx-0 md:ml-auto md:w-auto md:translate-x-4 lg:translate-x-10">
-                <Image
-                  src="/photos/vadym-portrait.webp"
-                  alt={C.author.name}
-                  width={1200}
-                  height={1500}
-                  sizes="(max-width: 768px) 118vw, 52vw"
-                  className="h-auto w-full select-none md:h-[min(88vh,900px)] md:w-auto md:max-w-none"
-                />
-              </div>
-            </Reveal>
-
-            {/* ТЕКСТ — на мобільному заходить на розмитий низ фото */}
-            <Reveal i={1} className="order-2 md:order-1">
-              <div className="relative -mt-24 text-center md:mt-0 md:text-left">
-                <Eyebrow>{C.author.eyebrow}</Eyebrow>
-                <h2 className="font-display mt-2 text-[clamp(2.4rem,6vw,4.2rem)] font-semibold leading-[1.05]">
-                  {C.author.name}
-                </h2>
-
-                <p className="font-display mt-7 text-[clamp(1.2rem,2.1vw,1.7rem)] leading-snug text-white/90">
-                  {C.author.quote}
-                </p>
-
-                <div className="hairline my-7 md:max-w-sm" />
-
-                <p className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{C.author.bio}</p>
-
-                <div className="mt-9 flex flex-wrap justify-center gap-x-10 gap-y-6 md:justify-start">
-                  {C.author.stats.map((st) => (
-                    <div key={st.label}>
-                      <div className="font-display text-[2.4rem] leading-none text-[var(--c432-amber)]">{st.value}</div>
-                      <div className="mt-2 text-[11px] uppercase tracking-[0.16em] text-white/40">{st.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-          </div>
+        {/* ══ AUTHOR ══ */}
+        <section className="sect mx-auto max-w-6xl px-5">
+          <AboutBlock />
         </section>
 
         {/* ══ FEATURES ══ */}
