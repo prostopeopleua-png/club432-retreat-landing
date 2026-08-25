@@ -145,8 +145,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ══ AUTHOR ══ */}
-        <section className="sect mx-auto max-w-6xl px-5">
+        {/* ══ AUTHOR ══
+            На весь екран, без полів і рамок. Сторінка навколо гасне (завіса
+            всередині AboutBlock), тому z-30: блок має лежати над нею. */}
+        <section className="relative z-30 min-h-[100svh] w-full">
           <AboutBlock />
         </section>
 

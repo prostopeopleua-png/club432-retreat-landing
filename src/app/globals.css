@@ -392,7 +392,9 @@ body {
 .rise-d3 { animation-delay: 0.42s; }
 
 /* ═══════════ Блок «Автор та ведучий» ═══════════ */
-.am { height: 760px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45); background: #07081B; }
+/* Блок на весь екран: без фіксованої висоти, без рамки й тіні — межі не має
+   бути взагалі, інакше зникає ефект провалу в темряву. */
+.am { background: #07081B; }
 
 /* Тепле сяйво дихає. Тільки transform і scale, тому дешево. */
 .am__aurora { animation: amDrift 20s ease-in-out infinite; }
@@ -421,6 +423,4 @@ body {
   100% { transform: translateX(140%) skewX(-12deg); opacity: 0; }
 }
 
-@media (max-width: 900px) {
-  .am { height: auto; min-height: 620px; }
-}
+
