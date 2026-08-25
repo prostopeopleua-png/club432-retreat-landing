@@ -147,8 +147,10 @@ export default function Home() {
 
         {/* ══ AUTHOR ══
             На весь екран, без полів і рамок. Сторінка навколо гасне (завіса
-            всередині AboutBlock), тому z-30: блок має лежати над нею. */}
-        <section className="relative z-30 min-h-[100svh] w-full">
+            всередині AboutBlock). z-60 — вище за фіксовану шапку (z-50), щоб
+            завіса гасила і її теж: інакше над чорнотою висіла б яскрава
+            кнопка й ефект порожнечі розсипався. */}
+        <section className="relative z-[60] min-h-[100svh] w-full">
           <AboutBlock />
         </section>
 

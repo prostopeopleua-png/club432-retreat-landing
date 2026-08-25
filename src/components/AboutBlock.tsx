@@ -82,7 +82,7 @@ export default function AboutBlock() {
         />
         <div aria-hidden className="am__sweep" />
 
-        <div className="relative mx-auto flex w-full max-w-[1500px] flex-col justify-end px-7 pb-14 pt-[34svh] md:px-[104px] md:pb-[9vh] md:pt-[30vh]">
+        <div className="relative mx-auto flex w-full max-w-[1500px] flex-col justify-end px-7 pb-14 pt-[27svh] md:px-[104px] md:pb-[9vh] md:pt-[30vh]">
           <div className="max-w-[820px]">
             <Eyebrow>{C.author.eyebrow}</Eyebrow>
 
