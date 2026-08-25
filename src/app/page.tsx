@@ -7,8 +7,10 @@ import CosmicBackground from "@/components/CosmicBackground";
 import RoamingMandala from "@/components/RoamingMandala";
 import CtaLink from "@/components/CtaLink";
 import AboutBlock from "@/components/AboutBlock";
+import PricingViewTracker from "@/components/PricingViewTracker";
 import { content as C } from "@/content";
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
+import { trackBotLinkClick } from "@/lib/analytics";
 
 const BOT = C.botUrl;
 
@@ -101,6 +103,9 @@ export default function Home() {
       </header>
 
       <main id="top" className="relative z-10">
+        {/* Ловить прокрутку до блоку з ціною → ViewContent у Meta. Нічого не малює. */}
+        <PricingViewTracker targetId="join" />
+
         {/* ══ HERO ══ */}
         {/* Поява першого екрана — на чистому CSS, БЕЗ framer-motion.
             Раніше заголовок і кнопки мали opacity:0 в HTML і проявлялись лише
@@ -336,7 +341,7 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm text-white/55">
               <a href="/metod-432" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkMetod}</a>
-              <a href={C.botUrlPlain} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkBot}</a>
+              <a href={C.botUrlPlain} target="_blank" rel="noopener noreferrer" onClick={() => trackBotLinkClick("footer")} className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkBot}</a>
               <a href="/oferta" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkOferta}</a>
               <a href="/privacy-policy" className="transition-colors hover:text-[var(--c432-amber)]">{C.footer.linkPrivacy}</a>
             </div>

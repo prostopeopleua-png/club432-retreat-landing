@@ -253,7 +253,6 @@ body {
   /* 6. Блок про автора: промінь світла має filter: blur на рухомому шарі —
      найдорожче, що тут є. Дихання сяйва теж прибираємо, щоб під час скролу
      працював лише сам скрол. */
-  .am__sweep { display: none !important; }
   .am__aurora { animation: none !important; }
 }
 
@@ -394,37 +393,12 @@ body {
 /* ═══════════ Блок «Автор та ведучий» ═══════════ */
 /* Блок на весь екран: без фіксованої висоти, без рамки й тіні — межі не має
    бути взагалі, інакше зникає ефект провалу в темряву. */
-.am { background: #07081B; }
-
-/* Бокове затемнення під текстом — лише на широких екранах. */
-.am__sidewash { display: none; }
-@media (min-width: 768px) { .am__sidewash { display: block; } }
-
 /* Тепле сяйво дихає. Тільки transform і scale, тому дешево. */
 .am__aurora { animation: amDrift 20s ease-in-out infinite; }
-
-/* Промінь світла проходить кадром. Має filter: blur, тобто перемальовується
-   щокадру — на телефоні вимкнений (див. мобільний блок нижче). */
-.am__sweep {
-  position: absolute;
-  top: -20%;
-  left: 0;
-  width: 22%;
-  height: 140%;
-  background: linear-gradient(90deg, transparent, rgba(253, 209, 111, 0.28), transparent);
-  filter: blur(14px);
-  animation: amSweep 11s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-}
 
 @keyframes amDrift {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
   50%      { transform: translate3d(2%, -2%, 0) scale(1.06); }
-}
-@keyframes amSweep {
-  0%   { transform: translateX(-40%) skewX(-12deg); opacity: 0; }
-  12%  { opacity: 0.5; }
-  45%  { opacity: 0; }
-  100% { transform: translateX(140%) skewX(-12deg); opacity: 0; }
 }
 
 
