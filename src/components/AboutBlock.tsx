@@ -9,40 +9,33 @@ import { content as C } from "@/content";
 /**
  * Блок «Автор та ведучий».
  *
- * Поява і зникнення привʼязані до скролу, а не до таймера: блок піднімається
- * назустріч, тримається, поки читаєш, і плавно відступає в космос, коли йде з
- * екрана. Фото при цьому повільно дрейфує — той самий рух, що в мандали.
+ * У блоку НЕМАЄ власного фону. Темряву дає завіса на все вікно, тому немає ні
+ * прямокутника, ні країв, ні стиків із сусідніми секціями — раніше саме край
+ * блоку читався світлою смугою внизу.
  *
- * Мобільна продуктивність: рухаємо тільки transform і opacity. Промінь світла
- * має filter: blur, тому на телефоні він вимкнений (див. globals.css).
+ * Фото — не фон, а фігура: знімок обрізаний по постаті й розчинений в альфу з
+ * лівого боку та знизу. Через це нічого не ріжеться при будь-якій пропорції
+ * вікна, чого неможливо було досягти розтягуванням через object-fit: cover.
  */
 export default function AboutBlock() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
 
-  // Завіса. Затемнює УСЮ сторінку — космос, мандалу, попередню секцію — поки
-  // блок проходить екран. Через неї і виникає відчуття провалу в темряву,
-  // а на виході вона так само плавно піднімається і сайт повертається.
-  const veil = useTransform(scrollYProgress, [0, 0.26, 0.4, 0.82, 0.99], [0, 0.86, 0.94, 0.94, 0]);
+  // Гасне світло на всій сторінці: космос, мандала, попередня секція, шапка.
+  const veil = useTransform(scrollYProgress, [0, 0.26, 0.4, 0.82, 0.99], [0, 0.86, 0.95, 0.95, 0]);
 
-  // Сам блок зʼявляється трохи пізніше за темряву: спершу гасне світло, потім
-  // проступає обличчя.
-  const opacity = useTransform(scrollYProgress, [0.12, 0.34, 0.76, 0.93], [0, 1, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0.12, 0.34, 0.76, 0.93], [0.965, 1, 1, 0.985]);
-  const lift = useTransform(scrollYProgress, [0.12, 0.34, 0.76, 0.93], [40, 0, 0, -22]);
-  // фото дрейфує повільніше за блок — глибина
-  const photoY = useTransform(scrollYProgress, [0, 1], ["-2.2%", "2.2%"]);
-  const photoScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.04, 1.09, 1.04]);
+  // Постать зʼявляється трохи пізніше за темряву і трохи раніше відступає.
+  const figureOpacity = useTransform(scrollYProgress, [0.12, 0.36, 0.74, 0.92], [0, 1, 1, 0]);
+  const figureY = useTransform(scrollYProgress, [0, 1], ["4%", "-4%"]);
+  const figureScale = useTransform(scrollYProgress, [0.12, 0.5, 0.92], [1.05, 1, 1.03]);
+
+  const textOpacity = useTransform(scrollYProgress, [0.2, 0.4, 0.74, 0.9], [0, 1, 1, 0]);
+  const textY = useTransform(scrollYProgress, [0.2, 0.4, 0.74, 0.9], [34, 0, 0, -20]);
 
   return (
     <div ref={ref} className="relative min-h-[100svh] w-full">
-      {/* Завіса лежить поза трансформованим блоком — інакше position: fixed
-          рахувався б від нього, а не від вікна. */}
       {!reduced && (
         <motion.div
           aria-hidden
@@ -51,110 +44,73 @@ export default function AboutBlock() {
         />
       )}
 
-      <motion.div
-        style={reduced ? undefined : { opacity, scale, y: lift }}
-        className="am relative z-[25] flex min-h-[100svh] w-full overflow-hidden"
-      >
-        {/* Кадр ширший за екран і притиснутий до лівого краю: обличчя через це
-            їде правіше й не потрапляє під текст. По вертикалі 12% замість 24% —
-            верх голови лежить на 17.4% висоти знімка, при 24% маківку зрізало. */}
-        <motion.div
-          style={reduced ? undefined : { y: photoY, scale: photoScale }}
-          className="absolute inset-y-0 left-0 w-full md:w-[118%]"
-        >
-          <Image
-            src="/photos/vadym-about.webp"
-            alt={C.author.name}
-            fill
-            sizes="(max-width: 768px) 100vw, 118vw"
-            className="object-cover"
-            style={{ objectPosition: "58% 12%" }}
-          />
-        </motion.div>
-
-        {/* затемнення знизу — нижній край блоку перетікає у фон сторінки */}
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(0deg, #07081B 11%, rgba(7,8,27,0.78) 42%, rgba(7,8,27,0.32) 70%, rgba(7,8,27,0.60) 100%)",
-          }}
-        />
-        {/* Затемнення з лівого боку: текст лягає на тінь, а не на обличчя.
-            Тільки на десктопі — на телефоні текст і так під фото. */}
-        <div
-          aria-hidden
-          className="am__sidewash absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(7,8,27,0.90) 0%, rgba(7,8,27,0.62) 26%, rgba(7,8,27,0.18) 50%, rgba(7,8,27,0) 66%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="am__aurora absolute inset-0"
-          style={{ background: "radial-gradient(40% 50% at 18% 55%, rgba(239,128,24,0.22), transparent 72%)" }}
-        />
-        <div aria-hidden className="am__sweep" />
-
-        <div className="relative mx-auto flex w-full max-w-[1500px] flex-col justify-end px-7 pb-14 pt-[27svh] md:px-[104px] md:pb-[9vh] md:pt-[30vh]">
-          <div className="max-w-[820px]">
-            <Eyebrow>{C.author.eyebrow}</Eyebrow>
-
-            {/* Імʼя береться з content.ts; градієнтом підсвічується останнє слово,
-                тому редагування тексту не ламає верстку. */}
-            <h2 className="mt-5 text-[clamp(2.6rem,6.2vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em] text-white">
-              {(() => {
-                const parts = C.author.name.trim().split(/\s+/);
-                const accent = parts.pop();
-                return (
-                  <>
-                    {parts.join(" ")} <span className="grad-text">{accent}</span>
-                  </>
-                );
-              })()}
-            </h2>
-
-            <p className="mt-6 max-w-[46ch] text-[clamp(1.05rem,1.5vw,1.32rem)] font-light leading-relaxed text-white/85">
-              {C.author.quote}
-            </p>
-
-            <Stats />
-
-            <CtaLink
-              href={C.botUrl}
-              location="author"
-              className="btn-cta mt-10 self-start !px-9 !py-[18px] !text-[15px]"
-            >
-              {C.pricing.cta}
-            </CtaLink>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Стик із наступною секцією. Без нього нижній край блоку читається
-          світлою смугою: під ним одразу починається космос із зорями, який
-          світліший за суцільний #07081B. */}
+      {/* тепле сяйво позаду постаті */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-0 top-full z-[20] h-[22vh] w-full"
-        style={{ background: "linear-gradient(180deg, #07081B 0%, rgba(7,8,27,0.72) 38%, rgba(7,8,27,0) 100%)" }}
+        className="am__aurora pointer-events-none absolute inset-0 z-[20]"
+        style={{ background: "radial-gradient(38% 46% at 74% 52%, rgba(239,128,24,0.22), transparent 70%)" }}
       />
+
+      {/* ПОСТАТЬ */}
+      <motion.div
+        style={reduced ? undefined : { opacity: figureOpacity, y: figureY, scale: figureScale }}
+        className="pointer-events-none absolute inset-x-0 top-0 z-[22] flex justify-center md:inset-y-0 md:left-auto md:right-0 md:top-auto md:justify-end md:translate-x-[3%]"
+      >
+        <Image
+          src="/photos/vadym-figure.webp"
+          alt={C.author.name}
+          width={1250}
+          height={1782}
+          sizes="(max-width: 768px) 100vw, 62vh"
+          priority={false}
+          className="h-auto w-full max-w-none select-none md:h-[100svh] md:w-auto"
+        />
+      </motion.div>
+
+      {/* ТЕКСТ */}
+      <motion.div
+        style={reduced ? undefined : { opacity: textOpacity, y: textY }}
+        className="relative z-[25] mx-auto flex min-h-[100svh] w-full max-w-[1500px] flex-col justify-end px-7 pb-14 pt-[54svh] md:justify-center md:px-[104px] md:pb-0 md:pt-0"
+      >
+        <div className="max-w-[640px]">
+          <div className="text-[12px] uppercase tracking-[0.22em] text-[var(--c432-amber)]">
+            {C.author.eyebrow}
+          </div>
+
+          {/* Імʼя береться з content.ts; градієнтом підсвічується останнє слово. */}
+          <h2 className="mt-5 text-[clamp(2.5rem,5.6vw,4.4rem)] font-semibold leading-[0.98] tracking-[-0.035em] text-white">
+            {(() => {
+              const parts = C.author.name.trim().split(/\s+/);
+              const accent = parts.pop();
+              return (
+                <>
+                  {parts.join(" ")} <span className="grad-text">{accent}</span>
+                </>
+              );
+            })()}
+          </h2>
+
+          <p className="mt-6 max-w-[42ch] text-[clamp(1.02rem,1.4vw,1.28rem)] font-light leading-relaxed text-white/85">
+            {C.author.quote}
+          </p>
+
+          <Stats />
+
+          <CtaLink
+            href={C.botUrl}
+            location="author"
+            className="btn-cta mt-10 self-start !px-9 !py-[18px] !text-[15px]"
+          >
+            {C.pricing.cta}
+          </CtaLink>
+        </div>
+      </motion.div>
     </div>
   );
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="text-[12px] uppercase tracking-[0.22em] text-[var(--c432-amber)]">{children}</div>
-  );
-}
-
 /** Цифри набігають один раз, коли блок доходить до екрана.
- *  Стартове значення — фінальне, тому в HTML і без JS стоять правильні числа.
- *  З нуля анімуємо лише тоді, коли блок ще НЕ у вʼюпорті: інакше людина, що
- *  зайшла одразу сюди, побачила б, як цифри стрибають назад. */
+ *  Стартове значення — фінальне, тому в HTML і без JS стоять правильні числа. */
 function Stats() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -169,7 +125,6 @@ function Stats() {
       (entries) => {
         const entry = entries[0];
         if (!entry) return;
-
         if (!entry.isIntersecting) {
           if (!armed.current) {
             armed.current = true;
@@ -177,10 +132,8 @@ function Stats() {
           }
           return;
         }
-
         io.disconnect();
-        if (!armed.current) return; // вже було видно — лишаємо фінальні числа
-
+        if (!armed.current) return;
         const t0 = performance.now();
         const tick = () => {
           const raw = Math.min(1, (performance.now() - t0) / 1600);
@@ -196,14 +149,14 @@ function Stats() {
   }, [reduced]);
 
   return (
-    <div ref={ref} className="mt-11 grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-10">
+    <div ref={ref} className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-8">
       {C.author.stats.map((s) => {
         const target = parseInt(s.value.replace(/\D/g, ""), 10);
         const suffix = s.value.replace(/[\d\s]/g, "");
         const shown = Number.isFinite(target) ? Math.round(target * p) + suffix : s.value;
         return (
-          <div key={s.label} className="border-t border-[rgba(253,209,111,0.28)] pt-4 md:max-w-[200px]">
-            <div className="grad-text text-[clamp(1.9rem,3.2vw,2.5rem)] font-semibold tracking-[-0.02em] tabular-nums">
+          <div key={s.label} className="border-t border-[rgba(253,209,111,0.28)] pt-4 md:max-w-[180px]">
+            <div className="grad-text text-[clamp(1.8rem,3vw,2.35rem)] font-semibold tracking-[-0.02em] tabular-nums">
               {shown}
             </div>
             <div className="mt-2 text-[13px] leading-snug text-white/55">{s.label}</div>

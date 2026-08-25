@@ -43,3 +43,26 @@ export function trackStandard(fbEvent: string, gaEvent: string, params: Params =
 export function trackSubscribeClick(location: string) {
   trackStandard("Lead", "subscribe_click", { location, currency: "EUR", value: 25 });
 }
+
+/**
+ * Людина догортала до блоку з ціною — сигнал реального інтересу.
+ *
+ * Навіщо: Lead трапляється надто рідко (одиниці на тиждень), і алгоритму Meta
+ * немає на чому вчитись — набір реклами не виходить з фази навчання, поки не
+ * набере близько 50 конверсій за тиждень. ViewContent дає щільніший сигнал:
+ * на нього можна оптимізувати перші кампанії, а на Lead перемкнутись пізніше,
+ * коли обсяг дозволить.
+ */
+export function trackPricingView() {
+  trackStandard("ViewContent", "pricing_view", {
+    content_name: "Клуб 432 — підписка",
+    currency: "EUR",
+    value: 25,
+  });
+}
+
+/** Клік по звичайному посиланню на бот (не кнопка-CTA). Навмисно НЕ Lead,
+    щоб не забруднювати головну конверсію, на яку оптимізується реклама. */
+export function trackBotLinkClick(location: string) {
+  track("bot_link_click", { location });
+}
