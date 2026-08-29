@@ -23,16 +23,20 @@ export default function AboutBlock() {
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
 
-  // Гасне світло на всій сторінці: космос, мандала, попередня секція, шапка.
-  const veil = useTransform(scrollYProgress, [0, 0.26, 0.4, 0.82, 0.99], [0, 0.86, 0.95, 0.95, 0]);
+  // Завіса гасить сторінку ДО ПОВНОЇ непрозорості й тримає її такою весь час,
+  // поки видно фігуру. Це принципово: підкладка фото зафарбована рівно цим
+  // кольором (#04050F), тож поки завіса суцільна — краю знімка не існує.
+  // Раніше вона зупинялась на 0.95, колір фону «плавав» разом зі скролом і на
+  // десктопі проступав прямокутник.
+  const veil = useTransform(scrollYProgress, [0, 0.2, 0.3, 0.87, 0.99], [0, 0.85, 1, 1, 0]);
 
-  // Постать зʼявляється трохи пізніше за темряву і трохи раніше відступає.
-  const figureOpacity = useTransform(scrollYProgress, [0.12, 0.36, 0.74, 0.92], [0, 1, 1, 0]);
-  const figureY = useTransform(scrollYProgress, [0, 1], ["4%", "-4%"]);
-  const figureScale = useTransform(scrollYProgress, [0.12, 0.5, 0.92], [1.05, 1, 1.03]);
+  // Фігура живе строго всередині вікна, де завіса вже суцільна.
+  const figureOpacity = useTransform(scrollYProgress, [0.3, 0.46, 0.8, 0.87], [0, 1, 1, 0]);
+  const figureY = useTransform(scrollYProgress, [0, 1], ["3%", "-3%"]);
+  const figureScale = useTransform(scrollYProgress, [0.3, 0.55, 0.87], [1.05, 1, 1.03]);
 
-  const textOpacity = useTransform(scrollYProgress, [0.2, 0.4, 0.74, 0.9], [0, 1, 1, 0]);
-  const textY = useTransform(scrollYProgress, [0.2, 0.4, 0.74, 0.9], [34, 0, 0, -20]);
+  const textOpacity = useTransform(scrollYProgress, [0.36, 0.52, 0.8, 0.87], [0, 1, 1, 0]);
+  const textY = useTransform(scrollYProgress, [0.36, 0.52, 0.8, 0.87], [30, 0, 0, -18]);
 
   return (
     <div ref={ref} className="relative min-h-[100svh] w-full">
@@ -40,7 +44,7 @@ export default function AboutBlock() {
         <motion.div
           aria-hidden
           style={{ opacity: veil }}
-          className="pointer-events-none fixed inset-0 z-[15] bg-[#04050D]"
+          className="pointer-events-none fixed inset-0 z-[15] bg-[#04050F]"
         />
       )}
 
@@ -48,31 +52,31 @@ export default function AboutBlock() {
       <div
         aria-hidden
         className="am__aurora pointer-events-none absolute inset-0 z-[20]"
-        style={{ background: "radial-gradient(38% 46% at 74% 52%, rgba(239,128,24,0.22), transparent 70%)" }}
+        style={{ background: "radial-gradient(38% 46% at 26% 52%, rgba(239,128,24,0.20), transparent 70%)" }}
       />
 
       {/* ПОСТАТЬ */}
       <motion.div
         style={reduced ? undefined : { opacity: figureOpacity, y: figureY, scale: figureScale }}
-        className="pointer-events-none absolute inset-x-0 top-0 z-[22] flex justify-center md:inset-y-0 md:left-auto md:right-0 md:top-auto md:justify-end md:translate-x-[3%]"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[22] flex justify-center md:inset-x-auto md:left-0 md:top-[2svh] md:-translate-x-[5%]"
       >
         <Image
           src="/photos/vadym-figure.webp"
           alt={C.author.name}
-          width={1250}
-          height={1782}
-          sizes="(max-width: 768px) 100vw, 62vh"
+          width={1000}
+          height={1425}
+          sizes="(max-width: 768px) 100vw, 75vh"
           priority={false}
-          className="h-auto w-full max-w-none select-none md:h-[100svh] md:w-auto"
+          className="h-auto w-full max-w-none select-none md:h-[104svh] md:w-auto"
         />
       </motion.div>
 
       {/* ТЕКСТ */}
       <motion.div
         style={reduced ? undefined : { opacity: textOpacity, y: textY }}
-        className="relative z-[25] mx-auto flex min-h-[100svh] w-full max-w-[1500px] flex-col justify-end px-7 pb-14 pt-[54svh] md:justify-center md:px-[104px] md:pb-0 md:pt-0"
+        className="relative z-[25] mx-auto flex min-h-[100svh] w-full max-w-[1500px] flex-col justify-end px-7 pb-14 pt-[54svh] md:items-end md:justify-center md:px-[104px] md:pb-0 md:pt-0"
       >
-        <div className="max-w-[640px]">
+        <div className="max-w-[640px] md:w-[46%] md:min-w-[440px]">
           <div className="text-[12px] uppercase tracking-[0.22em] text-[var(--c432-amber)]">
             {C.author.eyebrow}
           </div>
