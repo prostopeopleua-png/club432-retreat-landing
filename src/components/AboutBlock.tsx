@@ -25,7 +25,7 @@ export default function AboutBlock() {
 
   // Завіса гасить сторінку ДО ПОВНОЇ непрозорості й тримає її такою весь час,
   // поки видно фігуру. Це принципово: підкладка фото зафарбована рівно цим
-  // кольором (#04050F), тож поки завіса суцільна — краю знімка не існує.
+  // кольором (#040510), тож поки завіса суцільна — краю знімка не існує.
   // Раніше вона зупинялась на 0.95, колір фону «плавав» разом зі скролом і на
   // десктопі проступав прямокутник.
   const veil = useTransform(scrollYProgress, [0, 0.2, 0.3, 0.87, 0.99], [0, 0.85, 1, 1, 0]);
@@ -44,7 +44,7 @@ export default function AboutBlock() {
         <motion.div
           aria-hidden
           style={{ opacity: veil }}
-          className="pointer-events-none fixed inset-0 z-[15] bg-[#04050F]"
+          className="pointer-events-none fixed inset-0 z-[15] bg-[#040510]"
         />
       )}
 
