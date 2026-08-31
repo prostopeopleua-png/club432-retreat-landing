@@ -249,11 +249,6 @@ body {
 
   /* 5. Зерно (grain) — напівпрозорий шар із mix-blend-mode поверх усього. */
   .grain::after { display: none !important; }
-
-  /* 6. Блок про автора: промінь світла має filter: blur на рухомому шарі —
-     найдорожче, що тут є. Дихання сяйва теж прибираємо, щоб під час скролу
-     працював лише сам скрол. */
-  .am__aurora { animation: none !important; }
 }
 
 /* ═══════════ КЛУБ 432 — seamless cosmos + frosted glass (v3) ═══════════ */
@@ -389,7 +384,4 @@ body {
 .rise-d1 { animation-delay: 0.08s; }
 .rise-d2 { animation-delay: 0.26s; }
 .rise-d3 { animation-delay: 0.42s; }
-
-}
-
 
