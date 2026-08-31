@@ -29,7 +29,7 @@ const MOBILE: { src: string; x: number; y: number; size: number }[] = [
   { src: "m10", x: 30, y: 3, size: 62 },
   { src: "carpathians", x: 70, y: 4, size: 66 },
   { src: "m08", x: 5, y: 21, size: 70 },
-  { src: "m12", x: 93, y: 23, size: 78 },
+  { src: "m12", x: 95, y: 15, size: 72 },
   { src: "m11", x: 12, y: 89, size: 76 },
   { src: "group", x: 88, y: 87, size: 70 },
   { src: "m19", x: 32, y: 95, size: 62 },
