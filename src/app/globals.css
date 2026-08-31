@@ -389,13 +389,13 @@ body {
 /* Радіуси кілець. На телефоні вони великі навмисно: видимими лишаються тільки
    плитки біля лівого та правого країв, де є місце поза текстом. */
 :root {
-  --ring-0: 54vw;
-  --ring-1: 68vw;
-  --ring-2: 82vw;
-  --tile-k: 0.72;
+  --ring-0: 28vw;
+  --ring-1: 36vw;
+  --ring-2: 44vw;
+  --tile-k: 0.78;
 }
 @media (min-width: 768px) {
-  :root { --ring-0: 33vw; --ring-1: 42vw; --ring-2: 51vw; --tile-k: 1; }
+  :root { --ring-0: 28vw; --ring-1: 36vw; --ring-2: 44vw; --tile-k: 1; }
 }
 
 .collage-ring { animation: collageSpin linear infinite; }

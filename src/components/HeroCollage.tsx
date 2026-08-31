@@ -21,6 +21,21 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
  */
 type Tile = { src: string; ring: number; angle: number; size: number; mobile?: boolean };
 
+/** На телефоні кільце не працює: при будь-якому радіусі частина плиток лягає
+ *  рівно на текст. Тому там окрема розкладка — по кутах і краях. */
+const MOBILE: { src: string; x: number; y: number; size: number }[] = [
+  { src: "m15", x: 11, y: 7, size: 82 },
+  { src: "m28", x: 84, y: 9, size: 74 },
+  { src: "m10", x: 30, y: 3, size: 62 },
+  { src: "carpathians", x: 70, y: 4, size: 66 },
+  { src: "m08", x: 5, y: 21, size: 70 },
+  { src: "m12", x: 93, y: 23, size: 78 },
+  { src: "m11", x: 12, y: 89, size: 76 },
+  { src: "group", x: 88, y: 87, size: 70 },
+  { src: "m19", x: 32, y: 95, size: 62 },
+  { src: "m22", x: 68, y: 94, size: 66 },
+];
+
 const TILES: Tile[] = [
   { src: "m15", ring: 0, angle: 37.0, size: 88, mobile: true },
   { src: "m28", ring: 0, angle: 98.3, size: 100 },
@@ -77,7 +92,26 @@ export default function HeroCollage() {
         className="absolute inset-0"
         style={reduced ? undefined : { scale, opacity }}
       >
-        {[0, 1, 2].map((ring) => (
+        {!wide &&
+          MOBILE.map((t) => (
+            <div
+              key={t.src}
+              className="absolute -translate-x-1/2 -translate-y-1/2"
+              style={{ left: `${t.x}%`, top: `${t.y}%`, width: `calc(${t.size}px * var(--tile-k, 1))` }}
+            >
+              <Image
+                src={`/photos/community/${t.src}.webp`}
+                alt=""
+                width={240}
+                height={240}
+                sizes="100px"
+                className="h-auto w-full rounded-full opacity-[0.82]"
+              />
+            </div>
+          ))}
+
+        {wide &&
+          [0, 1, 2].map((ring) => (
           <div
             key={ring}
             className="collage-ring absolute left-1/2 top-1/2"
@@ -89,7 +123,7 @@ export default function HeroCollage() {
               animationDuration: SPIN[ring],
             }}
           >
-            {TILES.filter((t) => t.ring === ring && (wide || t.mobile)).map((t) => (
+            {TILES.filter((t) => t.ring === ring).map((t) => (
               <div
                 key={t.src}
                 className="absolute"
@@ -113,8 +147,8 @@ export default function HeroCollage() {
                 </div>
               </div>
             ))}
-          </div>
-        ))}
+            </div>
+          ))}
       </motion.div>
     </div>
   );
