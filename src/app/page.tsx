@@ -133,6 +133,31 @@ export default function Home() {
           </p>
         </section>
 
+        {/* ══ PAIN — петля, у якій людина крутиться ══ */}
+        <section className="sect mx-auto max-w-4xl px-5">
+          <Reveal><Eyebrow>{C.pain.eyebrow}</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-14 max-w-3xl text-center">{C.pain.heading}</h2></Reveal>
+          <ol className="relative space-y-7 border-l border-white/10 pl-7 sm:pl-9">
+            {C.pain.steps.map((st, i) => (
+              <Reveal key={st.when} i={i}>
+                <li className="relative">
+                  <span
+                    aria-hidden
+                    className="absolute -left-[35px] top-2 h-2 w-2 rounded-full bg-[var(--c432-amber)]/70 sm:-left-[43px]"
+                  />
+                  <div className="text-[13px] uppercase tracking-[0.16em] text-[var(--c432-amber)]/80">{st.when}</div>
+                  <p className="mt-2 text-[15px] leading-relaxed text-[var(--c432-ink)]">{st.text}</p>
+                </li>
+              </Reveal>
+            ))}
+          </ol>
+          <Reveal i={5}>
+            <p className="mx-auto mt-12 max-w-2xl text-center text-[clamp(1.02rem,1.5vw,1.2rem)] leading-relaxed text-white/85">
+              {C.pain.outro}
+            </p>
+          </Reveal>
+        </section>
+
         {/* ══ WHO ══ */}
         <section id="what" className="sect mx-auto max-w-6xl px-5">
           <Reveal><Eyebrow>{C.who.eyebrow}</Eyebrow></Reveal>
@@ -278,7 +303,49 @@ export default function Home() {
             ))}
           </div>
           <Reveal i={4}>
-            <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] leading-relaxed text-white/55">{C.month.outro}</p>
+            <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] leading-relaxed text-white/75">{C.month.note}</p>
+            <p className="mx-auto mt-4 max-w-2xl text-center text-[15px] leading-relaxed text-white/55">{C.month.outro}</p>
+          </Reveal>
+        </section>
+
+        {/* ══ MYTHS — заперечення знімаємо до ціни ══ */}
+        <section className="sect mx-auto max-w-5xl px-5">
+          <Reveal><Eyebrow>{C.myths.eyebrow}</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-14 max-w-3xl text-center">{C.myths.heading}</h2></Reveal>
+          <div className="space-y-4">
+            {C.myths.items.map((m, i) => (
+              <Reveal key={m.myth} i={i}>
+                <div className="frost grid gap-5 p-7 md:grid-cols-[0.85fr_1.15fr] md:gap-9 md:p-8">
+                  <div>
+                    <div className="text-[11px] uppercase tracking-[0.2em] text-white/35">Міф</div>
+                    <p className="mt-3 text-[15px] leading-relaxed text-white/55 line-through decoration-white/25">{m.myth}</p>
+                  </div>
+                  <div>
+                    <div className="text-[11px] uppercase tracking-[0.2em] text-[var(--c432-amber)]">Як насправді</div>
+                    <p className="mt-3 text-[15px] leading-relaxed text-[var(--c432-ink)]">{m.truth}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* ══ NOT FOR — чесна дискваліфікація ══ */}
+        <section className="sect mx-auto max-w-3xl px-5">
+          <Reveal><Eyebrow>{C.notFor.eyebrow}</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mb-12 text-center">{C.notFor.heading}</h2></Reveal>
+          <ul className="space-y-5">
+            {C.notFor.items.map((t, i) => (
+              <Reveal key={i} i={i}>
+                <li className="flex items-start gap-4">
+                  <span aria-hidden className="mt-2 h-px w-6 shrink-0 bg-white/25" />
+                  <span className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{t}</span>
+                </li>
+              </Reveal>
+            ))}
+          </ul>
+          <Reveal i={5}>
+            <p className="mt-10 text-center text-[15px] text-white/55">{C.notFor.outro}</p>
           </Reveal>
         </section>
 

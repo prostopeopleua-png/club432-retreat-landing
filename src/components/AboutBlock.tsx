@@ -48,26 +48,28 @@ export default function AboutBlock() {
         />
       )}
 
-      {/* тепле сяйво позаду постаті */}
+      {/* Тепле сяйво. Зміщене праворуч від центру фігури: коли воно згасало
+          рівно на її краю, воно цей край і підсвічувало. Тепер градієнт
+          переходить через межу, а не впирається в неї. */}
       <div
         aria-hidden
         className="am__aurora pointer-events-none absolute inset-0 z-[20]"
-        style={{ background: "radial-gradient(38% 46% at 26% 52%, rgba(239,128,24,0.20), transparent 70%)" }}
+        style={{ background: "radial-gradient(46% 52% at 46% 50%, rgba(239,128,24,0.19), transparent 72%)" }}
       />
 
       {/* ПОСТАТЬ */}
       <motion.div
         style={reduced ? undefined : { opacity: figureOpacity, y: figureY, scale: figureScale }}
-        className="pointer-events-none absolute inset-x-0 top-0 z-[22] flex justify-center md:inset-x-auto md:left-0 md:top-[2svh] md:-translate-x-[5%]"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[22] flex justify-center md:inset-x-auto md:left-0 md:top-[-4svh] md:-translate-x-[7%]"
       >
         <Image
           src="/photos/vadym-figure.webp"
           alt={C.author.name}
-          width={1000}
-          height={1425}
-          sizes="(max-width: 768px) 100vw, 75vh"
+          width={1100}
+          height={1300}
+          sizes="(max-width: 768px) 100vw, 90vh"
           priority={false}
-          className="h-auto w-full max-w-none select-none md:h-[104svh] md:w-auto"
+          className="h-auto w-full max-w-none select-none md:h-[112svh] md:w-auto"
         />
       </motion.div>
 
