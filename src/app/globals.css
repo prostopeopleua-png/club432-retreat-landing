@@ -390,15 +390,6 @@ body {
 .rise-d2 { animation-delay: 0.26s; }
 .rise-d3 { animation-delay: 0.42s; }
 
-/* ═══════════ Блок «Автор та ведучий» ═══════════ */
-/* Блок на весь екран: без фіксованої висоти, без рамки й тіні — межі не має
-   бути взагалі, інакше зникає ефект провалу в темряву. */
-/* Тепле сяйво дихає. Тільки transform і scale, тому дешево. */
-.am__aurora { animation: amDrift 20s ease-in-out infinite; }
-
-@keyframes amDrift {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50%      { transform: translate3d(2%, -2%, 0) scale(1.06); }
 }
 
 

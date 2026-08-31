@@ -48,15 +48,6 @@ export default function AboutBlock() {
         />
       )}
 
-      {/* Тепле сяйво. Зміщене праворуч від центру фігури: коли воно згасало
-          рівно на її краю, воно цей край і підсвічувало. Тепер градієнт
-          переходить через межу, а не впирається в неї. */}
-      <div
-        aria-hidden
-        className="am__aurora pointer-events-none absolute inset-0 z-[20]"
-        style={{ background: "radial-gradient(46% 52% at 46% 50%, rgba(239,128,24,0.19), transparent 72%)" }}
-      />
-
       {/* ПОСТАТЬ */}
       <motion.div
         style={reduced ? undefined : { opacity: figureOpacity, y: figureY, scale: figureScale }}
