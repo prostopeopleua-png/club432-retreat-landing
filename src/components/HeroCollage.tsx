@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 
 /**
@@ -61,12 +61,23 @@ const TILES: Tile[] = [
 export default function HeroCollage() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
+  // Ховати зайві плитки через CSS не досить: браузер усе одно їх завантажує.
+  // Тому на сервері рендеримо лише мобільний набір, а решту додаємо вже в
+  // браузері, коли знаємо ширину. Телефон качає 10 картинок замість 26.
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const apply = () => setWide(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
   // Прогрес рахуємо від верху сторінки до кінця першого екрана.
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 
   return (
     <div ref={ref} aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      {TILES.map((t, i) => (
+      {TILES.filter((t) => wide || t.mobile).map((t, i) => (
         <CollageTile key={t.src} tile={t} index={i} progress={scrollYProgress} reduced={!!reduced} />
       ))}
     </div>
@@ -106,7 +117,7 @@ function CollageTile({
         width: "calc(var(--tile) * var(--tile-k, 1))",
         ...(reduced ? {} : { x, y, opacity, scale }),
       } as React.CSSProperties}
-      className={`absolute -translate-x-1/2 -translate-y-1/2 ${tile.mobile ? "" : "hidden md:block"}`}
+      className="absolute -translate-x-1/2 -translate-y-1/2"
     >
       <div
         className={`tile-float overflow-hidden ${tile.round ? "rounded-full" : "rounded-[12px]"}`}
