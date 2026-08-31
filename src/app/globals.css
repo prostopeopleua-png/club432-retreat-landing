@@ -395,3 +395,6 @@ body {
 @media (max-width: 820px) {
   .tile-float { animation: none; }
 }
+/* На вузькому екрані плитки менші, щоб не наповзали на заголовок. */
+@media (max-width: 640px) { :root { --tile-k: 0.52; } }
+@media (min-width: 641px) and (max-width: 1024px) { :root { --tile-k: 0.78; } }

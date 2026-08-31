@@ -80,9 +80,12 @@ function CollageTile({
       style={{
         left: `${tile.x}%`,
         top: `${tile.y}%`,
-        width: tile.size,
+        // Розмір заданий у пікселях для десктопа й зменшується коефіцієнтом
+        // --tile-k на вузьких екранах: інлайновий style не вміє медіазапитів.
+        ["--tile" as string]: `${tile.size}px`,
+        width: "calc(var(--tile) * var(--tile-k, 1))",
         ...(reduced ? {} : { x, y, opacity, scale }),
-      }}
+      } as React.CSSProperties}
       className={`absolute -translate-x-1/2 -translate-y-1/2 ${tile.mobile ? "" : "hidden md:block"}`}
     >
       <div
