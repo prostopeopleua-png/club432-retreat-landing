@@ -7,6 +7,7 @@ import CosmicBackground from "@/components/CosmicBackground";
 import RoamingMandala from "@/components/RoamingMandala";
 import CtaLink from "@/components/CtaLink";
 import AboutBlock from "@/components/AboutBlock";
+import HeroCollage from "@/components/HeroCollage";
 import PricingViewTracker from "@/components/PricingViewTracker";
 import { content as C } from "@/content";
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
@@ -112,6 +113,7 @@ export default function Home() {
             після завантаження React. На повільному телефоні людина кілька
             секунд дивилась у порожній екран. CSS-анімація стартує одразу. */}
         <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 text-center">
+          <HeroCollage />
           <div className="rise-in">
             <Eyebrow>{C.hero.eyebrow}</Eyebrow>
           </div>

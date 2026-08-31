@@ -385,3 +385,13 @@ body {
 .rise-d2 { animation-delay: 0.26s; }
 .rise-d3 { animation-delay: 0.42s; }
 
+/* Плитки колажу на першому екрані: ледь помітне «дихання», щоб кадр був живий.
+   Тільки transform, тому композитор тягне це без перемальовування. */
+.tile-float { animation: tileFloat 9s ease-in-out infinite; }
+@keyframes tileFloat {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -10px; }
+}
+@media (max-width: 820px) {
+  .tile-float { animation: none; }
+}
