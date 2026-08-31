@@ -150,6 +150,53 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ══ VOICES — відгуки учасників ══ */}
+        <section className="sect mx-auto max-w-6xl px-5">
+          <Reveal><Eyebrow>{C.voices.eyebrow}</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center">{C.voices.heading}</h2></Reveal>
+          <Reveal i={2}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">{C.voices.subtitle}</p></Reveal>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            {C.voices.items.map((v, i) => (
+              <Reveal key={v.name} i={i}>
+                <figure className="frost frost-hover flex h-full flex-col p-7 sm:p-8">
+                  <svg viewBox="0 0 24 24" aria-hidden className="mb-4 h-7 w-7 shrink-0 fill-[var(--c432-amber)]/25">
+                    <path d="M9.5 5C6.5 6.6 4.6 9.4 4.6 12.9c0 3.2 1.9 5.1 4.3 5.1 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.9.1-1 .1.3-1.6 1.9-3.5 3.5-4.5L9.5 5Zm9.1 0c-3 1.6-4.9 4.4-4.9 7.9 0 3.2 1.9 5.1 4.3 5.1 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.9.1-1 .1.3-1.6 1.9-3.5 3.5-4.5L18.6 5Z" />
+                  </svg>
+                  <blockquote className="text-[15px] leading-relaxed text-[var(--c432-ink)]">
+                    {(() => {
+                      // Ключовий результат виділяємо: людина сканує відгуки, а не читає.
+                      const i = v.accent ? v.quote.indexOf(v.accent) : -1;
+                      if (i < 0) return v.quote;
+                      return (
+                        <>
+                          {v.quote.slice(0, i)}
+                          <strong className="font-semibold text-white">{v.accent}</strong>
+                          {v.quote.slice(i + v.accent.length)}
+                        </>
+                      );
+                    })()}
+                  </blockquote>
+                  <figcaption className="mt-auto pt-6">
+                    <div className="hairline mb-4" />
+                    <span className="font-semibold text-white">{v.name}</span>
+                    <span className="text-sm text-white/45"> · {v.context}</span>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal i={4}>
+            <blockquote className="mx-auto mt-12 max-w-2xl text-center">
+              <p className="font-display text-[clamp(1.15rem,2vw,1.5rem)] leading-relaxed text-white/85">
+                «{C.voices.pullQuote}»
+              </p>
+              <footer className="mt-4 text-sm text-[var(--c432-amber)]/70">{C.voices.pullAuthor}</footer>
+            </blockquote>
+          </Reveal>
+        </section>
+
         {/* ══ AUTHOR ══
             На весь екран, без полів і рамок. Сторінка навколо гасне (завіса
             всередині AboutBlock). z-60 — вище за фіксовану шапку (z-50), щоб
@@ -190,40 +237,6 @@ export default function Home() {
                 <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
               </a>
             </div>
-          </Reveal>
-        </section>
-
-        {/* ══ VOICES — відгуки учасників ══ */}
-        <section className="sect mx-auto max-w-6xl px-5">
-          <Reveal><Eyebrow>{C.voices.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center">{C.voices.heading}</h2></Reveal>
-          <Reveal i={2}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">{C.voices.subtitle}</p></Reveal>
-
-          <div className="grid gap-5 md:grid-cols-2">
-            {C.voices.items.map((v, i) => (
-              <Reveal key={v.name} i={i}>
-                <figure className="frost frost-hover flex h-full flex-col p-7 sm:p-8">
-                  <svg viewBox="0 0 24 24" aria-hidden className="mb-4 h-7 w-7 shrink-0 fill-[var(--c432-amber)]/25">
-                    <path d="M9.5 5C6.5 6.6 4.6 9.4 4.6 12.9c0 3.2 1.9 5.1 4.3 5.1 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.9.1-1 .1.3-1.6 1.9-3.5 3.5-4.5L9.5 5Zm9.1 0c-3 1.6-4.9 4.4-4.9 7.9 0 3.2 1.9 5.1 4.3 5.1 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.9.1-1 .1.3-1.6 1.9-3.5 3.5-4.5L18.6 5Z" />
-                  </svg>
-                  <blockquote className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{v.quote}</blockquote>
-                  <figcaption className="mt-auto pt-6">
-                    <div className="hairline mb-4" />
-                    <span className="font-semibold text-white">{v.name}</span>
-                    <span className="text-sm text-white/45"> · {v.context}</span>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal i={4}>
-            <blockquote className="mx-auto mt-12 max-w-2xl text-center">
-              <p className="font-display text-[clamp(1.15rem,2vw,1.5rem)] leading-relaxed text-white/85">
-                «{C.voices.pullQuote}»
-              </p>
-              <footer className="mt-4 text-sm text-[var(--c432-amber)]/70">{C.voices.pullAuthor}</footer>
-            </blockquote>
           </Reveal>
         </section>
 

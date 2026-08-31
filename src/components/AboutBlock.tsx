@@ -107,6 +107,7 @@ export default function AboutBlock() {
           >
             {C.pricing.cta}
           </CtaLink>
+          <p className="mt-4 text-xs text-white/40">{C.ctaNote}</p>
         </div>
       </motion.div>
     </div>
