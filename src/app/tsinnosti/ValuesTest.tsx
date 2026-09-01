@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import CtaLink from "@/components/CtaLink";
 import { content as C } from "@/content";
 import { VALUES, themes, valuesPage as T, type Theme } from "@/values";
@@ -35,7 +35,6 @@ export default function ValuesTest() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-5">
-      <AnimatePresence mode="wait">
         {step === 0 && (
           <Slide key="intro">
             <div className="eyebrow-line mb-6">{T.eyebrow}</div>
@@ -182,18 +181,20 @@ export default function ValuesTest() {
             </div>
           </Slide>
         )}
-      </AnimatePresence>
     </div>
   );
 }
 
+/** Поява кроку. Свідомо без exit-анімації та без AnimatePresence:
+ *  mode="wait" чекає завершення анімації зникнення, і якщо браузер
+ *  пригальмовує кадри (фонова вкладка, слабкий телефон), тест зависає.
+ *  Перехід між кроками не повинен залежати від анімації. */
 function Slide({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 18 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>
