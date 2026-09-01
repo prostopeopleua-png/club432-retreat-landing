@@ -372,6 +372,24 @@ export default function Home() {
           </Reveal>
         </section>
 
+        {/* ══ TEST TEASER — місток до безкоштовного тесту ══ */}
+        <section className="sect mx-auto max-w-3xl px-5">
+          <Reveal>
+            <div className="frost overflow-hidden p-9 text-center sm:p-12">
+              <Eyebrow>{C.testTeaser.eyebrow}</Eyebrow>
+              <h2 className="font-display mt-5 text-[clamp(1.7rem,3.4vw,2.6rem)] font-semibold leading-tight">
+                {C.testTeaser.heading}
+              </h2>
+              <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-[var(--c432-ink)]">
+                {C.testTeaser.text}
+              </p>
+              <a href="/tsinnosti" className="btn-cta mt-9 inline-block cursor-pointer">
+                {C.testTeaser.cta}
+              </a>
+            </div>
+          </Reveal>
+        </section>
+
         {/* ══ JOIN / PRICING ══ */}
         <section id="join" className="sect mx-auto max-w-2xl px-5">
           <Reveal><Eyebrow>{C.pricing.eyebrow}</Eyebrow></Reveal>
