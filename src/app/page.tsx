@@ -265,6 +265,29 @@ export default function Home() {
           </Reveal>
         </section>
 
+        {/* ══ QUESTIONS — справжні питання з чату ══ */}
+        <section className="sect mx-auto max-w-6xl px-5">
+          <Reveal><Eyebrow>{C.questions.eyebrow}</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center">{C.questions.heading}</h2></Reveal>
+          <Reveal i={2}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">{C.questions.subtitle}</p></Reveal>
+
+          {/* Колонки, а не сітка: питання різної довжини лягають щільно,
+              як стрічка чату, і не тягнуть одне одного за висотою. */}
+          <div className="[column-fill:balance] gap-5 sm:columns-2 lg:columns-3">
+            {C.questions.items.map((q, i) => (
+              <Reveal key={i} i={Math.min(i, 6)}>
+                <div className="frost mb-5 break-inside-avoid p-6">
+                  <p className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{q}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal i={7}>
+            <p className="mx-auto mt-8 max-w-2xl text-center text-[15px] text-white/55">{C.questions.outro}</p>
+          </Reveal>
+        </section>
+
         {/* ══ FORMAT ══ */}
         <section className="sect mx-auto max-w-6xl px-5">
           <Reveal><Eyebrow>{C.format.eyebrow}</Eyebrow></Reveal>
