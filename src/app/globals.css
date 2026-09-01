@@ -384,29 +384,3 @@ body {
 .rise-d1 { animation-delay: 0.08s; }
 .rise-d2 { animation-delay: 0.26s; }
 .rise-d3 { animation-delay: 0.42s; }
-
-/* ═══════════ Колаж облич на першому екрані ═══════════ */
-/* Радіуси кілець. На телефоні вони великі навмисно: видимими лишаються тільки
-   плитки біля лівого та правого країв, де є місце поза текстом. */
-:root {
-  --ring-0: 28vw;
-  --ring-1: 36vw;
-  --ring-2: 44vw;
-  --tile-k: 0.78;
-}
-@media (min-width: 768px) {
-  :root { --ring-0: 32vw; --ring-1: 40vw; --ring-2: 48vw; --tile-k: 1; }
-}
-
-.collage-ring { animation: collageSpin linear infinite; }
-.collage-counter { animation: collageSpin linear infinite reverse; }
-@keyframes collageSpin { to { transform: rotate(360deg); } }
-
-/* На телефоні кільця не крутяться: обертання повноекранного шару — найдорожче,
-   що можна покласти на перший екран. Плитки просто стоять по краях. */
-@media (max-width: 767px) {
-  .collage-ring, .collage-counter { animation: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .collage-ring, .collage-counter { animation: none; }
-}
