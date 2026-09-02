@@ -5,10 +5,19 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import CtaLink from "@/components/CtaLink";
 import { content as C } from "@/content";
-import { VALUES, themes, valuesPage as T, type Theme } from "@/values";
+import { VALUES, VALUES_VERSION, themes, valuesPage as T, type Theme } from "@/values";
 import { track } from "@/lib/analytics";
 
 const STORE = "club432_values";
+
+/** Пакуємо десятку в діп-лінк для бота: vals-<версія>-<10 байтів у base64url>.
+ *  Telegram дозволяє 64 символи в start-параметрі — виходить 21. */
+function encodePayload(ten: Set<string>): string {
+  const idx = VALUES.map((x, i) => (ten.has(x.v) ? i : -1)).filter((i) => i >= 0);
+  const bin = String.fromCharCode(...idx);
+  const b64 = btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return `vals-${VALUES_VERSION}-${b64}`;
+}
 
 /** Минула десятка, щоб було з чим порівняти. Живе тільки в цьому браузері. */
 function readPrevious(): string[] {
@@ -262,7 +271,11 @@ export default function ValuesTest() {
                 <CtaLink href={C.botUrl} location="values_join" className="btn-cta cursor-pointer">
                   {T.result.ctaJoin}
                 </CtaLink>
-                <CtaLink href={C.botUrlPlain} location="values_save" className="btn-ghost">
+                <CtaLink
+                  href={`${C.botUrlPlain}?start=${encodePayload(ten)}`}
+                  location="values_save"
+                  className="btn-ghost"
+                >
                   {T.result.ctaSave}
                 </CtaLink>
               </div>
