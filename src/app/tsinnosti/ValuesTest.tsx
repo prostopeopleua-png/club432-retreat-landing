@@ -2,10 +2,23 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import CtaLink from "@/components/CtaLink";
 import { content as C } from "@/content";
 import { VALUES, themes, valuesPage as T, type Theme } from "@/values";
 import { track } from "@/lib/analytics";
+
+const STORE = "club432_values";
+
+/** Минула десятка, щоб було з чим порівняти. Живе тільки в цьому браузері. */
+function readPrevious(): string[] {
+  try {
+    const raw = localStorage.getItem(STORE);
+    return raw ? (JSON.parse(raw) as string[]) : [];
+  } catch {
+    return [];
+  }
+}
 
 const NEED = 10;
 
@@ -15,6 +28,7 @@ export default function ValuesTest() {
   // зі списку — інакше дію неможливо відкотити, і людина застрягає.
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [ten, setTen] = useState<Set<string>>(new Set());
+  const [prev, setPrev] = useState<string[]>([]);
 
   const togglePicked = (v: string) =>
     setPicked((prev) => {
@@ -43,7 +57,7 @@ export default function ValuesTest() {
     VALUES.filter((x) => ten.has(x.v)).forEach((x) =>
       count.set(x.theme, (count.get(x.theme) ?? 0) + 1),
     );
-    return [...count.entries()].sort((a, b) => b[1] - a[1]).slice(0, 2).map(([t]) => t);
+    return [...count.entries()].sort((a, b) => b[1] - a[1]).slice(0, 1).map(([t]) => t);
   }, [step, ten]);
 
   return (
@@ -117,6 +131,10 @@ export default function ValuesTest() {
                     setTen((prev) => new Set([...prev].filter((v) => picked.has(v))));
                     setStep(2);
                   } else {
+                    setPrev(readPrevious());
+                    try {
+                      localStorage.setItem(STORE, JSON.stringify([...ten]));
+                    } catch {}
                     track("values_test_complete", { picked: picked.size });
                     setStep(3);
                   }
@@ -151,48 +169,104 @@ export default function ValuesTest() {
               ))}
             </div>
 
-            <div className="eyebrow-line mb-8">{T.result.themesLead}</div>
-            <div className="grid gap-5 md:grid-cols-2">
-              {top.map((t) => (
-                <div key={t} className="frost p-7">
-                  <h3 className="grad-text text-2xl font-semibold">{themes[t].name}</h3>
-                  <p className="mt-4 text-[15px] leading-relaxed text-[var(--c432-ink)]">{themes[t].about}</p>
+            {prev.length > 0 && (
+              <div className="frost mb-12 p-6 text-center text-[14px] text-white/70">
+                <span className="text-[var(--c432-amber)]">{T.result.compareTitle}: </span>
+                {(() => {
+                  const now = [...ten];
+                  const kept = now.filter((v) => prev.includes(v)).length;
+                  return `${T.result.compareKept} ${kept}, ${T.result.compareNew} ${now.length - kept}, ${T.result.compareGone} ${prev.length - kept}`;
+                })()}
+              </div>
+            )}
 
-                  <div className="hairline my-6" />
+            <div className="eyebrow-line mb-8">{T.result.themeLead}</div>
+            {top.map((t) => (
+              <div key={t}>
+                <div className="frost p-8 sm:p-10">
+                  <h3 className="grad-text text-[clamp(1.6rem,3vw,2.2rem)] font-semibold">{themes[t].name}</h3>
+                  <p className="mt-5 max-w-2xl text-[clamp(1rem,1.4vw,1.15rem)] leading-relaxed text-[var(--c432-ink)]">
+                    {themes[t].about}
+                  </p>
+                </div>
+
+                {/* Питання подані як повідомлення в чаті — вони звідти й узяті. */}
+                <div className="mt-12">
                   <div className="text-[11px] uppercase tracking-[0.18em] text-white/40">
                     {T.result.questionsLead}
                   </div>
-                  <ul className="mt-3 space-y-3">
-                    {themes[t].questions.map((q) => (
-                      <li key={q} className="text-[14px] leading-relaxed text-white/70">«{q}»</li>
+                  <div className="mt-6 space-y-4">
+                    {themes[t].questions.map((q, i) => (
+                      <div key={q} className={i % 2 ? "flex justify-end" : "flex justify-start"}>
+                        <p
+                          className={`max-w-[85%] px-5 py-4 text-[15px] leading-relaxed sm:max-w-[75%] ${
+                            i % 2
+                              ? "rounded-[20px] rounded-br-[6px] bg-[var(--c432-amber)]/12 text-white/90"
+                              : "rounded-[20px] rounded-bl-[6px] bg-white/[0.06] text-[var(--c432-ink)]"
+                          }`}
+                        >
+                          {q}
+                        </p>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
+                </div>
 
-                  <div className="hairline my-6" />
+                {/* Обкладинки справжні, просто з YouTube. Клік веде в клуб:
+                    самі записи доступні тільки учасникам. */}
+                <div className="mt-14">
                   <div className="text-[11px] uppercase tracking-[0.18em] text-[var(--c432-amber)]">
                     {T.result.lessonsLead}
                   </div>
-                  <ul className="mt-3 space-y-2">
+                  <div className="mt-6 grid gap-5 sm:grid-cols-3">
                     {themes[t].lessons.map((l) => (
-                      <li key={l} className="flex gap-2.5 text-[14px] leading-relaxed text-[var(--c432-ink)]">
-                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--c432-amber)]/70" />
-                        {l}
-                      </li>
+                      <CtaLink
+                        key={l.video}
+                        href={C.botUrl}
+                        location="values_lesson"
+                        className="group block"
+                      >
+                        <div className="relative aspect-video overflow-hidden rounded-2xl bg-white/5">
+                          <Image
+                            src={`https://i.ytimg.com/vi/${l.video}/hqdefault.jpg`}
+                            alt=""
+                            fill
+                            sizes="(max-width: 640px) 90vw, 30vw"
+                            className="object-cover opacity-80 transition-opacity duration-300 group-hover:opacity-100"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#07081b] via-transparent to-transparent" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--c432-amber)] shadow-[0_0_28px_rgba(239,128,24,0.55)] transition-transform duration-300 group-hover:scale-110">
+                              <svg viewBox="0 0 24 24" className="ml-1 h-6 w-6" fill="#0D0E2D" aria-hidden>
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
+                        <p className="mt-3 text-[14px] leading-snug text-[var(--c432-ink)] transition-colors group-hover:text-white">
+                          {l.title}
+                        </p>
+                      </CtaLink>
                     ))}
-                  </ul>
+                  </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
 
-            <div className="frost mt-10 p-8 text-center sm:p-10">
+            <div className="frost mt-16 p-8 text-center sm:p-10">
               <h3 className="font-display text-[clamp(1.4rem,2.6vw,2rem)] font-semibold">{T.result.ctaTitle}</h3>
               <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--c432-ink)]">
                 {T.result.ctaText}
               </p>
-              <CtaLink href={C.botUrl} location="values_test" className="btn-cta mt-8 cursor-pointer">
-                {T.result.cta}
-              </CtaLink>
-              <p className="mt-4 text-xs text-white/40">{C.ctaNote}</p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <CtaLink href={C.botUrl} location="values_join" className="btn-cta cursor-pointer">
+                  {T.result.ctaJoin}
+                </CtaLink>
+                <CtaLink href={C.botUrlPlain} location="values_save" className="btn-ghost">
+                  {T.result.ctaSave}
+                </CtaLink>
+              </div>
+              <p className="mt-4 text-xs text-white/40">{T.result.ctaSaveHint}</p>
             </div>
 
             <div className="mt-8 text-center">
