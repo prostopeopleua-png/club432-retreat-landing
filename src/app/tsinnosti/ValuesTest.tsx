@@ -11,9 +11,12 @@ const NEED = 10;
 
 export default function ValuesTest() {
   const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
+  // Два незалежні набори. На другому кроці зняття позначки НЕ прибирає картку
+  // зі списку — інакше дію неможливо відкотити, і людина застрягає.
   const [picked, setPicked] = useState<Set<string>>(new Set());
+  const [ten, setTen] = useState<Set<string>>(new Set());
 
-  const toggle = (v: string) =>
+  const togglePicked = (v: string) =>
     setPicked((prev) => {
       const next = new Set(prev);
       if (next.has(v)) next.delete(v);
@@ -21,17 +24,27 @@ export default function ValuesTest() {
       return next;
     });
 
+  const toggleTen = (v: string) =>
+    setTen((prev) => {
+      const next = new Set(prev);
+      if (next.has(v)) next.delete(v);
+      else if (next.size < NEED) next.add(v);
+      return next;
+    });
+
   const pool = step === 2 ? VALUES.filter((x) => picked.has(x.v)) : VALUES;
+  const chosen = step === 2 ? ten : picked;
+  const atLimit = step === 2 && ten.size >= NEED;
 
   // Дві теми, навколо яких зібралася десятка.
   const top = useMemo(() => {
     if (step !== 3) return [] as Theme[];
     const count = new Map<Theme, number>();
-    VALUES.filter((x) => picked.has(x.v)).forEach((x) =>
+    VALUES.filter((x) => ten.has(x.v)).forEach((x) =>
       count.set(x.theme, (count.get(x.theme) ?? 0) + 1),
     );
     return [...count.entries()].sort((a, b) => b[1] - a[1]).slice(0, 2).map(([t]) => t);
-  }, [step, picked]);
+  }, [step, ten]);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-5">
@@ -67,16 +80,19 @@ export default function ValuesTest() {
 
             <div className="flex flex-wrap justify-center gap-2.5">
               {pool.map(({ v }) => {
-                const on = picked.has(v);
+                const on = chosen.has(v);
+                const blocked = atLimit && !on;
                 return (
                   <button
                     key={v}
-                    onClick={() => toggle(v)}
+                    onClick={() => (step === 1 ? togglePicked(v) : toggleTen(v))}
                     aria-pressed={on}
                     className={`rounded-full border px-4 py-2.5 text-[14px] transition-colors duration-200 ${
                       on
                         ? "border-[var(--c432-amber)]/70 bg-[var(--c432-amber)]/15 text-white"
-                        : "border-white/12 text-[var(--c432-ink)] hover:border-white/30"
+                        : blocked
+                          ? "border-white/8 text-white/25"
+                          : "border-white/12 text-[var(--c432-ink)] hover:border-white/30"
                     }`}
                   >
                     {v}
@@ -86,16 +102,21 @@ export default function ValuesTest() {
             </div>
 
             <div className="sticky bottom-4 mt-10 flex flex-col items-center gap-3">
-              <div className="text-sm text-white/55">
+              <div className="text-center text-sm text-white/55">
                 {step === 1
                   ? `обрано ${picked.size}, треба щонайменше ${NEED}`
-                  : `лишилось ${picked.size} із ${NEED}`}
+                  : atLimit
+                    ? T.step2.full
+                    : `позначено ${ten.size} із ${NEED}`}
               </div>
               <button
-                disabled={step === 1 ? picked.size < NEED : picked.size !== NEED}
+                disabled={step === 1 ? picked.size < NEED : ten.size !== NEED}
                 onClick={() => {
-                  if (step === 1) setStep(2);
-                  else {
+                  if (step === 1) {
+                    // якщо вертались назад — лишаємо в десятці лише те, що досі обране
+                    setTen((prev) => new Set([...prev].filter((v) => picked.has(v))));
+                    setStep(2);
+                  } else {
                     track("values_test_complete", { picked: picked.size });
                     setStep(3);
                   }
@@ -103,6 +124,12 @@ export default function ValuesTest() {
                 className="btn-cta cursor-pointer disabled:cursor-not-allowed disabled:opacity-35"
               >
                 {step === 1 ? T.step1.next : T.step2.next}
+              </button>
+              <button
+                onClick={() => setStep(step === 1 ? 0 : 1)}
+                className="text-sm text-white/45 underline-offset-4 transition-colors hover:text-[var(--c432-amber)]"
+              >
+                {T.back}
               </button>
             </div>
           </Slide>
@@ -114,7 +141,7 @@ export default function ValuesTest() {
             <p className="mx-auto mb-9 max-w-xl text-center text-[var(--c432-ink)]">{T.result.lead}</p>
 
             <div className="mb-14 flex flex-wrap justify-center gap-2.5">
-              {VALUES.filter((x) => picked.has(x.v)).map(({ v }) => (
+              {VALUES.filter((x) => ten.has(x.v)).map(({ v }) => (
                 <span
                   key={v}
                   className="rounded-full border border-[var(--c432-amber)]/60 bg-[var(--c432-amber)]/12 px-4 py-2.5 text-[14px] text-white"
@@ -172,6 +199,7 @@ export default function ValuesTest() {
               <button
                 onClick={() => {
                   setPicked(new Set());
+                  setTen(new Set());
                   setStep(0);
                 }}
                 className="text-sm text-white/45 underline-offset-4 transition-colors hover:text-[var(--c432-amber)]"
