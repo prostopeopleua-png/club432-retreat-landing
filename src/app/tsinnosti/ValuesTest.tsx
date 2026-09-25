@@ -5,7 +5,11 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import CtaLink from "@/components/CtaLink";
 import { content as C } from "@/content";
-import { VALUES, VALUES_VERSION, themes, valuesPage as T, type Theme } from "@/values";
+import { VALUES, VALUES_VERSION, SHOW_RAYS_ON_SITE, themes, valuesPage as T, type Theme } from "@/values";
+import { RAYS, readRays } from "@/rays";
+
+/** Короткий аліас для текстів блоку Променів */
+const R = T.result.rays;
 import { track } from "@/lib/analytics";
 
 const STORE = "club432_values";
@@ -68,6 +72,16 @@ export default function ValuesTest() {
     );
     return [...count.entries()].sort((a, b) => b[1] - a[1]).slice(0, 1).map(([t]) => t);
   }, [step, ten]);
+
+  // Промені. Дві незалежні шкали: «відгук» по відмінних рисах і «потреба»
+  // по якостях набуття. Нормовано на базову частоту, див. src/rays.ts.
+  const rays = useMemo(
+    () =>
+      step === 3 && SHOW_RAYS_ON_SITE
+        ? readRays(VALUES.filter((x) => ten.has(x.v)), VALUES)
+        : null,
+    [step, ten],
+  );
 
   return (
     <div className="mx-auto w-full max-w-4xl px-5">
@@ -261,6 +275,122 @@ export default function ValuesTest() {
                 </div>
               </div>
             ))}
+
+            {/* ── ПРОМЕНІ ────────────────────────────────────────────────
+                Дві шкали свідомо показані окремо. Збіг це сильний сигнал,
+                розходження це найцікавіше в результаті, і саме воно веде
+                людину до питання, з яким варто прийти в клуб. */}
+            {rays?.resonance && (
+              <div className="mt-20">
+                <div className="eyebrow-line mb-8">{R.lead}</div>
+                <p className="max-w-2xl text-[15px] leading-relaxed text-[var(--c432-ink)]">{R.intro}</p>
+
+                <div className="mt-8 grid gap-5 md:grid-cols-2">
+                  <div className="frost p-7">
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-[var(--c432-amber)]">
+                      {R.needLabel}
+                    </div>
+                    {rays.need ? (
+                      <>
+                        <h3 className="grad-text mt-4 text-[clamp(1.3rem,2.4vw,1.8rem)] font-semibold">
+                          {RAYS[rays.need.ray].title}
+                        </h3>
+                        <div className="mt-1 text-[13px] text-white/45">{RAYS[rays.need.ray].subtitle}</div>
+                        <p className="mt-4 text-[15px] leading-relaxed text-[var(--c432-ink)]">{R.needExplain}</p>
+                        <div className="mt-5 flex flex-wrap gap-2">
+                          {rays.need.values.map((v) => (
+                            <span
+                              key={v}
+                              className="rounded-full bg-[var(--c432-amber)]/12 px-3 py-1 text-[13px] text-white/80"
+                            >
+                              {v}
+                            </span>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <h3 className="mt-4 text-[clamp(1.1rem,2vw,1.35rem)] font-semibold leading-snug">
+                          {R.noNeedTitle}
+                        </h3>
+                        <p className="mt-4 text-[15px] leading-relaxed text-[var(--c432-ink)]">{R.noNeedText}</p>
+                      </>
+                    )}
+                  </div>
+                  <div className="frost p-7">
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-[var(--c432-amber)]">
+                      {R.resonanceLabel}
+                    </div>
+                    <h3 className="grad-text mt-4 text-[clamp(1.3rem,2.4vw,1.8rem)] font-semibold">
+                      {RAYS[rays.resonance.ray].title}
+                    </h3>
+                    <div className="mt-1 text-[13px] text-white/45">{RAYS[rays.resonance.ray].subtitle}</div>
+                    <p className="mt-4 text-[15px] leading-relaxed text-[var(--c432-ink)]">
+                      {RAYS[rays.resonance.ray].essence}
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {rays.resonance.values.map((v) => (
+                        <span key={v} className="rounded-full bg-white/[0.06] px-3 py-1 text-[13px] text-white/70">
+                          {v}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                </div>
+
+                {rays.need && (
+                  <div className="frost mt-5 p-7">
+                    <h4 className="text-[clamp(1.05rem,1.8vw,1.25rem)] font-semibold">
+                      {rays.aligned ? R.alignedTitle : R.splitTitle}
+                    </h4>
+                    <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-[var(--c432-ink)]">
+                      {rays.aligned ? R.alignedText : R.splitText}
+                    </p>
+                  </div>
+                )}
+
+                <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                  {(
+                    [
+                      [R.strengthsLabel, RAYS[(rays.need ?? rays.resonance).ray].strengths],
+                      [R.shadowLabel, RAYS[(rays.need ?? rays.resonance).ray].shadow],
+                      [R.growthLabel, RAYS[(rays.need ?? rays.resonance).ray].growth],
+                    ] as const
+                  ).map(([label, items]) => (
+                    <div key={label} className="frost p-6">
+                      <div className="text-[11px] uppercase tracking-[0.18em] text-white/40">{label}</div>
+                      <ul className="mt-4 space-y-2">
+                        {items.map((x) => (
+                          <li key={x} className="text-[14px] leading-snug text-[var(--c432-ink)]">
+                            {x}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                  <div className="frost p-6">
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-white/40">{R.glamourLabel}</div>
+                    <p className="mt-4 text-[14px] leading-snug text-[var(--c432-ink)]">
+                      {RAYS[(rays.need ?? rays.resonance).ray].glamour}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="frost mt-5 border-l-2 border-[var(--c432-amber)]/50 p-7">
+                  <div className="text-[11px] uppercase tracking-[0.18em] text-[var(--c432-amber)]">
+                    {R.exploreLabel}
+                  </div>
+                  <p className="mt-4 max-w-2xl text-[clamp(1rem,1.4vw,1.1rem)] leading-relaxed text-white/90">
+                    {RAYS[(rays.need ?? rays.resonance).ray].explore}
+                  </p>
+                </div>
+
+                <p className="mt-6 max-w-2xl text-[13px] leading-relaxed text-white/40">
+                  {R.disclaimer} {R.source}.
+                </p>
+              </div>
+            )}
 
             <div className="frost mt-16 p-8 text-center sm:p-10">
               <h3 className="font-display text-[clamp(1.4rem,2.6vw,2rem)] font-semibold">{T.result.ctaTitle}</h3>

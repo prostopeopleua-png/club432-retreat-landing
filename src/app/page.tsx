@@ -7,6 +7,7 @@ import CosmicBackground from "@/components/CosmicBackground";
 import RoamingMandala from "@/components/RoamingMandala";
 import CtaLink from "@/components/CtaLink";
 import AboutBlock from "@/components/AboutBlock";
+import IntroVideo from "@/components/IntroVideo";
 import PricingViewTracker from "@/components/PricingViewTracker";
 import { content as C } from "@/content";
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
@@ -131,6 +132,16 @@ export default function Home() {
           <p className="rise-in rise-d3 mt-5 text-xs text-white/40 [text-shadow:0_1px_12px_rgba(7,8,27,0.95)]">
             {C.ctaNote}
           </p>
+        </section>
+
+        {/* ══ VIDEO — Вадим за 5 хвилин: навіщо клуб і що тут відбувається ══ */}
+        <section id="video" className="sect mx-auto max-w-5xl px-5">
+          <Reveal><Eyebrow>{C.video.eyebrow}</Eyebrow></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-5 max-w-3xl text-center">{C.video.heading}</h2></Reveal>
+          <Reveal i={2}>
+            <p className="mx-auto mb-10 max-w-2xl text-center text-[15px] leading-relaxed text-[var(--c432-ink)]">{C.video.caption}</p>
+          </Reveal>
+          <Reveal i={3}><IntroVideo /></Reveal>
         </section>
 
         {/* ══ PAIN — петля, у якій людина крутиться ══ */}

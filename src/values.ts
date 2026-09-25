@@ -13,7 +13,16 @@
 /** Версія списку. Якщо міняєш склад цінностей — підніми число ТУТ і
  *  перегенеруй bot/src/data/values432.js, інакше бот розшифрує старі
  *  посилання неправильно. */
-export const VALUES_VERSION = 1;
+export const VALUES_VERSION = 2;
+
+/** Чи показувати блок Променів на ПУБЛІЧНОМУ тесті (сайт).
+ *  Зараз false: рішення Вадима від 03.09.2026 — Промені відкриваються
+ *  учасникам у додатку й боті, а публічний лід-магніт лишається простим,
+ *  бо ловить холодний трафік із реклами. Код блоку живий, вмикається
+ *  однією зміною тут. */
+export const SHOW_RAYS_ON_SITE = false;
+
+import type { RayId } from "./rays";
 
 export type Theme = "opora" | "yasnist" | "zvyazok" | "volya" | "dostatok" | "sens";
 
@@ -49,6 +58,35 @@ export const valuesPage = {
     ctaSave: "Зберегти результат у боті",
     ctaSaveHint: "Щоб не загубився і щоб через пів року було з чим порівняти",
     restart: "Пройти ще раз",
+    // Блок Променів. Тон навмисно обережний: це запрошення дослідити, а не
+    // діагноз. Променева структура людини це пʼять позицій, і її не вивести
+    // з десяти слів. Пояснення механіки — у src/rays.ts.
+    rays: {
+      lead: "А тепер шар глибше",
+      intro:
+        "В езотеричній психології кажуть, що кожна людина належить до одного із семи типів енергії, які називають Променями. У кожного Променя є те, чим він уже є, і те, чого йому бракує. Найцікавіше, що твій вибір показує і одне, і друге.",
+      resonanceLabel: "А ось енергія, у якій тобі природно",
+      needLabel: "Промінь, який просить уваги зараз",
+      needExplain:
+        "Ці якості стоять у переліку того, що цьому Променю треба набути. Якщо вони опинились серед твоїх десяти, значить, саме їх зараз бракує, і саме тому вони відчуваються важливими.",
+      alignedTitle: "Відгук і потреба збіглися",
+      alignedText:
+        "Це сильний сигнал. Ти стоїш у своїй енергії і водночас бачиш, чого тобі в ній бракує. З таким матеріалом працювати найлегше.",
+      splitTitle: "Відгук і потреба розійшлися",
+      splitText:
+        "Це не помилка, а найцікавіше в результаті. Одна енергія тобі рідна, а росту зараз просить інша. Саме на цьому стику і відбувається робота.",
+      noNeedTitle: "У твоїй десятці немає жодної якості з тих, що Промені називають зоною росту",
+      noNeedText:
+        "Ти обрав тільки те, чим уже володієш. Це теж відповідь, і вона варта уваги більше, ніж будь-який результат тесту.",
+      strengthsLabel: "Чим цей Промінь є",
+      shadowLabel: "Як ця сила спотворюється",
+      growthLabel: "Чого йому бракує",
+      glamourLabel: "Головна пастка",
+      exploreLabel: "Що варто дослідити в собі",
+      disclaimer:
+        "Це натяк, а не діагноз. Повна променева структура це пʼять позицій: Душа, особистість, ментальне, емоційне і фізичне тіла. З десяти слів її не визначити, але напрямок, куди дивитись, вони показують точно.",
+      source: "За книгою А. А. Бейлі «Езотерична психологія»",
+    },
     compareTitle: "Порівняно з минулим разом",
     compareKept: "лишилось",
     compareNew: "нове",
@@ -150,35 +188,44 @@ export const themes: Record<Theme, {
 
 /** Порядок перемішаний навмисно: якщо цінності стоять групами, людина
  *  вгадує «правильну» відповідь замість того, щоб чути себе. */
-export const VALUES: { v: string; theme: Theme }[] = [
-  { v: "Спокій", theme: "opora" }, { v: "Своя справа", theme: "dostatok" }, { v: "Любов", theme: "zvyazok" },
-  { v: "Ясність", theme: "yasnist" }, { v: "Воля", theme: "volya" }, { v: "Призначення", theme: "sens" },
-  { v: "Здоровʼя", theme: "opora" }, { v: "Довіра", theme: "zvyazok" }, { v: "Дисципліна", theme: "volya" },
-  { v: "Знання", theme: "yasnist" }, { v: "Достаток", theme: "dostatok" }, { v: "Совість", theme: "sens" },
-  { v: "Сімʼя", theme: "zvyazok" }, { v: "Ритм", theme: "volya" }, { v: "Правда", theme: "yasnist" },
-  { v: "Енергія", theme: "opora" }, { v: "Служіння", theme: "sens" }, { v: "Майстерність", theme: "dostatok" },
-  { v: "Близькість", theme: "zvyazok" }, { v: "Відповідальність", theme: "volya" }, { v: "Глибина", theme: "yasnist" },
-  { v: "Тиша", theme: "opora" }, { v: "Свобода вибору", theme: "dostatok" }, { v: "Розвиток", theme: "sens" },
-  { v: "Дружба", theme: "zvyazok" }, { v: "Сміливість", theme: "volya" }, { v: "Чесність із собою", theme: "yasnist" },
-  { v: "Рівновага", theme: "opora" }, { v: "Праця", theme: "dostatok" }, { v: "Духовність", theme: "sens" },
-  { v: "Підтримка", theme: "zvyazok" }, { v: "Самоконтроль", theme: "volya" }, { v: "Розуміння", theme: "yasnist" },
-  { v: "Легкість", theme: "opora" }, { v: "Фінансова опора", theme: "dostatok" }, { v: "Справедливість", theme: "sens" },
-  { v: "Щирість", theme: "zvyazok" }, { v: "Наполегливість", theme: "volya" }, { v: "Спостережливість", theme: "yasnist" },
-  { v: "Стабільність", theme: "opora" }, { v: "Зростання", theme: "dostatok" }, { v: "Милосердя", theme: "sens" },
-  { v: "Прийняття", theme: "zvyazok" }, { v: "Витримка", theme: "volya" }, { v: "Цілісна картина", theme: "yasnist" },
-  { v: "Безпека", theme: "opora" }, { v: "Визнання", theme: "dostatok" }, { v: "Смирення", theme: "sens" },
-  { v: "Вдячність", theme: "zvyazok" }, { v: "Рішучість", theme: "volya" }, { v: "Навчання", theme: "yasnist" },
-  { v: "Відпочинок", theme: "opora" }, { v: "Результат", theme: "dostatok" }, { v: "Віра", theme: "sens" },
-  { v: "Спільнота", theme: "zvyazok" }, { v: "Порядок", theme: "volya" }, { v: "Тверезість", theme: "yasnist" },
-  { v: "Присутність", theme: "opora" }, { v: "Щедрість", theme: "dostatok" }, { v: "Внутрішня свобода", theme: "sens" },
-  { v: "Вміння слухати", theme: "zvyazok" }, { v: "Слово, що тримається", theme: "volya" }, { v: "Допитливість", theme: "yasnist" },
-  { v: "Витривалість", theme: "opora" }, { v: "Ощадливість", theme: "dostatok" }, { v: "Творчість", theme: "sens" },
-  { v: "Турбота", theme: "zvyazok" }, { v: "Активність", theme: "volya" }, { v: "Система", theme: "yasnist" },
-  { v: "Заземленість", theme: "opora" }, { v: "Впевненість у завтрашньому", theme: "dostatok" }, { v: "Слід після себе", theme: "sens" },
-  { v: "Вірність", theme: "zvyazok" }, { v: "Незалежність", theme: "volya" }, { v: "Уважність", theme: "yasnist" },
-  { v: "Дім", theme: "opora" }, { v: "Користь для інших", theme: "dostatok" }, { v: "Єдність зі світом", theme: "sens" },
-  { v: "Прощення", theme: "zvyazok" }, { v: "Сила", theme: "volya" }, { v: "Здоровий глузд", theme: "yasnist" },
-  { v: "Ритм тіла", theme: "opora" }, { v: "Професійність", theme: "dostatok" }, { v: "Правдивість", theme: "sens" },
-  { v: "Тепло", theme: "zvyazok" }, { v: "Доведення до кінця", theme: "volya" }, { v: "Внутрішня опора", theme: "opora" },
-  { v: "Розмах", theme: "dostatok" }, { v: "Сенс", theme: "sens" },
+/** Порядок перемішаний навмисно: якщо цінності стоять групами, людина
+ *  вгадує «правильну» відповідь замість того, щоб чути себе.
+ *
+ *  res  — Промені, серед ВІДМІННИХ РИС яких стоїть ця якість (шкала «відгук»);
+ *  need — Промені, серед ЯКОСТЕЙ НАБУТТЯ яких вона стоїть (шкала «потреба»).
+ *  Порожньо там, де першоджерело не дає підстав. Не вигадувати: краще менше
+ *  тегів, ніж натягнутий висновок. Пояснення механіки — у src/rays.ts. */
+export const VALUES: { v: string; theme: Theme; res?: RayId[]; need?: RayId[] }[] = [
+  { v: "Спокій", theme: "opora", res: [2], need: [4, 6] }, { v: "Своя справа", theme: "dostatok" }, { v: "Любов", theme: "zvyazok", res: [6], need: [2, 5, 7] },
+  { v: "Ясність", theme: "yasnist", res: [2, 3] }, { v: "Воля", theme: "volya", res: [1] }, { v: "Призначення", theme: "sens" },
+  { v: "Здоровʼя", theme: "opora" }, { v: "Довіра", theme: "zvyazok" }, { v: "Дисципліна", theme: "volya", res: [5, 7], need: [4] },
+  { v: "Знання", theme: "yasnist", res: [2, 5] }, { v: "Достаток", theme: "dostatok" }, { v: "Совість", theme: "sens" },
+  { v: "Сімʼя", theme: "zvyazok" }, { v: "Ритм", theme: "volya", res: [7] }, { v: "Правда", theme: "yasnist", res: [1, 2], need: [6] },
+  { v: "Енергія", theme: "opora", need: [2, 3] }, { v: "Служіння", theme: "sens", res: [6], need: [6] }, { v: "Майстерність", theme: "dostatok", res: [5, 7] },
+  { v: "Близькість", theme: "zvyazok", res: [6] }, { v: "Відповідальність", theme: "volya", res: [1] }, { v: "Глибина", theme: "yasnist", res: [2, 3] },
+  { v: "Тиша", theme: "opora", res: [2], need: [4, 6] }, { v: "Свобода вибору", theme: "dostatok", res: [5] }, { v: "Розвиток", theme: "sens" },
+  { v: "Дружба", theme: "zvyazok", res: [6] }, { v: "Сміливість", theme: "volya", res: [1, 4], need: [4] }, { v: "Чесність із собою", theme: "yasnist", res: [1, 5], need: [6] },
+  { v: "Рівновага", theme: "opora", need: [4, 6] }, { v: "Праця", theme: "dostatok" }, { v: "Духовність", theme: "sens", res: [6] },
+  { v: "Підтримка", theme: "zvyazok", res: [4], need: [1, 2, 3, 5] }, { v: "Самоконтроль", theme: "volya", res: [5], need: [4] }, { v: "Розуміння", theme: "yasnist", res: [2, 3], need: [6] },
+  { v: "Легкість", theme: "opora" }, { v: "Фінансова опора", theme: "dostatok" }, { v: "Справедливість", theme: "sens", res: [5] },
+  { v: "Щирість", theme: "zvyazok", res: [3] }, { v: "Наполегливість", theme: "volya", res: [5, 7] }, { v: "Спостережливість", theme: "yasnist", res: [5, 7] },
+  { v: "Стабільність", theme: "opora" }, { v: "Зростання", theme: "dostatok" }, { v: "Милосердя", theme: "sens", need: [1] },
+  { v: "Прийняття", theme: "zvyazok", need: [1, 3, 6, 7] }, { v: "Витримка", theme: "volya", res: [2], need: [1] }, { v: "Цілісна картина", theme: "yasnist", res: [1, 3], need: [5, 7] },
+  { v: "Безпека", theme: "opora" }, { v: "Визнання", theme: "dostatok" }, { v: "Смирення", theme: "sens", need: [1, 7] },
+  { v: "Вдячність", theme: "zvyazok", need: [5] }, { v: "Рішучість", theme: "volya", res: [1] }, { v: "Навчання", theme: "yasnist", res: [2, 5] },
+  { v: "Відпочинок", theme: "opora" }, { v: "Результат", theme: "dostatok" }, { v: "Віра", theme: "sens", res: [6] },
+  { v: "Спільнота", theme: "zvyazok", need: [7] }, { v: "Порядок", theme: "volya", res: [7] }, { v: "Тверезість", theme: "yasnist", res: [5], need: [3] },
+  { v: "Присутність", theme: "opora" }, { v: "Щедрість", theme: "dostatok", res: [4], need: [2, 4] }, { v: "Внутрішня свобода", theme: "sens", res: [5] },
+  { v: "Вміння слухати", theme: "zvyazok", res: [2] }, { v: "Слово, що тримається", theme: "volya", res: [1, 7] }, { v: "Допитливість", theme: "yasnist", res: [5] },
+  { v: "Витривалість", theme: "opora", res: [2] }, { v: "Ощадливість", theme: "dostatok" }, { v: "Творчість", theme: "sens", res: [3, 4] },
+  { v: "Турбота", theme: "zvyazok", need: [1, 7] }, { v: "Активність", theme: "volya", res: [1], need: [2, 3] }, { v: "Система", theme: "yasnist", res: [5, 7] },
+  { v: "Заземленість", theme: "opora", res: [5, 7] }, { v: "Впевненість у завтрашньому", theme: "dostatok" }, { v: "Слід після себе", theme: "sens" },
+  { v: "Вірність", theme: "zvyazok", res: [2, 4, 6] }, { v: "Незалежність", theme: "volya", res: [1, 5] }, { v: "Уважність", theme: "yasnist", res: [5, 7], need: [3, 4] },
+  { v: "Дім", theme: "opora" }, { v: "Користь для інших", theme: "dostatok", need: [2, 4] }, { v: "Єдність зі світом", theme: "sens", need: [7] },
+  { v: "Прощення", theme: "zvyazok", need: [1, 5] }, { v: "Сила", theme: "volya", res: [1, 2, 7], need: [6] }, { v: "Здоровий глузд", theme: "yasnist", res: [5], need: [3] },
+  { v: "Ритм тіла", theme: "opora", res: [7] }, { v: "Професійність", theme: "dostatok", res: [5, 7] }, { v: "Правдивість", theme: "sens", res: [1], need: [6] },
+  { v: "Тепло", theme: "zvyazok", res: [6], need: [1, 7] }, { v: "Доведення до кінця", theme: "volya", res: [1, 7] }, { v: "Внутрішня опора", theme: "opora", res: [1] },
+  { v: "Розмах", theme: "dostatok", res: [1, 3], need: [5, 7] }, { v: "Сенс", theme: "sens", res: [3] }, { v: "Гармонія", theme: "opora", res: [4] },
+  { v: "Краса", theme: "sens", res: [4] }, { v: "Великодушність", theme: "zvyazok", res: [4] }, { v: "Відданість", theme: "zvyazok", res: [6], need: [3, 5] },
+  { v: "Ніжність", theme: "zvyazok", res: [6], need: [1, 7] }, { v: "Чистота", theme: "sens", need: [4, 6] }, { v: "Точність", theme: "yasnist", res: [5, 7], need: [3, 4] },
 ];
