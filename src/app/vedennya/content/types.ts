@@ -7,6 +7,18 @@ export type Presentation = {
   mirror: { eyebrow: string; title: string; lede: string; questions: string[] };
   /** Що змінюється для людини: її Точка Б простими словами. Необовʼязковий. */
   goals?: { eyebrow: string; title: string; lede: string; items: { t: string; d: string }[] };
+  /** Перша жива сесія перед програмою. Необовʼязковий. */
+  firstStep?: { eyebrow: string; title: string; lede: string; points: string[] };
+  /** Що в програмі гнучке, а що незмінне. Необовʼязковий. */
+  promise?: {
+    eyebrow: string;
+    title: string;
+    lede: string;
+    flexTitle: string;
+    flex: string[];
+    fixedTitle: string;
+    fixedText: string;
+  };
   why: { eyebrow: string; title: string; lede: string };
   /** Блок довіри: де спілкуємось, що з записами. Необовʼязковий. */
   privacy?: { eyebrow: string; title: string; lede: string; points: string[] };

@@ -166,6 +166,85 @@ export default function VedennyaClient({ p }: { p: Presentation }) {
           </section>
         )}
 
+        {/* ══ ПЕРШИЙ КРОК (необовʼязково) ══ */}
+        {p.firstStep && (
+          <section className="sect mx-auto max-w-4xl px-5">
+            <Reveal>
+              <Eyebrow>{p.firstStep.eyebrow}</Eyebrow>
+            </Reveal>
+            <Reveal i={1}>
+              <h2 className="font-display h-section mx-auto max-w-3xl text-center">
+                {p.firstStep.title}
+              </h2>
+            </Reveal>
+            <Reveal i={2}>
+              <p className="lede mx-auto mt-6 mb-12 text-center">{p.firstStep.lede}</p>
+            </Reveal>
+            <Reveal i={2}>
+              <div className="frost p-8 md:p-10" style={{ boxShadow: GOLD_RING }}>
+                <ul className="grid gap-4 sm:grid-cols-2">
+                  {p.firstStep.points.map((pt) => (
+                    <li
+                      key={pt}
+                      className="flex items-start gap-3 text-[15px] leading-relaxed text-[var(--c432-ink)]"
+                    >
+                      <Dot />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          </section>
+        )}
+
+        {/* ══ ОБІЦЯНКА: гнучке і незмінне (необовʼязково) ══ */}
+        {p.promise && (
+          <section className="sect mx-auto max-w-5xl px-5">
+            <Reveal>
+              <Eyebrow>{p.promise.eyebrow}</Eyebrow>
+            </Reveal>
+            <Reveal i={1}>
+              <h2 className="font-display h-section mx-auto max-w-3xl text-center">
+                {p.promise.title}
+              </h2>
+            </Reveal>
+            <Reveal i={2}>
+              <p className="lede mx-auto mt-6 mb-14 text-center">{p.promise.lede}</p>
+            </Reveal>
+            <div className="grid gap-5 md:grid-cols-2">
+              <Reveal>
+                <div className="frost flex h-full flex-col p-8">
+                  <h3 className="text-xl font-semibold text-white">{p.promise.flexTitle}</h3>
+                  <div className="hairline my-5" />
+                  <ul className="flex flex-col gap-3">
+                    {p.promise.flex.map((f) => (
+                      <li
+                        key={f}
+                        className="flex items-start gap-3 text-[14.5px] leading-relaxed text-[var(--c432-ink)]"
+                      >
+                        <Dot />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+              <Reveal i={1}>
+                <div className="frost flex h-full flex-col p-8" style={{ boxShadow: GOLD_RING }}>
+                  <h3 className="grad-cosmic font-display text-2xl font-semibold">
+                    {p.promise.fixedTitle}
+                  </h3>
+                  <div className="hairline my-5" />
+                  <p className="text-[15.5px] leading-relaxed text-white/85">
+                    {p.promise.fixedText}
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          </section>
+        )}
+
         {/* ══ ЧОМУ ІНДИВІДУАЛЬНО ══ */}
         <section className="sect mx-auto max-w-4xl px-5 text-center">
           <Reveal>
