@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
 import CosmicBackground from "@/components/CosmicBackground";
 import SmoothScroll from "@/components/SmoothScroll";
+import type { Presentation } from "./content/types";
 
 /* ─────────────────────────  motion helpers  ───────────────────────── */
 const reveal: Variants = {
@@ -52,141 +53,16 @@ function StageTag({ n, children }: { n: string; children: React.ReactNode }) {
   );
 }
 
-/* ─────────────────────────────  data  ─────────────────────────────── */
-
-// Його власні питання (з першої сесії) — дзеркало
-const MIRROR = [
-  "Що в моєму житті я роблю зі страху, а не з любові?",
-  "Де я плутаю контроль зі спокоєм?",
-  "Чому результат від команди дається так важко, і чому мій стан злітає й падає разом із виконаними задачами?",
-  "Яку частину себе я досі не пробачив?",
-  "Що я робив би інакше, якби вже знав, як досягати бажаного легшим способом?",
-  "Як тиснути мʼяко й не перетиснути, коли здається, що мене не чують, і чому я геть не бачу власної тіні?",
-];
-
-const STAGES = [
-  { n: "01", t: "Діагностика", d: "Складаємо твій портрет і Карту Шляху. Профіль у додатку плюс один глибокий метод на вибір." },
-  { n: "02", t: "Навчання", d: "Пʼять інструментів, що ведуть зміну щодня, а не раз на тиждень." },
-  { n: "03", t: "Точка В", d: "Вимірюємо, як змінився шлях. Те саме дзеркало, що на вході, показує, скільки ти пройшов." },
-];
-
-// Етап 1 — методи діагностики на вибір
-const DIAG = [
-  { icon: "🕉️", t: "Ліла", meta: "по 2 години, доки гра не завершиться", d: "Показує твій духовний шлях. Для тих, кому це відгукується." },
-  { icon: "🃏", t: "МАК", meta: "метафоричні карти", d: "Показує те, чого не покаже розум. Оминає контроль і логіку." },
-  { icon: "🗣️", t: "Глибинне опитування", meta: "свідома розмова", d: "Мета існування, цінності, сильні й слабкі сторони, обмеження. Для тих, хто хоче відповідати сам, у ясному стані." },
-];
-
-// Етап 2 — 5 інструментів навчання
-const LEARN = [
-  {
-    n: "01",
-    t: "Щоденний пульс",
-    pts: [
-      "Дізнаємось контекст твого дня",
-      "Даю відгуки в моменті",
-      "Рекомендації без очікування сесії",
-      "Підтримка, коли стан раптово впав",
-      "Налаштування, щоб швидко вийти з оніміння і ясно побачити ситуацію",
-    ],
-  },
-  {
-    n: "02",
-    t: "Терапія",
-    pts: [
-      "Вносимо ясність у те, що зараз відбувається",
-      "Вчимось бачити причини, чому так сталося",
-      "Підбираємо індивідуальні інструменти змін",
-      "Розробляємо «Антивірус», щоб не хворіти цим знову",
-      "Контроль виконання завдань до запланованих змін",
-    ],
-  },
-  {
-    n: "03",
-    t: "Чайна церемонія",
-    pts: [
-      "Вчимось будувати власні ритуали і триматись їх",
-      "Аналізуємо минулий тиждень роботи",
-      "Медитуємо",
-      "Цілительство в особливому стані розслаблення",
-      "Святкуємо досягнення й відмічаємо непомітні самому зміни",
-    ],
-  },
-  {
-    n: "04",
-    t: "Шадовінг",
-    pts: [
-      "Зворотний відгук на важливі переписки, погляд збоку",
-      "Розбір записів важливих зустрічей",
-    ],
-  },
-];
-
-const RETREATS = [
-  { t: "Світло", d: "Без світла, у повній темряві." },
-  { t: "Розмова", d: "Додається тиша: без світла та розмов." },
-  { t: "Тиша", d: "Без світла, розмов і слуху." },
-  { t: "Голод", d: "Додається відмова від їжі." },
-  { t: "Служіння", d: "Усе вище плюс духовні практики." },
-];
-
-const SCIENCE = [
-  { t: "Розум", d: "Вимкнення автопілота (дефолт-система мозку). Стихає потік нав'язливих думок, зʼявляється ясність." },
-  { t: "Гормони", d: "Пік мелатоніну, зростання гормону росту, відновлення чутливості до інсуліну." },
-  { t: "Метаболізм", d: "Автофагія, кетоновий фокус, увімкнення ферментів довголіття." },
-];
-
-// Етап 3 — вимір результату
-const EXIT = [
-  { icon: "🕉️", t: "Ліла", d: "Бачимо, як змінився твій шлях: точки зависання, змії, стріли, де тепер зосереджена енергія." },
-  { icon: "🗣️", t: "Глибинне інтервʼю", d: "Проговорюємо, що змінилося всередині від Точки А до тепер." },
-];
-
-const PACKAGES = [
-  {
-    name: "Повна оплата",
-    price: "4 000 €",
-    term: "одним платежем",
-    badge: "Найвигідніше",
-    ring: "gold" as const,
-    items: [
-      "Повна діагностика та профіль",
-      "Усі пʼять інструментів навчання",
-      "Затвор як особиста ініціація",
-      "Три місяці ведення",
-    ],
-  },
-  {
-    name: "Частинами",
-    price: "4 500 €",
-    term: "3 платежі по 1 500 € / міс",
-    badge: "",
-    ring: "none" as const,
-    items: [
-      "Та сама повна програма",
-      "Комфортний ритм оплати",
-      "Три місяці ведення",
-    ],
-  },
-  {
-    name: "З посвятою",
-    price: "7 500 €",
-    term: "повний супровід затвору",
-    badge: "Повний супровід",
-    ring: "violet" as const,
-    items: [
-      "Усе з програми ведення",
-      "Повністю організована церемонія затвору",
-      "Підготовка місця та потрібних атрибутів",
-      "Тиждень поряд: перевірка стану й підтримка",
-      "Харчування під час практики",
-      "Виведення із затвору, фіксація перших відкриттів",
-    ],
-  },
-];
-
 /* ─────────────────────────────  page  ─────────────────────────────── */
-export default function VedennyaClient() {
+const GOLD_RING =
+  "inset 0 1px 1px rgba(216,236,248,0.14), 0 24px 40px rgba(4,5,15,0.5), 0 0 0 1px rgba(253,209,111,0.28)";
+
+function Dot() {
+  return <span className="mt-[7px] block h-1.5 w-1.5 shrink-0 rounded-full bg-[#FDD16F]" />;
+}
+
+export default function VedennyaClient({ p }: { p: Presentation }) {
+  const twoPackages = p.packages.items.length === 2;
   return (
     <SmoothScroll>
       <CosmicBackground />
@@ -215,42 +91,37 @@ export default function VedennyaClient() {
         <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 text-center">
           <div className="grid-overlay pointer-events-none absolute inset-0 -z-10" />
           <div className="rise-in">
-            <span className="eyebrow-line mb-8">Персональне глибинне ведення</span>
+            <span className="eyebrow-line mb-8">{p.hero.eyebrow}</span>
           </div>
           <h1 className="rise-in rise-d1 font-display wordmark text-[clamp(2.8rem,9vw,6.5rem)] font-semibold leading-[1.02] tracking-tight pb-[0.12em] [filter:drop-shadow(0_2px_10px_rgba(7,8,27,0.9))]">
-            Керувати можна всім.
+            {p.hero.title[0]}
             <br />
-            Крім власного стану.
+            {p.hero.title[1]}
           </h1>
           <p className="rise-in rise-d2 mx-auto mt-8 max-w-2xl text-[clamp(1.05rem,1.7vw,1.35rem)] leading-relaxed text-white/85 [text-shadow:0_1px_16px_rgba(7,8,27,0.95)]">
-            Коли команда виконує, ти на підйомі. Коли ні, тебе накриває. Справжня
-            сила не в тому, щоб тиснути сильніше, а в тому, щоб твій стан більше не
-            залежав від чужих дій.
+            {p.hero.lede}
           </p>
           <p className="rise-in rise-d3 mt-9 text-[13px] tracking-[0.15em] uppercase text-white/45 [text-shadow:0_1px_12px_rgba(7,8,27,0.95)]">
-            3 місяці · індивідуально · від першої зустрічі до нового рівня
+            {p.hero.meta}
           </p>
           <div className="rise-in rise-d3 mt-14 h-9 w-[1px] bg-gradient-to-b from-[#FDD16F]/60 to-transparent" />
         </section>
 
-        {/* ══ ДЗЕРКАЛО (його питання) ══ */}
+        {/* ══ ДЗЕРКАЛО ══ */}
         <section className="sect mx-auto max-w-6xl px-5">
           <Reveal>
-            <Eyebrow>Дзеркало</Eyebrow>
+            <Eyebrow>{p.mirror.eyebrow}</Eyebrow>
           </Reveal>
           <Reveal i={1}>
             <h2 className="font-display h-section mx-auto max-w-3xl text-center">
-              Ти вже поставив собі правильні питання
+              {p.mirror.title}
             </h2>
           </Reveal>
           <Reveal i={2}>
-            <p className="lede mx-auto mt-6 mb-16 text-center">
-              Це те, з чим ти прийшов. Я нічого не вигадав. Уся програма існує лише
-              для одного: щоб ти сам знайшов на них відповіді. Свої, не мої.
-            </p>
+            <p className="lede mx-auto mt-6 mb-16 text-center">{p.mirror.lede}</p>
           </Reveal>
           <div className="grid gap-5 md:grid-cols-2">
-            {MIRROR.map((q, i) => (
+            {p.mirror.questions.map((q, i) => (
               <Reveal key={q} i={i % 2}>
                 <div className="frost frost-hover flex h-full items-start gap-5 p-8">
                   <span className="num-badge shrink-0 leading-none">
@@ -268,21 +139,47 @@ export default function VedennyaClient() {
         {/* ══ ЧОМУ ІНДИВІДУАЛЬНО ══ */}
         <section className="sect mx-auto max-w-4xl px-5 text-center">
           <Reveal>
-            <Eyebrow>Чому саме індивідуально</Eyebrow>
+            <Eyebrow>{p.why.eyebrow}</Eyebrow>
           </Reveal>
           <Reveal i={1}>
-            <h2 className="font-display h-section mx-auto max-w-3xl">
-              Програма збирається під тебе
-            </h2>
+            <h2 className="font-display h-section mx-auto max-w-3xl">{p.why.title}</h2>
           </Reveal>
           <Reveal i={2}>
-            <p className="lede mx-auto mt-7">
-              Жодного шаблону. Ми починаємо з твоєї карти і будуємо шлях, що враховує
-              саме твої питання, твій ритм і твою природу. Ти не заходиш у чужу
-              систему. Ми проєктуємо твою.
-            </p>
+            <p className="lede mx-auto mt-7">{p.why.lede}</p>
           </Reveal>
         </section>
+
+        {/* ══ КОНФІДЕНЦІЙНІСТЬ (необовʼязково) ══ */}
+        {p.privacy && (
+          <section className="sect mx-auto max-w-4xl px-5">
+            <Reveal>
+              <Eyebrow>{p.privacy.eyebrow}</Eyebrow>
+            </Reveal>
+            <Reveal i={1}>
+              <h2 className="font-display h-section mx-auto max-w-3xl text-center">
+                {p.privacy.title}
+              </h2>
+            </Reveal>
+            <Reveal i={2}>
+              <p className="lede mx-auto mt-6 mb-12 text-center">{p.privacy.lede}</p>
+            </Reveal>
+            <Reveal i={2}>
+              <div className="frost p-8 md:p-10" style={{ boxShadow: GOLD_RING }}>
+                <ul className="grid gap-4 sm:grid-cols-2">
+                  {p.privacy.points.map((pt) => (
+                    <li
+                      key={pt}
+                      className="flex items-start gap-3 text-[15px] leading-relaxed text-[var(--c432-ink)]"
+                    >
+                      <Dot />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          </section>
+        )}
 
         {/* ══ ТРИ ЕТАПИ (огляд) ══ */}
         <section className="sect mx-auto max-w-6xl px-5">
@@ -295,7 +192,7 @@ export default function VedennyaClient() {
             </h2>
           </Reveal>
           <div className="grid gap-5 md:grid-cols-3">
-            {STAGES.map((s, i) => (
+            {p.stages.map((s, i) => (
               <Reveal key={s.n} i={i}>
                 <div className="frost frost-hover flex h-full flex-col p-8">
                   <span className="num-badge leading-none">{s.n}</span>
@@ -319,32 +216,28 @@ export default function VedennyaClient() {
           </Reveal>
           <Reveal i={1}>
             <h2 className="font-display h-section mx-auto max-w-3xl text-center">
-              Спершу карта. Потім рух.
+              {p.diag.title}
             </h2>
           </Reveal>
 
-          {/* база — профіль у додатку */}
+          {/* база — профіль */}
           <Reveal i={2}>
             <div className="frost mx-auto mt-12 max-w-3xl p-8 md:p-10">
               <span className="eyebrow mb-3">Для кожного</span>
               <h3 className="font-display text-2xl font-semibold text-white">
-                Профіль у додатку
+                {p.diag.baseTitle}
               </h3>
               <p className="mt-4 text-[15px] leading-relaxed text-[var(--c432-ink)]">
-                Ти самостійно проходиш тести в додатку. Я бачу твій портрет під
-                різними кутами, і в тебе, і в мене зʼявляється твій живий профіль у
-                кабінеті. З нього починається все інше.
+                {p.diag.baseText}
               </p>
             </div>
           </Reveal>
 
           <Reveal i={2}>
-            <p className="lede mx-auto mt-14 mb-10 text-center">
-              Плюс один глибокий метод на твій вибір. Обери свій вхід.
-            </p>
+            <p className="lede mx-auto mt-14 mb-10 text-center">{p.diag.choiceLede}</p>
           </Reveal>
           <div className="grid gap-5 md:grid-cols-3">
-            {DIAG.map((d, i) => (
+            {p.diag.methods.map((d, i) => (
               <Reveal key={d.t} i={i}>
                 <div className="frost frost-hover flex h-full flex-col p-8">
                   <span className="text-4xl">{d.icon}</span>
@@ -369,18 +262,15 @@ export default function VedennyaClient() {
           </Reveal>
           <Reveal i={1}>
             <h2 className="font-display h-section mx-auto max-w-3xl text-center">
-              Пʼять інструментів, що ведуть зміну щодня
+              {p.learn.title}
             </h2>
           </Reveal>
           <Reveal i={2}>
-            <p className="lede mx-auto mt-6 mb-16 text-center">
-              Трансформація стається не на зустрічі, а між зустрічами. Ці інструменти
-              тримають тебе весь шлях.
-            </p>
+            <p className="lede mx-auto mt-6 mb-16 text-center">{p.learn.lede}</p>
           </Reveal>
 
           <div className="grid gap-5 md:grid-cols-2">
-            {LEARN.map((t, i) => (
+            {p.learn.tools.map((t, i) => (
               <Reveal key={t.n} i={i % 2}>
                 <div className="frost frost-hover flex h-full flex-col p-8">
                   <div className="flex items-center gap-4">
@@ -389,13 +279,13 @@ export default function VedennyaClient() {
                   </div>
                   <div className="hairline my-5" />
                   <ul className="flex flex-col gap-3">
-                    {t.pts.map((p) => (
+                    {t.pts.map((pt) => (
                       <li
-                        key={p}
+                        key={pt}
                         className="flex items-start gap-3 text-[14.5px] leading-relaxed text-[var(--c432-ink)]"
                       >
-                        <span className="mt-[7px] block h-1.5 w-1.5 shrink-0 rounded-full bg-[#FDD16F]" />
-                        {p}
+                        <Dot />
+                        {pt}
                       </li>
                     ))}
                   </ul>
@@ -404,24 +294,54 @@ export default function VedennyaClient() {
             ))}
           </div>
 
-          {/* 5-й інструмент — Затвор (виділений блок) */}
+          {/* Запуск практики — тиждень щоденних ранків разом */}
           <Reveal i={1}>
-            <div className="frost mt-5 p-8 md:p-12" style={{ boxShadow: "inset 0 1px 1px rgba(216,236,248,0.14), 0 24px 40px rgba(4,5,15,0.5), 0 0 0 1px rgba(253,209,111,0.28)" }}>
+            <div className="frost mt-5 p-8 md:p-12">
               <div className="flex items-center gap-4">
-                <span className="num-badge leading-none">05</span>
+                <span className="num-badge leading-none">{p.launch.n}</span>
                 <div>
-                  <h3 className="font-display text-2xl font-semibold text-white">Затвор</h3>
-                  <span className="eyebrow mt-1">Особиста ініціація в кінці роботи</span>
+                  <h3 className="font-display text-2xl font-semibold text-white">
+                    {p.launch.title}
+                  </h3>
+                  <span className="eyebrow mt-1">{p.launch.eyebrow}</span>
                 </div>
               </div>
               <p className="mt-6 max-w-3xl text-[15px] leading-relaxed text-[var(--c432-ink)]">
-                Посвята через практику. Знайомство із собою справжнім без зовнішнього
-                шуму і вихід на новий рівень сприйняття. Пʼять рівнів ініціації за
-                твоєю готовністю: один день підготовки, пʼять днів практики, один день
-                виходу.
+                {p.launch.text}
+              </p>
+              <div className="mt-8 grid gap-4 md:grid-cols-3">
+                {p.launch.steps.map((s, i) => (
+                  <div key={s.t} className="glass rounded-2xl p-6">
+                    <span className="text-[11px] font-medium uppercase tracking-[0.24em] text-[#FDD16F]/80">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h4 className="grad-text mt-2 text-lg font-semibold">{s.t}</h4>
+                    <p className="mt-2 text-[13.5px] leading-relaxed text-[var(--c432-ink)]">
+                      {s.d}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Затвор — фінальна ініціація (виділений блок) */}
+          <Reveal i={1}>
+            <div className="frost mt-5 p-8 md:p-12" style={{ boxShadow: GOLD_RING }}>
+              <div className="flex items-center gap-4">
+                <span className="num-badge leading-none">{p.retreat.n}</span>
+                <div>
+                  <h3 className="font-display text-2xl font-semibold text-white">
+                    {p.retreat.title}
+                  </h3>
+                  <span className="eyebrow mt-1">{p.retreat.eyebrow}</span>
+                </div>
+              </div>
+              <p className="mt-6 max-w-3xl text-[15px] leading-relaxed text-[var(--c432-ink)]">
+                {p.retreat.text}
               </p>
               <div className="mt-8 grid gap-4 sm:grid-cols-3 md:grid-cols-5">
-                {RETREATS.map((r) => (
+                {p.retreat.levels.map((r) => (
                   <div key={r.t} className="rounded-2xl bg-white/[0.04] p-5 text-center ring-1 ring-white/10">
                     <h4 className="grad-text text-base font-semibold">{r.t}</h4>
                     <p className="mt-2 text-[12.5px] leading-relaxed text-[var(--c432-ink)]">
@@ -431,10 +351,10 @@ export default function VedennyaClient() {
                 ))}
               </div>
               <p className="mt-10 mb-6 text-center text-[13px] uppercase tracking-[0.2em] text-white/40">
-                Що відбувається з тобою всередині
+                {p.retreat.scienceTitle}
               </p>
               <div className="grid gap-4 md:grid-cols-3">
-                {SCIENCE.map((s) => (
+                {p.retreat.science.map((s) => (
                   <div key={s.t} className="glass rounded-2xl p-6">
                     <h4 className="text-base font-semibold text-white">{s.t}</h4>
                     <p className="mt-2 text-[13.5px] leading-relaxed text-[var(--c432-ink)]">
@@ -456,17 +376,14 @@ export default function VedennyaClient() {
           </Reveal>
           <Reveal i={1}>
             <h2 className="font-display h-section mx-auto max-w-3xl text-center">
-              Побачити, скільки ти пройшов
+              {p.exit.title}
             </h2>
           </Reveal>
           <Reveal i={2}>
-            <p className="lede mx-auto mt-6 mb-14 text-center">
-              У кінці ми повертаємось до того самого дзеркала, що на вході. Зміна
-              стає видимою і вимірюваною, а не «на відчуттях».
-            </p>
+            <p className="lede mx-auto mt-6 mb-14 text-center">{p.exit.lede}</p>
           </Reveal>
           <div className="grid gap-5 md:grid-cols-2">
-            {EXIT.map((e, i) => (
+            {p.exit.items.map((e, i) => (
               <Reveal key={e.t} i={i}>
                 <div className="frost frost-hover flex h-full flex-col p-8">
                   <span className="text-4xl">{e.icon}</span>
@@ -482,55 +399,55 @@ export default function VedennyaClient() {
         </section>
 
         {/* ══ ПАКЕТИ ══ */}
-        <section className="sect mx-auto max-w-6xl px-5">
+        <section className={`sect mx-auto px-5 ${twoPackages ? "max-w-4xl" : "max-w-6xl"}`}>
           <Reveal>
             <Eyebrow>Формати</Eyebrow>
           </Reveal>
           <Reveal i={1}>
             <h2 className="font-display h-section mx-auto mb-16 max-w-3xl text-center">
-              Обери глибину
+              {p.packages.title}
             </h2>
           </Reveal>
-          <div className="grid gap-5 md:grid-cols-3">
-            {PACKAGES.map((p, i) => (
-              <Reveal key={p.name} i={i}>
+          <div className={`grid gap-5 ${twoPackages ? "md:grid-cols-2" : "md:grid-cols-3"}`}>
+            {p.packages.items.map((pk, i) => (
+              <Reveal key={pk.name} i={i}>
                 <div
                   className={`frost frost-hover flex h-full flex-col p-8 ${
-                    p.ring === "gold"
+                    pk.ring === "gold"
                       ? "ring-1 ring-[#FDD16F]/40"
-                      : p.ring === "violet"
+                      : pk.ring === "violet"
                         ? "ring-1 ring-[#8B7BFF]/40"
                         : ""
                   }`}
                 >
-                  {p.badge ? (
+                  {pk.badge ? (
                     <span
                       className={`mb-3 text-[11px] font-medium uppercase tracking-[0.24em] ${
-                        p.ring === "violet" ? "text-[#8B7BFF]" : "text-[#FDD16F]"
+                        pk.ring === "violet" ? "text-[#8B7BFF]" : "text-[#FDD16F]"
                       }`}
                     >
-                      {p.badge}
+                      {pk.badge}
                     </span>
                   ) : (
                     <span className="mb-3 h-[15px]" />
                   )}
                   <h3 className="font-display text-2xl font-semibold text-white">
-                    {p.name}
+                    {pk.name}
                   </h3>
                   <div className="mt-4 flex items-baseline gap-2">
                     <span className="grad-cosmic font-display text-4xl font-semibold">
-                      {p.price}
+                      {pk.price}
                     </span>
                   </div>
-                  <span className="mt-1 text-[13px] text-white/50">{p.term}</span>
+                  <span className="mt-1 text-[13px] text-white/50">{pk.term}</span>
                   <div className="hairline my-6" />
                   <ul className="flex flex-col gap-3">
-                    {p.items.map((it) => (
+                    {pk.items.map((it) => (
                       <li
                         key={it}
                         className="flex items-start gap-3 text-[14.5px] leading-relaxed text-[var(--c432-ink)]"
                       >
-                        <span className="mt-[7px] block h-1.5 w-1.5 shrink-0 rounded-full bg-[#FDD16F]" />
+                        <Dot />
                         {it}
                       </li>
                     ))}
@@ -545,13 +462,11 @@ export default function VedennyaClient() {
         <section className="sect mx-auto max-w-2xl px-5 pb-40 text-center">
           <Reveal>
             <h2 className="font-display wordmark text-[clamp(2.4rem,7vw,4.5rem)] font-semibold leading-[1.05]">
-              Не поспішай.
+              {p.finale.title}
             </h2>
           </Reveal>
           <Reveal i={1}>
-            <p className="lede mx-auto mt-8">
-              Побудь із цим. Коли всередині відгукнеться, ти зрозумієш сам. Я поруч.
-            </p>
+            <p className="lede mx-auto mt-8">{p.finale.text}</p>
           </Reveal>
           <Reveal i={2}>
             <div className="mx-auto mt-12 h-px w-24 bg-gradient-to-r from-transparent via-[#FDD16F]/50 to-transparent" />

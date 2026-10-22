@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import VedennyaClient from "./VedennyaClient";
+import { OLES } from "./content/oles";
 
 /* Сторінка лише за посиланням: не в меню, не в sitemap, noindex/nofollow.
    Показуємо в прямому ефірі, пошуковики не індексують. */
@@ -16,5 +17,5 @@ export const metadata: Metadata = {
 };
 
 export default function VedennyaPage() {
-  return <VedennyaClient />;
+  return <VedennyaClient p={OLES} />;
 }
