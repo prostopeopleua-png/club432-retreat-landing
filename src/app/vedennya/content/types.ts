@@ -5,6 +5,8 @@
 export type Presentation = {
   hero: { eyebrow: string; title: [string, string]; lede: string; meta: string };
   mirror: { eyebrow: string; title: string; lede: string; questions: string[] };
+  /** Що змінюється для людини: її Точка Б простими словами. Необовʼязковий. */
+  goals?: { eyebrow: string; title: string; lede: string; items: { t: string; d: string }[] };
   why: { eyebrow: string; title: string; lede: string };
   /** Блок довіри: де спілкуємось, що з записами. Необовʼязковий. */
   privacy?: { eyebrow: string; title: string; lede: string; points: string[] };

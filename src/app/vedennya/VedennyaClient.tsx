@@ -136,6 +136,36 @@ export default function VedennyaClient({ p }: { p: Presentation }) {
           </div>
         </section>
 
+        {/* ══ ЩО ЗМІНЮЄТЬСЯ (необовʼязково) ══ */}
+        {p.goals && (
+          <section className="sect mx-auto max-w-6xl px-5">
+            <Reveal>
+              <Eyebrow>{p.goals.eyebrow}</Eyebrow>
+            </Reveal>
+            <Reveal i={1}>
+              <h2 className="font-display h-section mx-auto max-w-3xl text-center">
+                {p.goals.title}
+              </h2>
+            </Reveal>
+            <Reveal i={2}>
+              <p className="lede mx-auto mt-6 mb-16 text-center">{p.goals.lede}</p>
+            </Reveal>
+            <div className="grid gap-5 md:grid-cols-2">
+              {p.goals.items.map((g, i) => (
+                <Reveal key={g.t} i={i % 2}>
+                  <div className="frost frost-hover flex h-full flex-col p-8">
+                    <h3 className="grad-text text-xl font-semibold">{g.t}</h3>
+                    <div className="hairline my-5" />
+                    <p className="text-[15px] leading-relaxed text-[var(--c432-ink)]">
+                      {g.d}
+                    </p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* ══ ЧОМУ ІНДИВІДУАЛЬНО ══ */}
         <section className="sect mx-auto max-w-4xl px-5 text-center">
           <Reveal>
