@@ -71,7 +71,7 @@ export default function VedennyaClient({ p }: { p: Presentation }) {
       <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
         <a
           href="#top"
-          className="frost flex items-center gap-2.5 rounded-full py-2.5 pl-3 pr-5"
+          className={`frost flex items-center gap-2.5 rounded-full py-2.5 pl-3 ${p.hideBrand ? "pr-3" : "pr-5"}`}
         >
           <Image
             src="/logo-mandala-white.svg"
@@ -80,9 +80,11 @@ export default function VedennyaClient({ p }: { p: Presentation }) {
             height={30}
             className="shrink-0 drop-shadow-[0_0_6px_rgba(255,255,255,0.25)]"
           />
-          <span className="font-display whitespace-nowrap text-lg font-semibold tracking-wide">
-            Клуб 432
-          </span>
+          {!p.hideBrand && (
+            <span className="font-display whitespace-nowrap text-lg font-semibold tracking-wide">
+              Клуб 432
+            </span>
+          )}
         </a>
       </header>
 

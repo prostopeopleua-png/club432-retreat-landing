@@ -3,6 +3,8 @@
    по файлу на людину: звертання (ти/ви), герой, Дзеркало, пакети. */
 
 export type Presentation = {
+  /** Прибрати назву «Клуб 432» з хедера (лишається тільки мандала). */
+  hideBrand?: boolean;
   hero: { eyebrow: string; title: [string, string]; lede: string; meta: string };
   mirror: { eyebrow: string; title: string; lede: string; questions: string[] };
   /** Що змінюється для людини: її Точка Б простими словами. Необовʼязковий. */
