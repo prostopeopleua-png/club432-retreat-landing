@@ -189,7 +189,6 @@ export default function Home() {
               <div className="video-glow">
                 <IntroVideo />
               </div>
-              <p className="mt-4 text-[13px] leading-relaxed text-white/50 lg:max-w-[92%]">{C.video.caption}</p>
             </Reveal>
             <div className="mt-10 lg:mt-0">
               <Reveal>
