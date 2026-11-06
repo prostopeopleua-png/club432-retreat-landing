@@ -9,6 +9,8 @@ import CtaLink from "@/components/CtaLink";
 import AboutBlock from "@/components/AboutBlock";
 import IntroVideo from "@/components/IntroVideo";
 import PricingViewTracker from "@/components/PricingViewTracker";
+import SiteHeader from "@/components/SiteHeader";
+import HeroVoices from "@/components/HeroVoices";
 import { content as C } from "@/content";
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
 import { trackBotLinkClick } from "@/lib/analytics";
@@ -30,23 +32,14 @@ function Reveal({ children, i = 0, className }: { children: React.ReactNode; i?:
     </motion.div>
   );
 }
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return <div className="eyebrow-line mb-6">{children}</div>;
-}
-
 /* ───────────────── icons (line-art) — text lives in src/content.ts ───────────────── */
 const IC = "h-6 w-6 stroke-[1.5]";
 const Icons = [
-  () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><path d="M4 5h16v11H4z" strokeLinejoin="round"/><path d="M8 20h8M12 16v4" strokeLinecap="round"/><path d="M8 9h8M8 12h5" strokeLinecap="round"/></svg>),
-  () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><circle cx="12" cy="12" r="3"/><path d="M6.5 6.5a8 8 0 0 0 0 11M17.5 6.5a8 8 0 0 1 0 11M4 4a12 12 0 0 0 0 16M20 4a12 12 0 0 1 0 16" strokeLinecap="round"/></svg>),
-  () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><path d="M5 4h5v16H5zM10 4h5l3 15-5 1z" strokeLinejoin="round"/></svg>),
-  () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><path d="M12 3v3M12 18v3M3 12h3M18 12h3" strokeLinecap="round"/><circle cx="12" cy="12" r="4"/></svg>),
-  () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19a5 5 0 0 1 10 0M13 19a5 5 0 0 1 8-3.5" strokeLinecap="round"/></svg>),
-];
-const FormatIcons = [
-  () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M9 3v4M15 3v4" strokeLinecap="round"/></svg>),
-  () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2" strokeLinecap="round"/></svg>),
-  () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={IC}><path d="M6 12c0-2 1.5-3.5 3-3.5S18 15.5 15 15.5 3 8.5 6 8.5 18 16 18 12" strokeLinecap="round"/></svg>),
+  () => (<svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className={IC}><path d="M4 5h16v11H4z" strokeLinejoin="round"/><path d="M8 20h8M12 16v4" strokeLinecap="round"/><path d="M8 9h8M8 12h5" strokeLinecap="round"/></svg>),
+  () => (<svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className={IC}><circle cx="12" cy="12" r="3"/><path d="M6.5 6.5a8 8 0 0 0 0 11M17.5 6.5a8 8 0 0 1 0 11M4 4a12 12 0 0 0 0 16M20 4a12 12 0 0 1 0 16" strokeLinecap="round"/></svg>),
+  () => (<svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className={IC}><path d="M5 4h5v16H5zM10 4h5l3 15-5 1z" strokeLinejoin="round"/></svg>),
+  () => (<svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className={IC}><path d="M12 3v3M12 18v3M3 12h3M18 12h3" strokeLinecap="round"/><circle cx="12" cy="12" r="4"/></svg>),
+  () => (<svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className={IC}><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19a5 5 0 0 1 10 0M13 19a5 5 0 0 1 8-3.5" strokeLinecap="round"/></svg>),
 ];
 
 
@@ -82,81 +75,126 @@ const pageJsonLd = {
   ],
 };
 
+
+/* ───────── відгук як повідомлення в чаті ───────── */
+// Колір імені береться з індексу, а не випадково: інакше сервер і браузер
+// намалювали б різні кольори й React лаявся б на розбіжність розмітки.
+const NAME_TONE = ["text-[var(--c432-amber)]", "text-[var(--c432-violet-2)]", "text-[#8FD2C4]"];
+const MONO_TONE = ["bg-[var(--c432-amber)]/18", "bg-[var(--c432-violet-2)]/20", "bg-[#8FD2C4]/18"];
+
+type Voice = { quote: string; name: string; accent?: string; context: string };
+
+function Message({ v, i }: { v: Voice; i: number }) {
+  const tone = i % NAME_TONE.length;
+  // Ключовий результат виділяємо: людина сканує відгуки, а не читає.
+  const at = v.accent ? v.quote.indexOf(v.accent) : -1;
+  return (
+    <figure className="grid grid-cols-[auto_1fr] items-start gap-x-3">
+      <span aria-hidden className={`mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[15px] font-semibold ${MONO_TONE[tone]} ${NAME_TONE[tone]}`}>
+        {v.name.slice(0, 1)}
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="bubble">
+          <div className={`text-[14px] font-semibold ${NAME_TONE[tone]}`}>{v.name}</div>
+          <blockquote className="mt-1.5 text-[15px] leading-relaxed text-[var(--c432-ink)]">
+            {at < 0 ? v.quote : (
+              <>
+                {v.quote.slice(0, at)}
+                <strong className="font-semibold text-white">{v.accent}</strong>
+                {v.quote.slice(at + (v.accent as string).length)}
+              </>
+            )}
+          </blockquote>
+        </div>
+      </div>
+      <figcaption className="col-start-2 mt-2 pl-1 text-[13px] text-white/45">{v.context}</figcaption>
+    </figure>
+  );
+}
+
+function QLine({ q }: { q: string }) {
+  return (
+    <li className="border-b border-white/10 py-5 text-[15px] leading-relaxed text-[var(--c432-ink)]">
+      {q}
+    </li>
+  );
+}
+
 /* ═══════════════════════════ page ═══════════════════════════ */
 export default function Home() {
+  // Голоси: три на видноті, решта під розкриттям. Текст лишається в розмітці,
+  // тож пошук і AI-відповіді його бачать, а телефон не гортає зайві екрани.
+  const voicesLead = C.voices.items.slice(0, 3);
+  const voicesRest = C.voices.items.slice(3);
+  const qLead = C.questions.items.slice(0, 10);
+  const qRest = C.questions.items.slice(10);
+
   return (
     <SmoothScroll>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }} />
       <CosmicBackground />
       <RoamingMandala />
 
-      {/* NAV */}
-      <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
-        <nav className="frost flex w-full max-w-5xl items-center justify-between gap-3 rounded-full py-2.5 pl-3 pr-3 sm:pl-5">
-          <a href="#top" className="flex items-center gap-2.5">
-            <Image src="/logo-mandala-white.svg" alt={C.nav.brand} width={32} height={32} className="shrink-0 drop-shadow-[0_0_6px_rgba(255,255,255,0.25)]" />
-            <span className="font-display whitespace-nowrap text-lg font-semibold tracking-wide">{C.nav.brand}</span>
-          </a>
-          <CtaLink href={BOT} location="nav" className="btn-cta cursor-pointer !px-4 !py-2.5 !text-[11px] sm:!px-6 sm:!py-3 sm:!text-[13px]">
-            {C.nav.cta}
-          </CtaLink>
-        </nav>
-      </header>
+      {/* NAV: прихована на першому екрані, з'являється, коли герой пішов з в'юпорту */}
+      <SiteHeader heroId="hero" botUrl={BOT} />
 
       <main id="top" className="relative z-10">
         {/* Ловить прокрутку до блоку з ціною → ViewContent у Meta. Нічого не малює. */}
         <PricingViewTracker targetId="join" />
 
-        {/* ══ HERO ══ */}
-        {/* Поява першого екрана — на чистому CSS, БЕЗ framer-motion.
-            Раніше заголовок і кнопки мали opacity:0 в HTML і проявлялись лише
-            після завантаження React. На повільному телефоні людина кілька
-            секунд дивилась у порожній екран. CSS-анімація стартує одразу. */}
-        <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 text-center">
-          <div className="rise-in">
-            <Eyebrow>{C.hero.eyebrow}</Eyebrow>
+        {/* ══ HERO ══
+            Поява першого екрана на чистому CSS, БЕЗ framer-motion: інакше на
+            повільному телефоні людина кілька секунд дивиться в порожній екран.
+            Від 1024px дві колонки: зліва текст і кнопки, справа голоси учасників.
+            На телефоні голоси стоять горизонтальною стрічкою під кнопками. */}
+        <section id="hero" className="relative mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] items-center gap-x-12 px-5 pb-14 pt-10 sm:pt-16 lg:min-h-[100svh] lg:grid-cols-[minmax(0,55fr)_minmax(0,45fr)] lg:px-10 lg:py-16">
+          <div className="min-w-0">
+            <p className="rise-in inline-block rounded-full border border-white/20 bg-[rgba(7,8,27,0.55)] px-4 py-1.5 text-[13px] leading-snug text-white/80 sm:text-[14px]">
+              {C.hero.pill}
+            </p>
+            <h1 className="rise-in rise-d1 font-display mt-6 text-[clamp(2.6rem,4.9vw,5.4rem)] font-semibold leading-[1.02] tracking-tight text-white [text-shadow:0_2px_24px_rgba(7,8,27,0.9)] sm:mt-7">
+              {C.hero.titleMain}{" "}
+              <em className="font-normal italic text-[var(--c432-amber)]">{C.hero.titleAccent}</em>
+            </h1>
+            <p className="rise-in rise-d2 mt-5 max-w-xl text-[17px] leading-relaxed text-white/75 [text-shadow:0_1px_16px_rgba(7,8,27,0.95)] sm:mt-7 sm:text-[20px]">
+              {C.hero.subtitle}
+            </p>
+            <div className="rise-in rise-d3 mt-7 flex flex-col items-stretch gap-3 sm:mt-9 sm:flex-row sm:items-center sm:gap-4">
+              <CtaLink href={BOT} location="hero" className="btn-cta cursor-pointer">{C.hero.ctaPrimary}</CtaLink>
+              <a href="/tsinnosti" className="btn-ghost">{C.hero.ctaSecondary}</a>
+            </div>
+            {/* Власна підкладка: рядок лежить на світлих пелюстках мандали,
+                і без неї контраст падає нижче норми. */}
+            <p className="rise-in rise-d3 mt-5 inline-block rounded-full bg-[rgba(7,8,27,0.72)] px-5 py-2 text-[13px] text-white/80">
+              {C.hero.priceLine}
+            </p>
           </div>
-          <h1 className="rise-in rise-d1 font-display wordmark relative text-[clamp(3.5rem,13vw,10rem)] font-semibold leading-[1.06] tracking-tight pb-[0.14em] [filter:drop-shadow(0_2px_10px_rgba(7,8,27,0.9))_drop-shadow(0_0_28px_rgba(7,8,27,0.7))]">
-            {C.hero.title}
-          </h1>
-          <p className="rise-in rise-d2 mx-auto mt-7 max-w-2xl text-[clamp(1.05rem,1.7vw,1.35rem)] leading-relaxed text-white/85 [text-shadow:0_1px_16px_rgba(7,8,27,0.95)]">
-            {C.hero.subtitle}
-          </p>
-          <p className="rise-in rise-d3 mt-8 text-[13px] tracking-wide text-white/55 [text-shadow:0_1px_12px_rgba(7,8,27,0.95)]">
-            {C.hero.facts}
-          </p>
-          <div className="rise-in rise-d3 mt-7 flex flex-col items-center gap-4 sm:flex-row">
-            <CtaLink href={BOT} location="hero" className="btn-cta cursor-pointer">{C.hero.ctaPrimary}</CtaLink>
-            <a href="#what" className="btn-ghost">{C.hero.ctaSecondary}</a>
+          <div className="rise-in rise-d3 mt-10 min-w-0 lg:mt-0">
+            <HeroVoices />
           </div>
-          <p className="rise-in rise-d3 mt-5 text-xs text-white/40 [text-shadow:0_1px_12px_rgba(7,8,27,0.95)]">
-            {C.ctaNote}
-          </p>
         </section>
 
-        {/* ══ VIDEO — Вадим за 5 хвилин: навіщо клуб і що тут відбувається ══ */}
+        {/* ══ VIDEO ══ */}
         <section id="video" className="sect mx-auto max-w-5xl px-5">
-          <Reveal><Eyebrow>{C.video.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-5 max-w-3xl text-center">{C.video.heading}</h2></Reveal>
-          <Reveal i={2}>
+          <Reveal><h2 className="font-display h-section mx-auto mb-5 max-w-3xl text-center">{C.video.heading}</h2></Reveal>
+          <Reveal i={1}>
             <p className="mx-auto mb-10 max-w-2xl text-center text-[15px] leading-relaxed text-[var(--c432-ink)]">{C.video.caption}</p>
           </Reveal>
-          <Reveal i={3}><IntroVideo /></Reveal>
+          <Reveal i={2}><IntroVideo /></Reveal>
         </section>
 
-        {/* ══ PAIN — петля, у якій людина крутиться ══ */}
-        <section className="sect mx-auto max-w-4xl px-5">
-          <Reveal><Eyebrow>{C.pain.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-14 max-w-3xl text-center">{C.pain.heading}</h2></Reveal>
+        {/* ══ PAIN + ДЛЯ КОГО ══
+            Архетипи були окремою секцією з трьох карток на 1150px. Вони
+            відповідають на те саме питання, що й біль («це про мене?»), тож
+            стоять тут трьома рядками одразу після нього. */}
+        <section id="what" className="sect mx-auto max-w-4xl px-5">
+          <Reveal><h2 className="font-display h-section mx-auto mb-14 max-w-3xl text-center">{C.pain.heading}</h2></Reveal>
           <ol className="relative space-y-7 border-l border-white/10 pl-7 sm:pl-9">
             {C.pain.steps.map((st, i) => (
               <Reveal key={st.when} i={i}>
                 <li className="relative">
-                  <span
-                    aria-hidden
-                    className="absolute -left-[35px] top-2 h-2 w-2 rounded-full bg-[var(--c432-amber)]/70 sm:-left-[43px]"
-                  />
-                  <div className="text-[13px] uppercase tracking-[0.16em] text-[var(--c432-amber)]/80">{st.when}</div>
+                  <span aria-hidden className="absolute -left-[35px] top-2 h-2 w-2 rounded-full bg-[var(--c432-amber)]/70 sm:-left-[43px]" />
+                  <div className="text-[14px] font-semibold text-[var(--c432-amber)]/90">{st.when}</div>
                   <p className="mt-2 text-[15px] leading-relaxed text-[var(--c432-ink)]">{st.text}</p>
                 </li>
               </Reveal>
@@ -167,69 +205,29 @@ export default function Home() {
               {C.pain.outro}
             </p>
           </Reveal>
-        </section>
 
-        {/* ══ WHO ══ */}
-        <section id="what" className="sect mx-auto max-w-6xl px-5">
-          <Reveal><Eyebrow>{C.who.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-14 max-w-3xl text-center">{C.who.heading}</h2></Reveal>
-          <div className="grid gap-5 md:grid-cols-3">
-            {C.who.items.map((w, i) => (
-              <Reveal key={w.title} i={i}>
-                <div className="frost frost-hover h-full p-8">
-                  <h3 className="grad-text text-2xl font-semibold uppercase tracking-wide">{w.title}</h3>
-                  <div className="hairline my-5" />
-                  <p className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{w.text}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+          <Reveal i={6}>
+            <h3 className="font-display mt-20 mb-8 text-center text-[clamp(1.4rem,2.6vw,2rem)] font-semibold">{C.who.heading}</h3>
+            <ul className="mx-auto max-w-2xl divide-y divide-white/10 rounded-3xl bg-[rgba(9,10,30,0.62)] px-6 sm:px-8">
+              {C.who.items.map((w) => (
+                <li key={w.title} className="flex flex-col gap-1 py-5 sm:flex-row sm:gap-6">
+                  <span className="shrink-0 font-semibold text-[var(--c432-amber)] sm:w-32">{w.title}</span>
+                  <span className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{w.text}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
 
-        {/* ══ VOICES — відгуки учасників ══ */}
-        <section className="sect mx-auto max-w-6xl px-5">
-          <Reveal><Eyebrow>{C.voices.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center">{C.voices.heading}</h2></Reveal>
-          <Reveal i={2}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">{C.voices.subtitle}</p></Reveal>
-
-          <div className="grid gap-5 md:grid-cols-2">
-            {C.voices.items.map((v, i) => (
-              <Reveal key={v.name} i={i}>
-                <figure className="frost frost-hover flex h-full flex-col p-7 sm:p-8">
-                  <svg viewBox="0 0 24 24" aria-hidden className="mb-4 h-7 w-7 shrink-0 fill-[var(--c432-amber)]/25">
-                    <path d="M9.5 5C6.5 6.6 4.6 9.4 4.6 12.9c0 3.2 1.9 5.1 4.3 5.1 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.9.1-1 .1.3-1.6 1.9-3.5 3.5-4.5L9.5 5Zm9.1 0c-3 1.6-4.9 4.4-4.9 7.9 0 3.2 1.9 5.1 4.3 5.1 2.2 0 3.8-1.6 3.8-3.7 0-2-1.4-3.5-3.3-3.5-.4 0-.9.1-1 .1.3-1.6 1.9-3.5 3.5-4.5L18.6 5Z" />
-                  </svg>
-                  <blockquote className="text-[15px] leading-relaxed text-[var(--c432-ink)]">
-                    {(() => {
-                      // Ключовий результат виділяємо: людина сканує відгуки, а не читає.
-                      const i = v.accent ? v.quote.indexOf(v.accent) : -1;
-                      if (i < 0) return v.quote;
-                      return (
-                        <>
-                          {v.quote.slice(0, i)}
-                          <strong className="font-semibold text-white">{v.accent}</strong>
-                          {v.quote.slice(i + v.accent.length)}
-                        </>
-                      );
-                    })()}
-                  </blockquote>
-                  <figcaption className="mt-auto pt-6">
-                    <div className="hairline mb-4" />
-                    <span className="font-semibold text-white">{v.name}</span>
-                    <span className="text-sm text-white/45"> · {v.context}</span>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal i={4}>
-            <blockquote className="mx-auto mt-12 max-w-2xl text-center">
-              <p className="font-display text-[clamp(1.15rem,2vw,1.5rem)] leading-relaxed text-white/85">
-                «{C.voices.pullQuote}»
-              </p>
-              <footer className="mt-4 text-sm text-[var(--c432-amber)]/70">{C.voices.pullAuthor}</footer>
-            </blockquote>
+          {/* Тонка смуга до безкоштовного тесту — саме тут, де людина впізнала
+              себе, але ще не готова платити. */}
+          <Reveal i={7}>
+            <div className="frost mt-14 flex flex-col items-center gap-5 p-7 text-center sm:flex-row sm:justify-between sm:p-8 sm:text-left">
+              <div>
+                <div className="font-display text-xl font-semibold">{C.testTeaser.heading}</div>
+                <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-[var(--c432-ink)]">{C.testTeaser.text}</p>
+              </div>
+              <a href="/tsinnosti" className="btn-ghost shrink-0">{C.testTeaser.cta}</a>
+            </div>
           </Reveal>
         </section>
 
@@ -242,222 +240,218 @@ export default function Home() {
           <AboutBlock />
         </section>
 
-        {/* ══ FEATURES ══ */}
+        {/* ══ ЩО ВСЕРЕДИНІ ══
+            Тут раніше було три окремі секції (можливості, формат, перший
+            місяць) на 5200px. Усі три відповідають на одне питання, тож
+            зібрані в одну: користь, ритм, перший місяць. */}
         <section className="sect mx-auto max-w-6xl px-5">
-          <Reveal><Eyebrow>{C.features.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center">{C.features.heading}</h2></Reveal>
-          <Reveal i={2}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">{C.features.subtitle}</p></Reveal>
+          <Reveal><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center text-balance">{C.features.heading}</h2></Reveal>
+          <Reveal i={1}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">{C.features.subtitle}</p></Reveal>
+
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {C.features.items.map((f, i) => {
               const Icon = Icons[i] ?? Icons[0];
               return (
-                <Reveal key={f.title} i={i}>
-                  <div className="frost frost-hover group flex h-full flex-col p-7">
-                    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full text-[var(--c432-amber)]" style={{ background: "rgba(253,209,111,0.08)", boxShadow: "inset 0 0 0 1px rgba(253,209,111,0.18)" }}>
-                      <Icon />
+                <Reveal key={f.title} i={Math.min(i, 3)}>
+                  <div className="frost frost-hover flex h-full flex-col p-7">
+                    {/* Іконка в рядок із заголовком, а не над ним: та сама
+                        інформація на 60px менше висоти в кожній картці. */}
+                    <div className="flex items-center gap-3">
+                      <span className="text-[var(--c432-amber)]"><Icon /></span>
+                      <h3 className="text-lg font-semibold">{f.title}</h3>
                     </div>
-                    <h3 className="text-xl font-semibold">{f.title}</h3>
                     <p className="mt-3 text-[15px] leading-relaxed text-[var(--c432-ink)]">{f.text}</p>
                   </div>
                 </Reveal>
               );
             })}
           </div>
-          <Reveal i={5}>
-            <div className="mt-10 text-center">
-              <a
-                href="/metod-432"
-                className="group inline-flex items-center gap-2 text-sm tracking-wide text-[var(--c432-amber)]/85 transition-colors hover:text-[var(--c432-amber)]"
-              >
-                {C.features.deeperLink}
-                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-              </a>
-            </div>
-          </Reveal>
-        </section>
 
-        {/* ══ QUESTIONS — справжні питання з чату ══ */}
-        <section className="sect mx-auto max-w-6xl px-5">
-          <Reveal><Eyebrow>{C.questions.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center">{C.questions.heading}</h2></Reveal>
-          <Reveal i={2}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">{C.questions.subtitle}</p></Reveal>
-
-          {/* Колонки, а не сітка: питання різної довжини лягають щільно,
-              як стрічка чату, і не тягнуть одне одного за висотою. */}
-          <div className="[column-fill:balance] gap-5 sm:columns-2 lg:columns-3">
-            {C.questions.items.map((q, i) => (
-              <Reveal key={i} i={Math.min(i, 6)}>
-                <div className="frost mb-5 break-inside-avoid p-6">
-                  <p className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{q}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal i={7}>
-            <p className="mx-auto mt-8 max-w-2xl text-center text-[15px] text-white/55">{C.questions.outro}</p>
-          </Reveal>
-        </section>
-
-        {/* ══ FORMAT ══ */}
-        <section className="sect mx-auto max-w-6xl px-5">
-          <Reveal><Eyebrow>{C.format.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-14 max-w-3xl text-center">{C.format.heading}</h2></Reveal>
-          <div className="grid gap-5 md:grid-cols-3">
-            {C.format.items.map((f, i) => {
-              const Icon = FormatIcons[i] ?? FormatIcons[0];
-              return (
-                <Reveal key={f.title} i={i}>
-                  <div className="frost h-full p-8">
-                    <div className="mb-5 text-[var(--c432-amber)]"><Icon /></div>
-                    <h3 className="text-xl font-semibold">{f.title}</h3>
-                    <p className="mt-3 text-[15px] leading-relaxed text-[var(--c432-ink)]">{f.text}</p>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ══ MONTH — як проходить місяць ══ */}
-        <section className="sect mx-auto max-w-6xl px-5">
-          <Reveal><Eyebrow>{C.month.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center">{C.month.heading}</h2></Reveal>
-          <Reveal i={2}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">{C.month.subtitle}</p></Reveal>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {C.month.items.map((m, i) => (
-              <Reveal key={m.week} i={i}>
-                <div className="frost frost-hover flex h-full flex-col p-7">
-                  <div className="font-display text-4xl leading-none text-[var(--c432-amber)]/45">{m.week}</div>
-                  <h3 className="mt-4 text-xl font-semibold">{m.title}</h3>
-                  <div className="hairline my-4" />
-                  <p className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{m.text}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          {/* Формат — рядком, без карток: це три факти, а не три ідеї. */}
           <Reveal i={4}>
-            <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] leading-relaxed text-white/75">{C.month.note}</p>
-            <p className="mx-auto mt-4 max-w-2xl text-center text-[15px] leading-relaxed text-white/55">{C.month.outro}</p>
-          </Reveal>
-        </section>
-
-        {/* ══ MYTHS — заперечення знімаємо до ціни ══ */}
-        <section className="sect mx-auto max-w-5xl px-5">
-          <Reveal><Eyebrow>{C.myths.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mx-auto mb-14 max-w-3xl text-center">{C.myths.heading}</h2></Reveal>
-          <div className="space-y-4">
-            {C.myths.items.map((m, i) => (
-              <Reveal key={m.myth} i={i}>
-                <div className="frost grid gap-5 p-7 md:grid-cols-[0.85fr_1.15fr] md:gap-9 md:p-8">
-                  <div>
-                    <div className="text-[11px] uppercase tracking-[0.2em] text-white/35">Міф</div>
-                    <p className="mt-3 text-[15px] leading-relaxed text-white/55 line-through decoration-white/25">{m.myth}</p>
-                  </div>
-                  <div>
-                    <div className="text-[11px] uppercase tracking-[0.2em] text-[var(--c432-amber)]">Як насправді</div>
-                    <p className="mt-3 text-[15px] leading-relaxed text-[var(--c432-ink)]">{m.truth}</p>
-                  </div>
+            <dl className="mt-10 grid gap-x-8 gap-y-6 rounded-3xl bg-[rgba(9,10,30,0.62)] px-6 py-8 sm:grid-cols-3 sm:px-8">
+              {C.format.items.map((f) => (
+                <div key={f.title}>
+                  <dt className="font-semibold text-[var(--c432-amber)]">{f.title}</dt>
+                  <dd className="mt-1.5 text-[14px] leading-relaxed text-[var(--c432-ink)]">{f.text}</dd>
                 </div>
-              </Reveal>
-            ))}
-          </div>
-        </section>
-
-        {/* ══ NOT FOR — чесна дискваліфікація ══ */}
-        <section className="sect mx-auto max-w-3xl px-5">
-          <Reveal><Eyebrow>{C.notFor.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mb-12 text-center">{C.notFor.heading}</h2></Reveal>
-          <ul className="space-y-5">
-            {C.notFor.items.map((t, i) => (
-              <Reveal key={i} i={i}>
-                <li className="flex items-start gap-4">
-                  <span aria-hidden className="mt-2 h-px w-6 shrink-0 bg-white/25" />
-                  <span className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{t}</span>
-                </li>
-              </Reveal>
-            ))}
-          </ul>
-          <Reveal i={5}>
-            <p className="mt-10 text-center text-[15px] text-white/55">{C.notFor.outro}</p>
+              ))}
+            </dl>
           </Reveal>
-        </section>
 
-        {/* ══ TEST TEASER — місток до безкоштовного тесту ══ */}
-        <section className="sect mx-auto max-w-3xl px-5">
-          <Reveal>
-            <div className="frost overflow-hidden p-9 text-center sm:p-12">
-              <Eyebrow>{C.testTeaser.eyebrow}</Eyebrow>
-              <h2 className="font-display mt-5 text-[clamp(1.7rem,3.4vw,2.6rem)] font-semibold leading-tight">
-                {C.testTeaser.heading}
-              </h2>
-              <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-[var(--c432-ink)]">
-                {C.testTeaser.text}
-              </p>
-              <a href="/tsinnosti" className="btn-cta mt-9 inline-block cursor-pointer">
-                {C.testTeaser.cta}
+          {/* Перший місяць — компактною смугою 01–04. */}
+          <Reveal i={5}>
+            <h3 className="font-display mt-16 text-center text-[clamp(1.4rem,2.6vw,2rem)] font-semibold">{C.month.heading}</h3>
+            <p className="mx-auto mt-3 mb-10 max-w-xl text-center text-[15px] text-[var(--c432-ink)]">{C.month.subtitle}</p>
+            <ol className="grid gap-x-8 gap-y-7 rounded-3xl bg-[rgba(9,10,30,0.62)] p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-4">
+              {C.month.items.map((m) => (
+                <li key={m.week} className="border-t border-[var(--c432-amber)]/25 pt-4">
+                  <div className="font-display text-2xl leading-none text-[var(--c432-amber)]/50 tabular-nums">{m.week}</div>
+                  <h4 className="mt-2 font-semibold">{m.title}</h4>
+                  <p className="mt-2 text-[14px] leading-relaxed text-[var(--c432-ink)]">{m.text}</p>
+                </li>
+              ))}
+            </ol>
+            <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] leading-relaxed text-white/70">{C.month.note}</p>
+          </Reveal>
+
+          <Reveal i={6}>
+            <div className="mt-12 text-center">
+              <a href="/metod-432" className="inline-block text-sm text-[var(--c432-amber)]/85 underline-offset-4 transition-colors hover:text-[var(--c432-amber)] hover:underline">
+                {C.features.deeperLink}
               </a>
             </div>
           </Reveal>
         </section>
 
-        {/* ══ JOIN / PRICING ══ */}
-        <section id="join" className="sect mx-auto max-w-2xl px-5">
-          <Reveal><Eyebrow>{C.pricing.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section text-center">{C.pricing.heading}</h2></Reveal>
-          <Reveal i={2}><p className="mx-auto mb-12 mt-4 max-w-xl text-center text-[var(--c432-ink)]">{C.pricing.subtitle}</p></Reveal>
+        {/* ══ JOIN / ЦІНА ══
+            Переїхала з 87% глибини сюди. За 25 € не треба вмовляти десять
+            екранів; докази й заперечення працюють далі, вже зі знанням ціни.
+            Поруч — чесний список «кому тут буде погано»: сказане просто біля
+            кнопки оплати воно додає довіри більше, ніж окремою секцією. */}
+        <section id="join" className="sect mx-auto max-w-6xl px-5">
+          <Reveal><h2 className="font-display h-section text-center text-balance">{C.pricing.heading}</h2></Reveal>
+          <Reveal i={1}><p className="mx-auto mb-14 mt-4 max-w-xl text-center text-[var(--c432-ink)]">{C.pricing.subtitle}</p></Reveal>
+
+          <div className="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+            <Reveal i={2} className="order-1">
+              <div className="frost relative mx-auto max-w-md overflow-hidden rounded-[2rem] p-8 text-center sm:p-10">
+                <div className="pointer-events-none absolute inset-0 opacity-90" style={{ background: "radial-gradient(75% 60% at 50% 0%, rgba(239,128,24,0.16), transparent 68%)" }} />
+                <div className="relative">
+                  <h3 className="grad-text text-2xl font-semibold">{C.pricing.planName}</h3>
+                  <p className="mt-4 text-white/45">{C.pricing.valueLabel} <span className="line-through">{C.pricing.valueOld}</span></p>
+                  <div className="mt-2 font-display text-5xl font-semibold text-[var(--c432-amber)] tabular-nums">
+                    {C.pricing.price} <span className="text-2xl font-normal text-white/55">{C.pricing.priceUnit}</span>
+                  </div>
+                  <p className="mt-1 text-sm text-white/55">{C.pricing.priceNote}</p>
+
+                  <div className="hairline my-7" />
+
+                  <ul className="space-y-4 text-left">
+                    {C.pricing.benefits.map((b, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span aria-hidden className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--c432-amber)]">
+                          <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="#0D0E2D" strokeWidth="3.2"><path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        </span>
+                        <span className="text-[15px] leading-relaxed text-[var(--c432-ink)]">
+                          {b.startsWith("Бонус:") ? (<><span className="font-semibold text-white">Бонус:</span>{b.slice(6)}</>) : b}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <CtaLink href={BOT} location="pricing" className="btn-cta mt-9 w-full cursor-pointer">{C.pricing.cta}</CtaLink>
+                  <p className="mt-4 text-xs text-white/55">{C.ctaNote}</p>
+                  <p className="mt-3 text-xs text-[var(--c432-amber)]/80">{C.pricing.cancelNote}</p>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal i={3} className="order-2 lg:order-none">
+              <h3 className="font-display text-[clamp(1.4rem,2.6vw,2rem)] font-semibold">{C.notFor.heading}</h3>
+              <ul className="mt-7 space-y-5">
+                {C.notFor.items.map((t, i) => (
+                  <li key={i} className="flex items-start gap-4">
+                    <span aria-hidden className="mt-2 h-px w-6 shrink-0 bg-white/25" />
+                    <span className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{t}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-8 text-[15px] text-white/55">{C.notFor.outro}</p>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ══ VOICES — відгуки як те, чим вони є: повідомлення учасників ══
+            Були вісім однакових карток на 4000px, які читались як один довгий
+            блок. Тепер це стрічка повідомлень: три на видноті, решта під
+            розкриттям. Жодних вигаданих аватарів і часу — тільки імʼя,
+            як його підписує сам Telegram, і текст. */}
+        <section className="sect mx-auto max-w-3xl px-5">
+          <Reveal><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center text-balance">{C.voices.heading}</h2></Reveal>
+          <Reveal i={1}><p className="mx-auto mb-3 max-w-xl text-center text-[var(--c432-ink)]">{C.voices.subtitle}</p></Reveal>
+          <Reveal i={2}><p className="mx-auto mb-12 max-w-xl text-center text-[13px] text-white/45">{C.voices.note}</p></Reveal>
+
+          <div className="space-y-6">
+            {voicesLead.map((v, i) => <Reveal key={i} i={Math.min(i, 3)}><Message v={v} i={i} /></Reveal>)}
+          </div>
+
+          <Reveal i={4}>
+            <details className="group mt-6">
+              <summary className="btn-ghost mx-auto w-fit list-none marker:content-['']">
+                <span className="group-open:hidden">{C.voices.moreLabel}</span>
+                <span className="hidden group-open:inline">Згорнути</span>
+              </summary>
+              <div className="mt-6 space-y-6">
+                {voicesRest.map((v, i) => <Message key={i} v={v} i={i + 3} />)}
+              </div>
+            </details>
+          </Reveal>
+
+          <Reveal i={5}>
+            <blockquote className="mx-auto mt-14 max-w-2xl text-center">
+              <p className="font-display text-[clamp(1.15rem,2vw,1.5rem)] leading-relaxed text-white/85">
+                «{C.voices.pullQuote}»
+              </p>
+              <footer className="mt-4 text-sm text-[var(--c432-amber)]/80">{C.voices.pullAuthor}</footer>
+            </blockquote>
+          </Reveal>
+        </section>
+
+        {/* ══ QUESTIONS ══
+            Було 24 картки на 4100px. Стало десять щільним списком, решта під
+            розкриттям: картка навколо кожного рядка нічого не додавала. */}
+        <section className="sect mx-auto max-w-5xl px-5">
+          <Reveal><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center text-balance">{C.questions.heading}</h2></Reveal>
+          <Reveal i={1}><p className="mx-auto mb-12 max-w-xl text-center text-[var(--c432-ink)]">{C.questions.subtitle}</p></Reveal>
+
+          <Reveal i={2}>
+            <ul className="grid gap-x-10 rounded-3xl bg-[rgba(9,10,30,0.62)] px-6 sm:grid-cols-2 sm:px-8">
+              {qLead.map((q, i) => <QLine key={i} q={q} />)}
+            </ul>
+          </Reveal>
 
           <Reveal i={3}>
-            <div className="frost relative mx-auto max-w-md overflow-hidden rounded-[2rem] p-8 text-center sm:p-10">
-              <div className="pointer-events-none absolute inset-0 opacity-90" style={{ background: "radial-gradient(75% 60% at 50% 0%, rgba(239,128,24,0.16), transparent 68%)" }} />
-              <div className="relative">
-                <h3 className="grad-text text-2xl font-semibold">{C.pricing.planName}</h3>
-                <p className="mt-4 text-white/45">{C.pricing.valueLabel} <span className="line-through">{C.pricing.valueOld}</span></p>
-                <div className="mt-2 font-display text-5xl font-semibold text-[var(--c432-amber)]">
-                  {C.pricing.price} <span className="text-2xl font-normal text-white/55">{C.pricing.priceUnit}</span>
-                </div>
-                <p className="mt-1 text-sm text-white/45">{C.pricing.priceNote}</p>
+            <details className="group mt-8">
+              <summary className="btn-ghost mx-auto w-fit list-none marker:content-['']">
+                <span className="group-open:hidden">{C.questions.moreLabel}</span>
+                <span className="hidden group-open:inline">Згорнути</span>
+              </summary>
+              <ul className="mt-6 grid gap-x-10 rounded-3xl bg-[rgba(9,10,30,0.62)] px-6 sm:grid-cols-2 sm:px-8">
+                {qRest.map((q, i) => <QLine key={i} q={q} />)}
+              </ul>
+            </details>
+          </Reveal>
 
-                <div className="hairline my-7" />
-
-                <ul className="space-y-4 text-left">
-                  {C.pricing.benefits.map((b, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--c432-amber)]">
-                        <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="#0D0E2D" strokeWidth="3.2"><path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                      </span>
-                      <span className="text-[15px] leading-relaxed text-[var(--c432-ink)]">
-                        {b.startsWith("Бонус:") ? (<><span className="font-semibold text-white">Бонус:</span>{b.slice(6)}</>) : b}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                <CtaLink href={BOT} location="pricing" className="btn-cta mt-9 w-full cursor-pointer">{C.pricing.cta}</CtaLink>
-                <p className="mt-4 text-xs text-white/40">{C.ctaNote}</p>
-                <p className="mt-4 text-xs uppercase tracking-[0.18em] text-[var(--c432-amber)]/70">{C.pricing.cancelNote}</p>
-              </div>
-            </div>
+          <Reveal i={4}>
+            <p className="mx-auto mt-10 max-w-2xl text-center text-[15px] text-white/60">{C.questions.outro}</p>
           </Reveal>
         </section>
 
-        {/* ══ FAQ ══ */}
+        {/* ══ FAQ ══ Ввібрав блок «міфи»: це були ті самі заперечення. */}
         <section className="sect mx-auto max-w-3xl px-5">
-          <Reveal><Eyebrow>{C.faq.eyebrow}</Eyebrow></Reveal>
-          <Reveal i={1}><h2 className="font-display h-section mb-12 text-center">{C.faq.heading}</h2></Reveal>
+          <Reveal><h2 className="font-display h-section mb-12 text-center text-balance">{C.faq.heading}</h2></Reveal>
           <div className="space-y-4">
             {C.faq.items.map((item, i) => (
-              <Reveal key={item.q} i={i}>
-                <details className="frost group p-6 [&_summary]:cursor-pointer">
-                  <summary className="flex items-center justify-between gap-4 text-lg font-semibold marker:content-['']">
+              <Reveal key={item.q} i={Math.min(i, 4)}>
+                <details className="frost group px-6 py-5 [&_summary]:cursor-pointer">
+                  <summary className="flex items-center justify-between gap-4 text-[17px] font-semibold marker:content-['']">
                     {item.q}
-                    <span className="text-2xl text-[var(--c432-amber)] transition-transform duration-300 group-open:rotate-45">+</span>
+                    <span aria-hidden className="text-2xl text-[var(--c432-amber)] transition-transform duration-300 group-open:rotate-45">+</span>
                   </summary>
                   <p className="mt-4 text-[15px] leading-relaxed text-[var(--c432-ink)]">{item.a}</p>
                 </details>
               </Reveal>
             ))}
           </div>
+
+          {/* Остання кнопка: людина дочитала заперечення, це точка рішення. */}
+          <Reveal i={5}>
+            <div className="mt-14 text-center">
+              <CtaLink href={BOT} location="faq" className="btn-cta cursor-pointer">{C.pricing.cta}</CtaLink>
+              <p className="mt-4 text-[13px] text-white/55">{C.hero.priceLine}</p>
+            </div>
+          </Reveal>
         </section>
 
         {/* ══ FOOTER ══ */}
