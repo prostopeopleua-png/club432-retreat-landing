@@ -36,7 +36,6 @@ function Reveal({ children, i = 0, className }: { children: React.ReactNode; i?:
 const IC = "h-6 w-6 stroke-[1.5]";
 const Icons = [
   () => (<svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className={IC}><path d="M4 5h16v11H4z" strokeLinejoin="round"/><path d="M8 20h8M12 16v4" strokeLinecap="round"/><path d="M8 9h8M8 12h5" strokeLinecap="round"/></svg>),
-  () => (<svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className={IC}><circle cx="12" cy="12" r="3"/><path d="M6.5 6.5a8 8 0 0 0 0 11M17.5 6.5a8 8 0 0 1 0 11M4 4a12 12 0 0 0 0 16M20 4a12 12 0 0 1 0 16" strokeLinecap="round"/></svg>),
   () => (<svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className={IC}><path d="M5 4h5v16H5zM10 4h5l3 15-5 1z" strokeLinejoin="round"/></svg>),
   () => (<svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className={IC}><path d="M12 3v3M12 18v3M3 12h3M18 12h3" strokeLinecap="round"/><circle cx="12" cy="12" r="4"/></svg>),
   () => (<svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className={IC}><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19a5 5 0 0 1 10 0M13 19a5 5 0 0 1 8-3.5" strokeLinecap="round"/></svg>),
@@ -287,7 +286,7 @@ export default function Home() {
           <Reveal><h2 className="font-display h-section mx-auto mb-4 max-w-3xl text-center text-balance">{C.features.heading}</h2></Reveal>
           <Reveal i={1}><p className="mx-auto mb-14 max-w-xl text-center text-[var(--c432-ink)]">{C.features.subtitle}</p></Reveal>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto grid max-w-4xl gap-5 sm:grid-cols-2">
             {C.features.items.map((f, i) => {
               const Icon = Icons[i] ?? Icons[0];
               return (
