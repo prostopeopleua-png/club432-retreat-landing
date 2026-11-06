@@ -182,7 +182,7 @@ export default function Home() {
           <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-x-14 lg:grid-cols-[minmax(0,55fr)_minmax(0,45fr)]">
             <Reveal className="lg:hidden">
               <h2 className="font-display mb-7 text-[clamp(2.2rem,8vw,3.5rem)] font-semibold leading-[1.05] tracking-tight text-white">
-                {C.video.title}<br /><em className="font-normal italic text-[var(--c432-amber)]">{C.video.titleAccent}</em>
+                {C.video.title}{" "}<br /><em className="font-normal italic text-[var(--c432-amber)]">{C.video.titleAccent}</em>
               </h2>
             </Reveal>
             <Reveal i={1} className="lg:sticky lg:top-28">
@@ -193,7 +193,7 @@ export default function Home() {
             <div className="mt-10 lg:mt-0">
               <Reveal>
                 <h2 className="font-display hidden text-[clamp(2.5rem,3.6vw,3.5rem)] font-semibold leading-[1.05] tracking-tight text-white lg:block">
-                  {C.video.title}<br /><em className="font-normal italic text-[var(--c432-amber)]">{C.video.titleAccent}</em>
+                  {C.video.title}{" "}<br /><em className="font-normal italic text-[var(--c432-amber)]">{C.video.titleAccent}</em>
                 </h2>
               </Reveal>
               <Reveal i={1}>
