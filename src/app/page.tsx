@@ -11,6 +11,7 @@ import IntroVideo from "@/components/IntroVideo";
 import PricingViewTracker from "@/components/PricingViewTracker";
 import SiteHeader from "@/components/SiteHeader";
 import HeroVoices from "@/components/HeroVoices";
+import ArchetypeCards from "@/components/ArchetypeCards";
 import { content as C } from "@/content";
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
 import { trackBotLinkClick } from "@/lib/analytics";
@@ -221,10 +222,24 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ══ ДЛЯ КОГО (третій екран) ══
+            Ті самі картки, що на /metod-432 (компонент ArchetypeCards). */}
+        <section id="who" className="sect mx-auto max-w-6xl px-5">
+          <Reveal><p className="text-center text-[14px] text-white/60">{C.who.caption}</p></Reveal>
+          <Reveal i={1}><h2 className="font-display h-section mx-auto mt-3 mb-12 max-w-3xl text-center text-balance">{C.who.heading}</h2></Reveal>
+          <ArchetypeCards items={C.who.items} />
+          <Reveal i={2}>
+            <div className="mt-14 flex flex-col items-center gap-7 text-center">
+              <p className="font-display text-[clamp(1.6rem,3vw,2.4rem)] leading-tight text-white">
+                {C.who.closing} <em className="italic text-[var(--c432-amber)]">{C.who.closingAccent}</em>
+              </p>
+              <CtaLink href={BOT} location="who" className="btn-cta cursor-pointer">{C.who.cta}</CtaLink>
+            </div>
+          </Reveal>
+        </section>
+
         {/* ══ PAIN + ДЛЯ КОГО ══
-            Архетипи були окремою секцією з трьох карток на 1150px. Вони
-            відповідають на те саме питання, що й біль («це про мене?»), тож
-            стоять тут трьома рядками одразу після нього. */}
+            Архетипи звідси переїхали в окремий третій екран (після відео). */}
         <section id="what" className="sect mx-auto max-w-4xl px-5">
           <Reveal><h2 className="font-display h-section mx-auto mb-14 max-w-3xl text-center">{C.pain.heading}</h2></Reveal>
           <ol className="relative space-y-7 border-l border-white/10 pl-7 sm:pl-9">
@@ -242,18 +257,6 @@ export default function Home() {
             <p className="mx-auto mt-12 max-w-2xl text-center text-[clamp(1.02rem,1.5vw,1.2rem)] leading-relaxed text-white/85">
               {C.pain.outro}
             </p>
-          </Reveal>
-
-          <Reveal i={6}>
-            <h3 className="font-display mt-20 mb-8 text-center text-[clamp(1.4rem,2.6vw,2rem)] font-semibold">{C.who.heading}</h3>
-            <ul className="mx-auto max-w-2xl divide-y divide-white/10 rounded-3xl bg-[rgba(9,10,30,0.62)] px-6 sm:px-8">
-              {C.who.items.map((w) => (
-                <li key={w.title} className="flex flex-col gap-1 py-5 sm:flex-row sm:gap-6">
-                  <span className="shrink-0 font-semibold text-[var(--c432-amber)] sm:w-32">{w.title}</span>
-                  <span className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{w.text}</span>
-                </li>
-              ))}
-            </ul>
           </Reveal>
 
           {/* Тонка смуга до безкоштовного тесту — саме тут, де людина впізнала

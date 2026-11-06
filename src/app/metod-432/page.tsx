@@ -9,6 +9,7 @@ import {
   type Variants,
 } from "framer-motion";
 import SmoothScroll from "@/components/SmoothScroll";
+import ArchetypeCards from "@/components/ArchetypeCards";
 
 const ResonanceCanvas = dynamic(
   () => import("@/components/three/ResonanceCanvas"),
@@ -326,17 +327,10 @@ export default function Metod432Page() {
           <Reveal i={1}>
             <h2 className="font-display h-section mb-14 max-w-3xl">Спільнота однодумців, які рухаються в один бік</h2>
           </Reveal>
-          <div className="grid gap-5 md:grid-cols-3">
-            {ARCHETYPES.map((a, i) => (
-              <Reveal key={a.t} i={i}>
-                <div className="glass h-full rounded-3xl p-8">
-                  <h3 className="grad-text text-2xl font-semibold uppercase tracking-wide">{a.t}</h3>
-                  <div className="hairline my-5" />
-                  <p className="text-[15px] leading-relaxed text-[var(--c432-ink)]">{a.d}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <ArchetypeCards
+            items={ARCHETYPES.map((a) => ({ title: a.t, text: a.d }))}
+            titleClassName="grad-text text-2xl font-semibold uppercase tracking-wide"
+          />
         </section>
 
         {/* ══ JOIN CTA ══ */}
