@@ -26,3 +26,6 @@ npm-debug.log*
 
 # vercel
 .vercel
+
+# Артефакти аудиту Hallmark (скріншоти, звіти) — локальні
+.hallmark/

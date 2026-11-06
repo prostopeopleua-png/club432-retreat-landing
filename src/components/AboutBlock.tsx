@@ -70,7 +70,7 @@ export default function AboutBlock() {
         className="relative z-[25] mx-auto flex min-h-[100svh] w-full max-w-[1500px] flex-col justify-end px-7 pb-14 pt-[54svh] md:items-end md:justify-center md:px-[104px] md:pb-0 md:pt-0"
       >
         <div className="max-w-[640px] md:w-[46%] md:min-w-[440px]">
-          <div className="text-[12px] uppercase tracking-[0.22em] text-[var(--c432-amber)]">
+          <div className="text-[14px] text-[var(--c432-amber)]/90">
             {C.author.eyebrow}
           </div>
 
