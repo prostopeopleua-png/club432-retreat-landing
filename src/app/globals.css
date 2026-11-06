@@ -510,3 +510,18 @@ summary::-webkit-details-marker { display: none; }
   .hv-col:nth-child(2) { padding-top: 0; }
   .hv-dup { display: none; }
 }
+
+/* ═══════════ Відео в другому екрані: рамка і бурштинове світіння ═══════════
+   Світіння намальоване градієнтом під відео, без filter і без анімації. */
+.video-glow { position: relative; }
+.video-glow::before {
+  content: "";
+  position: absolute;
+  inset: -12% -10%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(239,128,24,0.16), rgba(253,209,111,0.06) 55%, transparent 100%);
+}
+.video-glow > .frost {
+  box-shadow: 0 0 0 1px rgba(253,209,111,0.2), 0 24px 60px rgba(4,5,15,0.55), 0 0 48px rgba(253,209,111,0.08);
+}

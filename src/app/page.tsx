@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, type Variants } from "framer-motion";
+import { motion, MotionConfig, type Variants } from "framer-motion";
 import SmoothScroll from "@/components/SmoothScroll";
 import CosmicBackground from "@/components/CosmicBackground";
 import RoamingMandala from "@/components/RoamingMandala";
@@ -131,6 +131,7 @@ export default function Home() {
 
   return (
     <SmoothScroll>
+      <MotionConfig reducedMotion="user">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }} />
       <CosmicBackground />
       <RoamingMandala />
@@ -174,13 +175,52 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ══ VIDEO ══ */}
-        <section id="video" className="sect mx-auto max-w-5xl px-5">
-          <Reveal><h2 className="font-display h-section mx-auto mb-5 max-w-3xl text-center">{C.video.heading}</h2></Reveal>
-          <Reveal i={1}>
-            <p className="mx-auto mb-10 max-w-2xl text-center text-[15px] leading-relaxed text-[var(--c432-ink)]">{C.video.caption}</p>
-          </Reveal>
-          <Reveal i={2}><IntroVideo /></Reveal>
+        {/* ══ VIDEO + ЩО МИ РОБИМО ══
+            Десктоп: відео зліва (~55%), текст справа, по верху відео.
+            Телефон: заголовок, відео на всю ширину, потім текст. */}
+        <section id="video" className="sect mx-auto max-w-7xl px-5 lg:px-10">
+          <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-x-14 lg:grid-cols-[minmax(0,55fr)_minmax(0,45fr)]">
+            <Reveal className="lg:hidden">
+              <h2 className="font-display mb-7 text-[clamp(2.2rem,8vw,3.5rem)] font-semibold leading-[1.05] tracking-tight text-white">
+                {C.video.title}<br /><em className="font-normal italic text-[var(--c432-amber)]">{C.video.titleAccent}</em>
+              </h2>
+            </Reveal>
+            <Reveal i={1} className="lg:sticky lg:top-28">
+              <div className="video-glow">
+                <IntroVideo />
+              </div>
+              <p className="mt-4 text-[13px] leading-relaxed text-white/50 lg:max-w-[92%]">{C.video.caption}</p>
+            </Reveal>
+            <div className="mt-10 lg:mt-0">
+              <Reveal>
+                <h2 className="font-display hidden text-[clamp(2.5rem,3.6vw,3.5rem)] font-semibold leading-[1.05] tracking-tight text-white lg:block">
+                  {C.video.title}<br /><em className="font-normal italic text-[var(--c432-amber)]">{C.video.titleAccent}</em>
+                </h2>
+              </Reveal>
+              <Reveal i={1}>
+                <p className="font-display text-[clamp(1.5rem,2.2vw,1.85rem)] leading-[1.25] text-white/95 lg:mt-7">{C.video.lead}</p>
+              </Reveal>
+              <Reveal i={2}>
+                <p className="mt-5 text-[17px] leading-relaxed text-[var(--c432-ink)] lg:text-[18px]">{C.video.intro}</p>
+              </Reveal>
+              <Reveal i={3}>
+                <p className="mt-8 text-[15px] font-semibold text-[var(--c432-amber)]/90">{C.video.listIntro}</p>
+                <ul className="mt-3">
+                  {C.video.list.map((li) => (
+                    <li key={li} className="flex gap-3 border-t border-[rgba(253,209,111,0.15)] py-3.5 text-[17px] leading-snug text-white/85">
+                      <span aria-hidden className="mt-[0.15em] text-[13px] text-[var(--c432-amber)]">✦</span>
+                      <span>{li}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+              <Reveal i={4}>
+                <p className="font-display mt-8 border-t border-[rgba(253,209,111,0.15)] pt-7 text-[clamp(1.6rem,2.3vw,2.1rem)] leading-[1.2] text-white">
+                  {C.video.finale} <em className="italic text-[var(--c432-amber)]">{C.video.finaleAccent}</em>
+                </p>
+              </Reveal>
+            </div>
+          </div>
         </section>
 
         {/* ══ PAIN + ДЛЯ КОГО ══
@@ -475,6 +515,7 @@ export default function Home() {
           <p className="mt-10 text-center text-xs text-white/30">© {new Date().getFullYear()} {C.footer.brand} · {C.footer.legal}</p>
         </footer>
       </main>
+      </MotionConfig>
     </SmoothScroll>
   );
 }

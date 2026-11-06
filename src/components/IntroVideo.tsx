@@ -62,7 +62,7 @@ export default function IntroVideo() {
             <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--c432-amber)]/90 shadow-[0_0_40px_rgba(253,209,111,0.45)] transition-transform duration-300 group-hover:scale-110 sm:h-20 sm:w-20">
               <svg viewBox="0 0 24 24" className="ml-1 h-6 w-6 fill-[#07081b] sm:h-9 sm:w-9"><path d="M8 5v14l11-7z" /></svg>
             </span>
-            <span className="text-[13px] uppercase tracking-[0.18em] text-white/90 [text-shadow:0_1px_12px_rgba(7,8,27,0.95)]">
+            <span className="text-[15px] font-medium text-white/90 [text-shadow:0_1px_12px_rgba(7,8,27,0.95)]">
               {V.play}
             </span>
           </span>
