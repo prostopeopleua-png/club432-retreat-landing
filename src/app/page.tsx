@@ -12,6 +12,7 @@ import PricingViewTracker from "@/components/PricingViewTracker";
 import SiteHeader from "@/components/SiteHeader";
 import HeroVoices from "@/components/HeroVoices";
 import ArchetypeCards from "@/components/ArchetypeCards";
+import FoundationBlock from "@/components/FoundationBlock";
 import { content as C } from "@/content";
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
 import { trackBotLinkClick } from "@/lib/analytics";
@@ -237,6 +238,9 @@ export default function Home() {
             </div>
           </Reveal>
         </section>
+
+        {/* ══ ФУНДАМЕНТ ЗНАНЬ (четвертий екран) ══ спільний з /metod-432 */}
+        <FoundationBlock center sectionClassName="sect" />
 
         {/* ══ PAIN + ДЛЯ КОГО ══
             Архетипи звідси переїхали в окремий третій екран (після відео). */}

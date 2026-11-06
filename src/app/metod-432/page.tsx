@@ -10,6 +10,8 @@ import {
 } from "framer-motion";
 import SmoothScroll from "@/components/SmoothScroll";
 import ArchetypeCards from "@/components/ArchetypeCards";
+import FoundationBlock from "@/components/FoundationBlock";
+import { content as C } from "@/content";
 
 const ResonanceCanvas = dynamic(
   () => import("@/components/three/ResonanceCanvas"),
@@ -55,31 +57,6 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   return <span className="eyebrow mb-5">{children}</span>;
 }
 
-/* ─────────────────────────────  icons  ────────────────────────────── */
-const ico = "w-7 h-7 stroke-[1.4]";
-const IconInfinity = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={ico}>
-    <path d="M6 12c0-2 1.5-3.5 3-3.5S18 15.5 15 15.5 3 8.5 6 8.5 18 16 18 12" strokeLinecap="round" />
-  </svg>
-);
-const IconMind = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={ico}>
-    <path d="M12 3a6 6 0 0 0-6 6c0 2 1 3 1 5v3a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-3c0-2 1-3 1-5a6 6 0 0 0-6-6Z" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M9.5 9.5a2.5 2.5 0 0 1 5 0" strokeLinecap="round" />
-  </svg>
-);
-const IconSymbol = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={ico}>
-    <path d="M12 2 4 7v10l8 5 8-5V7l-8-5Z" strokeLinejoin="round" />
-    <circle cx="12" cy="12" r="3.5" />
-  </svg>
-);
-const IconConfluence = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className={ico}>
-    <circle cx="8.5" cy="10" r="5" /><circle cx="15.5" cy="10" r="5" /><path d="M12 14v6" strokeLinecap="round" />
-  </svg>
-);
-
 /* ─────────────────────────────  data  ─────────────────────────────── */
 const LEVELS = [
   { n: "01", t: "Тіло", s: "Матеріальний рівень", d: "Фізичне, енергія, дія у світі. Основа, яку неможливо ігнорувати.", c: "#EF8018" },
@@ -87,12 +64,6 @@ const LEVELS = [
   { n: "03", t: "Дух", s: "Духовний рівень", d: "Душа та дух. Джерело сенсу, з якого все починається і куди все веде.", c: "#8B7BFF" },
 ];
 
-const FOUNDATION = [
-  { icon: <IconInfinity />, t: "Позачасова Мудрість", d: "Універсальне вчення в основі всіх традицій: еволюція свідомості, звʼязок Душі та особистості, роль людини у Всесвіті." },
-  { icon: <IconMind />, t: "Психологія — наукова та езотерична", d: "Поєднуємо дослідження розуму й поведінки з наукою про Душу: духовні закони та внутрішній екзистенційний досвід." },
-  { icon: <IconSymbol />, t: "Філософія та Символізм", d: "Вічні питання буття та мова Всесвіту, де видимий світ — відображення глибинних істин." },
-  { icon: <IconConfluence />, t: "Інтеграція джерел", d: "Веди, Бхаґавад-Ґіта, Християнство, Буддизм і Стоїцизм — спільна істина, яка працює в реальному житті." },
-];
 
 const ARCHETYPES = [
   { t: "Шукач", d: "Відчуваєш більше потенціалу, ніж проявлено. Хочеш глибше розкрити свою Душу та призначення." },
@@ -234,35 +205,8 @@ export default function Metod432Page() {
           </div>
         </section>
 
-        {/* ══ FOUNDATION ══ */}
-        <section id="foundation" className="section-pad relative">
-          <div className="absolute inset-0 -z-0 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(109,90,230,0.12),transparent)]" />
-          <div className="relative mx-auto max-w-6xl px-5">
-            <Reveal><Eyebrow>Фундамент знань</Eyebrow></Reveal>
-            <Reveal i={1}>
-              <h2 className="font-display h-section mb-4 max-w-3xl">
-                Ми не сповідуємо жодну релігію.<br />Ми обʼєднуємо <span className="grad-cosmic">науку й духовну мудрість</span>
-              </h2>
-            </Reveal>
-            <Reveal i={2}>
-              <p className="lede mb-14">Чотири опори, на яких стоїть кожна лекція та практика методу.</p>
-            </Reveal>
-
-            <div className="grid gap-5 sm:grid-cols-2">
-              {FOUNDATION.map((f, i) => (
-                <Reveal key={f.t} i={i}>
-                  <div className="glass group flex h-full gap-5 rounded-3xl p-7">
-                    <div className="mt-1 shrink-0 text-[var(--c432-amber)] transition-transform duration-300 group-hover:scale-110">{f.icon}</div>
-                    <div>
-                      <h3 className="text-xl font-semibold">{f.t}</h3>
-                      <p className="mt-2 text-[15px] leading-relaxed text-[var(--c432-ink)]">{f.d}</p>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* ══ FOUNDATION ══ (спільний з головною компонент) */}
+        <FoundationBlock subtitle={C.foundation.subtitleMetod} />
 
         {/* ══ TRANSFORMATION ══ */}
         <section id="transform" className="section-pad relative mx-auto max-w-5xl px-5 text-center">
