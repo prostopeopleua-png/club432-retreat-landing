@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { motion } from "framer-motion";
 import { content as C } from "@/content";
 
@@ -36,6 +37,18 @@ const ICONS = [
   ),
 ];
 
+/* Від 768px текст карток видно завжди; на телефоні він під розкриттям.
+   Стежимо за шириною через matchMedia, без слухача прокрутки. */
+const WIDE = "(min-width: 768px)";
+function subscribe(cb: () => void) {
+  const mq = window.matchMedia(WIDE);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+}
+function useWide() {
+  return useSyncExternalStore(subscribe, () => window.matchMedia(WIDE).matches, () => false);
+}
+
 const ease = [0.16, 1, 0.3, 1] as const;
 function Rise({ i = 0, className, children }: { i?: number; className?: string; children: React.ReactNode }) {
   return (
@@ -61,6 +74,7 @@ export default function FoundationBlock({
   sectionClassName?: string;
 }) {
   const head = center ? "mx-auto text-center" : "";
+  const wide = useWide();
   return (
     <section id="foundation" className={`${sectionClassName} relative`}>
       <div aria-hidden className="absolute inset-0 -z-0 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(109,90,230,0.12),transparent)]" />
@@ -75,18 +89,27 @@ export default function FoundationBlock({
           <p className={`lede mb-14 ${head}`}>{subtitle}</p>
         </Rise>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-2 md:gap-5">
           {F.items.map((f, i) => {
             const Icon = ICONS[i] ?? ICONS[0];
             return (
               <Rise key={f.title} i={i}>
-                <div className="glass group flex h-full gap-5 rounded-3xl p-6 sm:p-7">
-                  <div className="mt-1 shrink-0 text-[var(--c432-amber)] transition-transform duration-300 group-hover:scale-110"><Icon /></div>
-                  <div>
-                    <h3 className="text-xl font-semibold">{f.title}</h3>
-                    <p className="mt-2 text-[15px] leading-relaxed text-[var(--c432-ink)]">{f.text}</p>
-                  </div>
-                </div>
+                {/* Телефон: видно іконку й назву, текст розкривається (лишається в HTML).
+                    Десктоп: картка завжди відкрита, клік по назві нічого не робить. */}
+                <details className="fb-card glass group h-full rounded-3xl p-5 md:p-7" open={wide || undefined}>
+                  <summary
+                    className="flex cursor-pointer items-start gap-5 md:cursor-default"
+                    onClick={(e) => { if (wide) e.preventDefault(); }}
+                    tabIndex={wide ? -1 : undefined}
+                  >
+                    <span className="mt-1 shrink-0 text-[var(--c432-amber)] transition-transform duration-300 group-hover:scale-110"><Icon /></span>
+                    <h3 className="flex-1 text-lg font-semibold leading-snug md:text-xl">{f.title}</h3>
+                    <svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" className="fb-chev mt-1.5 h-5 w-5 shrink-0 stroke-2 text-[var(--c432-amber)] md:hidden">
+                      <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </summary>
+                  <p className="fb-body mt-2 pl-12 text-[15px] leading-relaxed text-[var(--c432-ink)]">{f.text}</p>
+                </details>
               </Rise>
             );
           })}

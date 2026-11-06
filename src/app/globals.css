@@ -525,3 +525,19 @@ summary::-webkit-details-marker { display: none; }
 .video-glow > .frost {
   box-shadow: 0 0 0 1px rgba(253,209,111,0.2), 0 24px 60px rgba(4,5,15,0.55), 0 0 48px rgba(253,209,111,0.08);
 }
+
+/* ═══════════ «Фундамент знань»: картки-розкриття на телефоні ═══════════
+   Шеврон повертається, текст з'являється: тільки transform і opacity. */
+.fb-chev { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.fb-card[open] .fb-chev { transform: rotate(180deg); }
+@media (max-width: 767px) {
+  .fb-card[open] .fb-body { animation: fbIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+}
+@keyframes fbIn {
+  from { opacity: 0; transform: translate3d(0, -6px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fb-chev { transition: none; }
+  .fb-card[open] .fb-body { animation: none; }
+}
